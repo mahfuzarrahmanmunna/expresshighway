@@ -4,17 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X, Phone, Mail } from "lucide-react";
+import { FaWhatsapp, FaFacebookF } from "react-icons/fa";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 const NAV_ITEMS = [
-  { label: "Residences", number: "01" },
-  { label: "Experience", number: "02" },
-  { label: "Architecture", number: "03" },
-  { label: "Location", number: "04" },
+  { label: "Home", number: "01", href: "/" },
+  { label: "About", number: "02", href: "/aboutus" },
+  { label: "Club & Lounge", number: "03", href: "/club-and-lounge" },
+  { label: "Contact", number: "04", href: "/contact" },
+  { label: "Sampan Group", number: "05", href: "https://sampangroup.com" },
 ];
 
 export default function GlassNavbar() {
@@ -86,7 +88,7 @@ export default function GlassNavbar() {
           duration: 1.4,
           delay: 1.8,
           ease: "power4.out",
-        }
+        },
       );
 
       ScrollTrigger.create({
@@ -111,9 +113,7 @@ export default function GlassNavbar() {
             backgroundColor: `rgba(8,8,8,${0.38 + p * 0.48})`,
             borderColor: `rgba(255,255,255,${0.08 + p * 0.1})`,
             boxShadow: `
-              0 ${10 + p * 12}px ${35 + p * 20}px rgba(0,0,0,${
-              0.15 + p * 0.2
-            }),
+              0 ${10 + p * 12}px ${35 + p * 20}px rgba(0,0,0,${0.15 + p * 0.2}),
               inset 0 1px 0 rgba(255,255,255,${0.06 + p * 0.05})
             `,
             duration: 0.35,
@@ -274,7 +274,7 @@ export default function GlassNavbar() {
             ================================================= */}
 
             <motion.a
-              href="#"
+              href="#home"
               className="group flex items-center gap-4"
               whileHover={{ x: 2 }}
               transition={{
@@ -340,7 +340,7 @@ export default function GlassNavbar() {
                     font-light
                   "
                 >
-                  ERA
+                  EXPRESS
                 </div>
 
                 <div
@@ -352,7 +352,7 @@ export default function GlassNavbar() {
                     text-white/35
                   "
                 >
-                  Residences / London
+                  Highway Inn
                 </div>
               </div>
             </motion.a>
@@ -361,11 +361,17 @@ export default function GlassNavbar() {
                 DESKTOP NAV
             ================================================= */}
 
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden xl:flex items-center gap-1">
               {NAV_ITEMS.map((item) => (
                 <motion.a
                   key={item.label}
-                  href={`#${item.label.toLowerCase()}`}
+                  href={item.href}
+                  target={item.label === "Sampan Group" ? "_blank" : undefined}
+                  rel={
+                    item.label === "Sampan Group"
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
                   className="
                     group
                     relative
@@ -444,50 +450,57 @@ export default function GlassNavbar() {
             </div>
 
             {/* =================================================
-                RIGHT SIDE
+                RIGHT SIDE (Contact Icons + CTA)
             ================================================= */}
 
             <div className="flex items-center gap-3">
-              {/* Scroll Indicator */}
-              <div
-                className="
-                  hidden
-                  xl:flex
-                  items-center
-                  gap-2
-                  mr-3
-                "
-              >
-                <span className="text-[8px] tracking-[0.2em] text-white/25">
-                  {isScrolled ? "SCROLL" : "EXPLORE"}
-                </span>
-
-                <motion.span
-                  className="
-                    block
-                    w-8
-                    h-px
-                    bg-white/20
-                    overflow-hidden
-                  "
+              {/* Contact & Social Icons */}
+              <div className="hidden lg:flex items-center gap-2 mr-2">
+                <motion.a
+                  href="tel:+8801710000000"
+                  data-cursor="CALL"
+                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
-                  <motion.span
-                    className="block h-full bg-white"
-                    animate={{
-                      x: isScrolled ? ["-100%", "100%"] : "0%",
-                    }}
-                    transition={{
-                      duration: 1.2,
-                      repeat: isScrolled ? Infinity : 0,
-                      ease: "linear",
-                    }}
-                  />
-                </motion.span>
+                  <Phone size={13} strokeWidth={1.5} />
+                </motion.a>
+                <motion.a
+                  href="https://wa.me/8801710000000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor="CHAT"
+                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <FaWhatsapp size={13} />
+                </motion.a>
+                <motion.a
+                  href="mailto:info@expresshighwayinn.com"
+                  data-cursor="MAIL"
+                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <Mail size={13} strokeWidth={1.5} />
+                </motion.a>
+                <motion.a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor="VISIT"
+                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <FaFacebookF size={13} />
+                </motion.a>
               </div>
 
-              {/* CTA */}
+              {/* CTA (The only commercial page) */}
               <motion.a
-                href="#contact"
+                href="#membership"
                 className="
                   hidden
                   md:flex
@@ -495,15 +508,15 @@ export default function GlassNavbar() {
                   gap-3
                   rounded-full
                   border
-                  border-white/15
-                  bg-white/[0.04]
+                  border-primary/40
+                  bg-primary/10
                   px-4
                   py-2.5
                   text-[9px]
                   uppercase
                   tracking-[0.18em]
-                  text-white/70
-                  hover:text-black
+                  text-primary
+                  hover:text-white
                   overflow-hidden
                   relative
                   group
@@ -519,7 +532,7 @@ export default function GlassNavbar() {
                   className="
                     absolute
                     inset-0
-                    bg-white
+                    bg-primary
                     translate-y-full
                     group-hover:translate-y-0
                     transition-transform
@@ -528,9 +541,7 @@ export default function GlassNavbar() {
                   "
                 />
 
-                <span className="relative z-10">
-                  Private Viewing
-                </span>
+                <span className="relative z-10">Membership</span>
 
                 <ArrowUpRight
                   size={13}
@@ -544,12 +555,12 @@ export default function GlassNavbar() {
                 />
               </motion.a>
 
-              {/* Mobile Menu */}
+              {/* Mobile Menu Toggle */}
               <motion.button
                 onClick={() => setMenuOpen(true)}
                 whileTap={{ scale: 0.9 }}
                 className="
-                  lg:hidden
+                  xl:hidden
                   w-10
                   h-10
                   rounded-full
@@ -618,7 +629,7 @@ export default function GlassNavbar() {
                 text-white
               "
             >
-              ERA
+              EXPRESS
             </div>
 
             <div
@@ -629,7 +640,7 @@ export default function GlassNavbar() {
                 uppercase
               "
             >
-              Residences / London
+              Highway Inn
             </div>
           </div>
 
@@ -657,102 +668,130 @@ export default function GlassNavbar() {
             relative
             z-10
             px-6
-            pt-16
-          "
-        >
-          {NAV_ITEMS.map((item, index) => (
-            <motion.a
-              key={item.label}
-              href={`#${item.label.toLowerCase()}`}
-              onClick={() => setMenuOpen(false)}
-              initial={{
-                opacity: 0,
-                y: 30,
-              }}
-              animate={
-                menuOpen
-                  ? {
-                      opacity: 1,
-                      y: 0,
-                    }
-                  : {
-                      opacity: 0,
-                      y: 30,
-                    }
-              }
-              transition={{
-                delay: menuOpen ? 0.08 + index * 0.07 : 0,
-                duration: 0.6,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="
-                group
-                flex
-                items-center
-                justify-between
-                py-5
-                border-b
-                border-white/[0.08]
-              "
-            >
-              <div className="flex items-center gap-5">
-                <span className="text-[9px] text-white/25">
-                  {item.number}
-                </span>
-
-                <span
-                  className="
-                    text-2xl
-                    font-light
-                    tracking-tight
-                    text-white/70
-                    group-hover:text-white
-                    transition-colors
-                  "
-                >
-                  {item.label}
-                </span>
-              </div>
-
-              <ArrowUpRight
-                size={18}
-                className="
-                  text-white/30
-                  group-hover:text-white
-                  group-hover:rotate-45
-                  transition-all
-                  duration-500
-                "
-              />
-            </motion.a>
-          ))}
-        </div>
-
-        {/* Bottom */}
-        <div
-          className="
-            absolute
-            bottom-8
-            left-6
-            right-6
+            pt-12
+            pb-8
             flex
-            items-end
+            flex-col
+            h-[calc(100vh-100px)]
             justify-between
           "
         >
           <div>
-            <p className="text-[8px] tracking-[0.2em] text-white/25 uppercase">
-              Private residences
-            </p>
+            {NAV_ITEMS.map((item, index) => (
+              <motion.a
+                key={item.label}
+                href={item.href}
+                target={item.label === "Sampan Group" ? "_blank" : undefined}
+                rel={
+                  item.label === "Sampan Group"
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                onClick={() => setMenuOpen(false)}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                animate={
+                  menuOpen
+                    ? {
+                        opacity: 1,
+                        y: 0,
+                      }
+                    : {
+                        opacity: 0,
+                        y: 30,
+                      }
+                }
+                transition={{
+                  delay: menuOpen ? 0.08 + index * 0.07 : 0,
+                  duration: 0.6,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="
+                  group
+                  flex
+                  items-center
+                  justify-between
+                  py-5
+                  border-b
+                  border-white/[0.08]
+                "
+              >
+                <div className="flex items-center gap-5">
+                  <span className="text-[9px] text-white/25">
+                    {item.number}
+                  </span>
 
-            <p className="mt-2 text-[10px] text-white/40">
-              A new perspective on London living.
-            </p>
+                  <span
+                    className="
+                      text-2xl
+                      font-light
+                      tracking-tight
+                      text-white/70
+                      group-hover:text-white
+                      transition-colors
+                    "
+                  >
+                    {item.label}
+                  </span>
+                </div>
+
+                <ArrowUpRight
+                  size={18}
+                  className="
+                    text-white/30
+                    group-hover:text-white
+                    group-hover:rotate-45
+                    transition-all
+                    duration-500
+                  "
+                />
+              </motion.a>
+            ))}
           </div>
 
-          <span className="text-[8px] tracking-[0.2em] text-white/20">
-            © 2026
-          </span>
+          <div className="mt-8">
+            <motion.a
+              href="#membership"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center justify-center gap-3 w-full py-5 bg-primary text-white text-[11px] uppercase tracking-[0.2em] font-medium"
+            >
+              Get Membership
+              <ArrowUpRight size={16} />
+            </motion.a>
+
+            <div className="flex justify-center gap-6 mt-8">
+              <a
+                href="tel:+8801710000000"
+                className="text-white/50 hover:text-white"
+              >
+                <Phone size={16} />
+              </a>
+              <a
+                href="https://wa.me/8801710000000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/50 hover:text-white"
+              >
+                <FaWhatsapp size={16} />
+              </a>
+              <a
+                href="mailto:info@expresshighwayinn.com"
+                className="text-white/50 hover:text-white"
+              >
+                <Mail size={16} />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/50 hover:text-white"
+              >
+                <FaFacebookF size={16} />
+              </a>
+            </div>
+          </div>
         </div>
       </motion.div>
     </>

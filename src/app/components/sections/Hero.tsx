@@ -13,7 +13,6 @@ const WebGLDepth = dynamic(() => import("../ui/WebGLDepth"), { ssr: false });
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef<HTMLDivElement>(null);
@@ -44,7 +43,8 @@ export default function Hero() {
         const words = headlineRef.current.querySelectorAll(".word");
         words.forEach((word) => {
           const text = word.textContent?.trim().toLowerCase();
-          if (text === "luxury" || text === "timeless") {
+          // Apply shimmer to "Luxury" or "Highway"
+          if (text === "luxury" || text === "highway") {
             word.classList.add("text-shimmer");
           }
         });
@@ -140,7 +140,7 @@ export default function Hero() {
         yoyo: true,
       });
 
-      // ── 2.5D Parallax ──
+      // ── 2.5D Parallax (Subtler for a professional feel) ──
       const bgXTo = gsap.quickTo(bgRef.current, "x", {
         duration: 2,
         ease: "power2.out",
@@ -161,10 +161,10 @@ export default function Hero() {
       const handleMouseMove = (e: MouseEvent) => {
         const nx = (e.clientX / window.innerWidth - 0.5) * 2;
         const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-        bgXTo(nx * -15);
-        bgYTo(ny * -10);
-        textXTo(nx * 18);
-        textYTo(ny * 8);
+        bgXTo(nx * -10); // Reduced movement
+        bgYTo(ny * -8);
+        textXTo(nx * 12);
+        textYTo(ny * 6);
       };
 
       if (window.innerWidth > 1024) {
@@ -192,8 +192,7 @@ export default function Hero() {
             })`;
           }
 
-          // Nav scroll state
-          const nav = document.querySelector(".glass-material");
+          const nav = document.querySelector(".nav-main");
           if (nav) {
             if (p > 0.02) nav.classList.add("nav-scrolled");
             else nav.classList.remove("nav-scrolled");
@@ -222,9 +221,9 @@ export default function Hero() {
         <div className="relative flex flex-col items-center">
           <div
             id="loading-text"
-            className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl tracking-[0.3em] font-medium opacity-0"
+            className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl tracking-[0.4em] font-medium opacity-0"
           >
-            ERA RESIDENCE
+            EXPRESS HIGHWAY INN
           </div>
           <div
             ref={loadingLineRef}
@@ -234,14 +233,14 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Background */}
+      {/* Background Image - Moody Highway/Property aesthetic */}
       <div
         ref={bgRef}
         className="absolute inset-[-60px] will-change-transform opacity-0"
       >
         <Image
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&h=1080&fit=crop&q=85"
-          alt="ERA Residence Luxury Property"
+          src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1920&auto=format&fit=crop"
+          alt="Express Highway Inn Luxury Property at Night"
           fill
           priority
           sizes="100vw"
@@ -253,7 +252,7 @@ export default function Hero() {
       {/* Overlay */}
       <div
         ref={overlayRef}
-        className="absolute inset-0 z-[2] bg-black/40 transition-colors"
+        className="absolute inset-0 z-[2] bg-gradient-to-b from-black/60 via-black/30 to-black/80 transition-colors"
       />
 
       {/* WebGL Light Leaks */}
@@ -265,31 +264,31 @@ export default function Hero() {
         id="hero-content"
         className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 will-change-transform"
       >
-        <div className="max-w-5xl">
+        <div className="max-w-4xl">
           <p
             ref={tagRef}
-            className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-primary/70 mb-8 font-medium opacity-0 translate-y-5 will-change-transform"
+            className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-primary/80 mb-8 font-medium opacity-0 translate-y-5 will-change-transform"
           >
-            Exclusive Collection 2025
+            Premium Hospitality & Club
           </p>
 
           <h1
             ref={headlineRef}
             id="hero-headline"
-            className="font-[family-name:var(--font-playfair)] text-[2.8rem] md:text-[5rem] lg:text-[6.5rem] font-medium tracking-tight leading-[0.95] text-white"
+            className="font-[family-name:var(--font-playfair)] text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] font-medium tracking-tight leading-[1.05] text-white"
             style={{ perspective: "1200px" }}
             data-cursor="text"
           >
-            Where Luxury Meets Timeless Architecture
+            Where the Highway Leads to Luxury
           </h1>
 
           <p
             ref={descRef}
-            className="mt-10 text-sm md:text-lg font-light text-white/35 max-w-xl mx-auto leading-relaxed opacity-0 translate-y-10 will-change-transform"
+            className="mt-8 text-sm md:text-lg font-light text-white/60 max-w-2xl mx-auto leading-relaxed opacity-0 translate-y-10 will-change-transform"
           >
-            An exclusive collection of residences where every detail has been
-            crafted to perfection, offering unparalleled views and timeless
-            elegance.
+            Express Highway Inn brings fine dining, an exclusive Club & Lounge,
+            and everyday convenience together in one address, for every
+            traveller on the road and every member who calls it their stop.
           </p>
 
           <div
@@ -297,17 +296,17 @@ export default function Hero() {
             className="mt-12 flex flex-col sm:flex-row gap-5 justify-center opacity-0 scale-90 will-change-transform"
           >
             <MagneticButton strength={0.4}>
-              <a href="#residences" className="btn-primary block">
-                Explore Residences
+              <a href="#club-lounge" className="btn-primary block">
+                Explore Club & Lounge Facilities
               </a>
             </MagneticButton>
             <MagneticButton strength={0.3}>
               <a
-                href="#experience"
-                className="btn-outline flex items-center justify-center gap-3"
+                href="#contact"
+                className="btn-ghost flex items-center justify-center gap-3"
               >
-                <span className="w-2 h-2 border border-current rounded-full" />
-                Watch The Film
+                <span className="w-1.5 h-1.5 bg-current rounded-full" />
+                Contact Us
               </a>
             </MagneticButton>
           </div>
@@ -320,7 +319,7 @@ export default function Hero() {
         className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 opacity-0 flex flex-col items-center gap-4"
       >
         <div className="w-px h-16 bg-white/10 relative overflow-hidden hero-scroll-line" />
-        <span className="text-[8px] uppercase tracking-[0.4em] text-white/15 font-medium">
+        <span className="text-[8px] uppercase tracking-[0.4em] text-white/25 font-medium">
           Scroll to discover
         </span>
       </div>
@@ -331,10 +330,10 @@ export default function Hero() {
         className="absolute left-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block opacity-0"
       >
         <span
-          className="text-[7px] tracking-[0.5em] uppercase text-white/10"
+          className="text-[7px] tracking-[0.5em] uppercase text-white/20"
           style={{ writingMode: "vertical-rl" }}
         >
-          Est. 2024 — Premium Living
+          Est. 2025 — Premium Hospitality
         </span>
       </div>
       <div
@@ -342,10 +341,10 @@ export default function Hero() {
         className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block opacity-0"
       >
         <span
-          className="text-[7px] tracking-[0.5em] uppercase text-white/10"
+          className="text-[7px] tracking-[0.5em] uppercase text-white/20"
           style={{ writingMode: "vertical-rl" }}
         >
-          48°51&apos;N 2°21&apos;E
+          Expressway — KM 42
         </span>
       </div>
     </div>

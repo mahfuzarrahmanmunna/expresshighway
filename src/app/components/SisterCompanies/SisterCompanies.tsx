@@ -534,8 +534,8 @@ export default function SisterConcerns() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const ecosystemRef = useRef<HTMLDivElement>(null);
 
-  const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [activeCompany, setActiveCompany] = useState<Company | null>(null);
 
@@ -544,6 +544,9 @@ export default function SisterConcerns() {
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -561,11 +564,11 @@ export default function SisterConcerns() {
 
   useGSAP(
     () => {
-      if (!isMounted || !headlineRef.current) return;
+      if (!headlineRef.current) return;
 
       // Robust SplitType initialization
       const split = new SplitType(headlineRef.current, {
-        types: "lines, words",
+        types: "lines,words",
         lineClass: "overflow-hidden block",
         wordClass: "inline-block will-change-transform",
       });

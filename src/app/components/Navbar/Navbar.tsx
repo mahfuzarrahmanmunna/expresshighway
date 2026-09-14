@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, ArrowRight, MapPin } from "lucide-react";
+import { Phone, Mail, type LucideIcon } from "lucide-react";
 import { gsap } from "gsap";
 import SplitType from "split-type";
-import { BsFacebook, BsInstagram, BsTwitter, BsLinkedin } from "react-icons/bs";
+import { BsFacebook, BsWhatsapp } from "react-icons/bs";
+import type { IconType } from "react-icons";
 import { cn } from "@/app/lib/utils";
 import {
   useAnimation,
@@ -15,22 +16,28 @@ import {
 
 /* ── Config ── */
 const NAV_ITEMS = [
-  { label: "Experience", href: "#about" },
-  { label: "Residences", href: "#featured" },
-  { label: "Collection", href: "#collection" },
-  { label: "Amenities", href: "#amenities" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Club & Lounge", href: "#club-lounge" },
+  { label: "Membership", href: "#membership" }, // Commercial Page
   { label: "Contact", href: "#contact" },
+  { label: "Sampan Group", href: "#sampan-group" },
 ];
 
-const MOBILE_ITEMS = [...NAV_ITEMS, { label: "Book a Tour", href: "#contact" }];
+const MOBILE_ITEMS = [...NAV_ITEMS];
 
-const SOCIAL_ICONS = [
-  { Icon: BsInstagram, label: "Instagram" },
-  { Icon: BsFacebook, label: "Facebook" },
-  { Icon: BsTwitter, label: "Twitter" },
-  { Icon: BsLinkedin, label: "LinkedIn" },
-] as const;
+interface ContactLink {
+  Icon: LucideIcon | IconType;
+  label: string;
+  href: string;
+}
+
+const CONTACT_ICONS: ContactLink[] = [
+  { Icon: Phone, label: "Phone", href: "tel:+8801710000000" },
+  { Icon: BsWhatsapp, label: "WhatsApp", href: "https://wa.me/8801710000000" },
+  { Icon: Mail, label: "Email", href: "mailto:info@expresshighwayinn.com" },
+  { Icon: BsFacebook, label: "Facebook", href: "https://facebook.com" },
+];
 
 /* ── Props ── */
 interface NavbarProps {
@@ -103,7 +110,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.15 });
 
-      /* Top bar slides down */
       tl.from(".nav-topbar", {
         y: "-100%",
         opacity: 0,
@@ -111,14 +117,12 @@ export default function Navbar({ splashVisible }: NavbarProps) {
         ease: "power3.out",
       });
 
-      /* Main bar */
       tl.from(
         ".nav-main",
         { y: -20, opacity: 0, duration: 0.6, ease: "power3.out" },
         "-=0.3",
       );
 
-      /* Stagger children */
       tl.from(
         ".nav-logo",
         { opacity: 0, y: -8, duration: 0.5, ease: "power3.out" },
@@ -174,13 +178,11 @@ export default function Navbar({ splashVisible }: NavbarProps) {
 
         setIsScrolled(past);
 
-        /* Top bar collapses on scroll */
         if (topBarRef.current) {
           topBarRef.current.style.maxHeight = past ? "0px" : "40px";
           topBarRef.current.style.opacity = past ? "0" : "1";
         }
 
-        /* Logo subtle scale */
         if (logoRef.current && !prefersReducedMotion.current) {
           gsap.to(logoRef.current, {
             scale: past ? 0.96 : 1,
@@ -189,7 +191,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
           });
         }
 
-        /* Hide / reveal main nav */
         if (!prefersReducedMotion.current) {
           if (past && down && !isHidden) {
             isHidden = true;
@@ -299,7 +300,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
     }
   }, [isMobileOpen, lock, unlock]);
 
-  /* ── Escape key ── */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsMobileOpen(false);
@@ -321,16 +321,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
   );
 
   const openMobileMenu = useCallback(() => setIsMobileOpen(true), []);
-
-  const handleCtaDown = useCallback((e: React.PointerEvent) => {
-    if (prefersReducedMotion.current) return;
-    gsap.set(e.currentTarget, { scale: 0.97 });
-  }, []);
-
-  const handleCtaUp = useCallback((e: React.PointerEvent) => {
-    if (prefersReducedMotion.current) return;
-    gsap.set(e.currentTarget, { clearProps: "scale" });
-  }, []);
 
   /* ════════════════════════════════════════════════════════════
      RENDER
@@ -354,30 +344,27 @@ export default function Navbar({ splashVisible }: NavbarProps) {
           <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
             {/* Left info */}
             <div className="hidden items-center gap-4 sm:flex">
-              <span className="flex items-center gap-1.5 text-[9px] tracking-[0.2em] uppercase text-foreground/25">
-                <MapPin className="h-2.5 w-2.5" />
-                Phoenix, Arizona
+              <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/25">
+                Express Highway Inn
               </span>
               <span className="h-2.5 w-px bg-white/[0.06]" />
               <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/25">
-                Mon — Sat: 9AM — 7PM
+                Premium Hospitality
               </span>
             </div>
 
             {/* Right info */}
             <div className="flex items-center gap-4">
               <a
-                href="tel:+18005551234"
+                href="mailto:info@expresshighwayinn.com"
                 className="flex items-center gap-1.5 text-[9px] tracking-[0.2em] uppercase text-foreground/25 transition-colors duration-300 hover:text-primary/60"
               >
-                <Phone className="h-2.5 w-2.5" />
-                <span className="hidden sm:inline">+1 800 555 1234</span>
-                <span className="sm:hidden">Call Us</span>
+                <Mail className="h-2.5 w-2.5" />
+                <span className="hidden sm:inline">
+                  info@expresshighwayinn.com
+                </span>
+                <span className="sm:hidden">Email Us</span>
               </a>
-              <span className="h-2.5 w-px bg-white/[0.06]" />
-              <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/25">
-                Est. 2009
-              </span>
             </div>
           </div>
         </div>
@@ -397,20 +384,20 @@ export default function Navbar({ splashVisible }: NavbarProps) {
             {/* ── Logo ── */}
             <button
               ref={logoRef}
-              onClick={() => handleClick("#hero")}
+              onClick={() => handleClick("#home")}
               aria-label="Scroll to top"
               className="nav-logo group flex items-center gap-0 bg-transparent border-none p-0 cursor-pointer"
             >
               <span
                 className={cn(
-                  "text-[1.15rem] sm:text-[1.3rem] font-light tracking-[0.25em] uppercase text-foreground transition-all duration-400",
-                  "group-hover:text-primary group-hover:tracking-[0.3em]",
+                  "text-[0.95rem] sm:text-[1.1rem] font-light tracking-[0.2em] uppercase text-foreground transition-all duration-400",
+                  "group-hover:text-primary group-hover:tracking-[0.25em]",
                 )}
                 style={{
                   textShadow: "0 0 50px rgba(0,125,197,0.12)",
                 }}
               >
-                EXPRESS
+                EXPRESS HIGHWAY INN
               </span>
               <span
                 className={cn(
@@ -424,9 +411,10 @@ export default function Navbar({ splashVisible }: NavbarProps) {
             <div className="hidden items-center lg:flex">
               {NAV_ITEMS.map((item, i) => {
                 const isActive = activeSection === item.href;
+                const isCta = item.href === "#membership"; // Highlight Membership
+
                 return (
                   <div key={item.href} className="flex items-center">
-                    {/* Subtle dot separator between items */}
                     {i > 0 && (
                       <span className="mx-3 h-[3px] w-[3px] rounded-full bg-white/[0.08]" />
                     )}
@@ -438,48 +426,44 @@ export default function Navbar({ splashVisible }: NavbarProps) {
                         "transition-[color,letter-spacing] duration-[350ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
                         "hover:tracking-[0.22em]",
                         "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:rounded-sm",
-                        isActive
-                          ? "text-primary font-medium"
-                          : "text-foreground/40 hover:text-foreground/80",
+                        isCta
+                          ? "text-primary border border-primary/40 px-4 py-2 rounded-sm hover:bg-primary/10 hover:border-primary"
+                          : isActive
+                            ? "text-primary font-medium"
+                            : "text-foreground/40 hover:text-foreground/80",
                       )}
                     >
                       {item.label}
-                      {/* Active underline */}
-                      <span
-                        className={cn(
-                          "absolute bottom-0 left-1/2 h-px -translate-x-1/2",
-                          "bg-primary/60",
-                          "transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-                          isActive ? "w-full" : "w-0 group-hover:w-3/4",
-                        )}
-                      />
+                      {!isCta && (
+                        <span
+                          className={cn(
+                            "absolute bottom-0 left-1/2 h-px -translate-x-1/2",
+                            "bg-primary/60",
+                            "transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+                            isActive ? "w-full" : "w-0 group-hover:w-3/4",
+                          )}
+                        />
+                      )}
                     </button>
                   </div>
                 );
               })}
             </div>
 
-            {/* ── Desktop Right ── */}
-            <div className="hidden items-center gap-5 lg:flex">
-              <button
-                onClick={() => handleClick("#contact")}
-                className={cn(
-                  "nav-right-item group relative inline-flex items-center gap-2.5 cursor-pointer overflow-hidden border-none",
-                  "px-6 py-2.5 rounded-none",
-                  "text-[10px] font-medium tracking-[0.2em] uppercase text-white bg-primary",
-                  "transition-[transform,box-shadow] duration-[300ms] ease-[cubic-bezier(0.25,1,0.5,1)]",
-                  "hover:scale-[1.03] hover:shadow-[0_0_40px_-8px_rgba(0,125,197,0.45)]",
-                  "active:scale-[0.98]",
-                  "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-1 focus-visible:ring-offset-[#050505]",
-                )}
-                onPointerDown={handleCtaDown}
-                onPointerUp={handleCtaUp}
-                onPointerLeave={handleCtaUp}
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-[#0096E0] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                <span className="relative z-10">Schedule a Tour</span>
-                <ArrowRight className="relative z-10 h-3 w-3 transition-transform duration-[300ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0.5" />
-              </button>
+            {/* ── Desktop Right (Contact / Socials) ── */}
+            <div className="hidden items-center gap-3 lg:flex">
+              {CONTACT_ICONS.map(({ Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="nav-right-item flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.06] text-foreground/30 transition-all duration-300 hover:border-primary/20 hover:text-primary/60 hover:bg-primary/[0.03] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30"
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                </a>
+              ))}
             </div>
 
             {/* ── Mobile Toggle ── */}
@@ -490,18 +474,9 @@ export default function Navbar({ splashVisible }: NavbarProps) {
               aria-expanded={isMobileOpen}
             >
               <div className="flex flex-col items-center justify-center gap-[5px]">
-                <span
-                  className={cn(
-                    "block h-px w-5 bg-foreground/70 transition-all duration-[500ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-                  )}
-                />
-                <span
-                  className={cn(
-                    "block h-px w-5 bg-foreground/70 transition-all duration-[500ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-                  )}
-                />
+                <span className="block h-px w-5 bg-foreground/70 transition-all duration-[500ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
+                <span className="block h-px w-5 bg-foreground/70 transition-all duration-[500ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
               </div>
-              {/* Hover ring */}
               <span className="absolute inset-0 rounded-full border border-white/[0.06] transition-colors duration-300 hover:border-primary/20" />
             </button>
           </div>
@@ -525,7 +500,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
             aria-modal="true"
             aria-label="Navigation menu"
           >
-            {/* Subtle grid background */}
             <div
               className="pointer-events-none absolute inset-0 opacity-[0.015]"
               style={{
@@ -535,7 +509,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
               }}
             />
 
-            {/* Radial glow */}
             <div
               className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full opacity-[0.04]"
               style={{
@@ -561,7 +534,7 @@ export default function Navbar({ splashVisible }: NavbarProps) {
               </button>
             </div>
 
-            {/* Navigation links — centered vertically */}
+            {/* Navigation links */}
             <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6">
               <nav className="flex flex-col items-center gap-1 sm:gap-2">
                 {MOBILE_ITEMS.map((item, index) => (
@@ -577,8 +550,7 @@ export default function Navbar({ splashVisible }: NavbarProps) {
                       "text-[clamp(2rem,8vw,3.5rem)]",
                       "transition-colors duration-300",
                       "focus-visible:outline-none focus-visible:text-primary rounded-sm",
-                      /* Last item (Book a Tour) styled as CTA */
-                      index === MOBILE_ITEMS.length - 1 && "text-primary",
+                      item.href === "#membership" && "text-primary",
                     )}
                     style={{ perspective: "600px" }}
                   >
@@ -590,25 +562,25 @@ export default function Navbar({ splashVisible }: NavbarProps) {
 
             {/* Bottom bar */}
             <div className="relative z-10 px-5 pb-8 sm:px-8 sm:pb-10">
-              {/* Divider */}
               <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
               <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
-                {/* Phone */}
                 <a
-                  href="tel:+18005551234"
+                  href="tel:+8801710000000"
                   className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-foreground/30 transition-colors duration-300 hover:text-primary/60"
                 >
                   <Phone className="h-3 w-3" />
-                  +1 800 555 1234
+                  +88 01710 000000
                 </a>
 
-                {/* Socials */}
+                {/* Socials & Contact Icons */}
                 <div className="flex items-center gap-3">
-                  {SOCIAL_ICONS.map(({ Icon, label }) => (
+                  {CONTACT_ICONS.map(({ Icon, label, href }) => (
                     <a
                       key={label}
-                      href="#"
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       aria-label={label}
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.06] text-foreground/20 transition-all duration-300 hover:border-primary/20 hover:text-primary/60 hover:bg-primary/[0.03] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/30"
                     >
@@ -616,12 +588,6 @@ export default function Navbar({ splashVisible }: NavbarProps) {
                     </a>
                   ))}
                 </div>
-
-                {/* Location */}
-                <span className="hidden items-center gap-1.5 text-[10px] tracking-[0.2em] uppercase text-foreground/20 sm:flex">
-                  <MapPin className="h-3 w-3" />
-                  Phoenix, AZ
-                </span>
               </div>
             </div>
           </motion.div>
