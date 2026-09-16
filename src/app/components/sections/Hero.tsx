@@ -239,7 +239,7 @@ export default function Hero() {
         className="absolute inset-[-60px] will-change-transform opacity-0"
       >
         <Image
-          src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1920&auto=format&fit=crop"
+          src="/hero.jpg"
           alt="Express Highway Inn Luxury Property at Night"
           fill
           priority

@@ -26,7 +26,7 @@ export default function Home() {
       <ContactTrust/>
       <About />
       <FacilitiesExperience />
-      <Projects />
+      {/* <Projects /> */}
       <SisterCompanies />
     </>
   );

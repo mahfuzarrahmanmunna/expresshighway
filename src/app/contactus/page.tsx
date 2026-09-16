@@ -13,12 +13,13 @@ import {
   Phone,
   Mail,
   MessageSquare,
+  Clock,
 } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ═══════════════════════════════════════════════════════════════
-   1. GLOBAL CURSOR & GRAIN (Light Theme Adapted)
+   1. GLOBAL CURSOR & GRAIN (Refined Luxury)
 ═══════════════════════════════════════════════════════════════ */
 function CustomCursorAndGrain() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -47,7 +48,7 @@ function CustomCursorAndGrain() {
         const cursorText = interactive.getAttribute("data-cursor");
         gsap.to(ring, {
           scale: 3.5,
-          borderColor: "rgba(0, 125, 198, 0.6)",
+          borderColor: "rgba(0, 125, 198, 0.8)",
           backgroundColor: "rgba(0, 125, 198, 0.05)",
         });
         if (cursorText && ring.querySelector("span")) {
@@ -56,7 +57,7 @@ function CustomCursorAndGrain() {
       } else {
         gsap.to(ring, {
           scale: 1,
-          borderColor: "rgba(77, 77, 79, 0.3)",
+          borderColor: "rgba(255, 255, 255, 0.2)",
           backgroundColor: "transparent",
         });
         if (ring.querySelector("span")) {
@@ -73,16 +74,16 @@ function CustomCursorAndGrain() {
     <>
       <div
         ref={dotRef}
-        className="hidden md:block fixed top-0 left-0 z-[9999] w-2 h-2 bg-[#4D4D4F] rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%]"
+        className="hidden md:block fixed top-0 left-0 z-[9999] w-1.5 h-1.5 bg-white rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%]"
       ></div>
       <div
         ref={ringRef}
-        className="hidden md:flex fixed top-0 left-0 z-[9998] w-10 h-10 border border-[#4D4D4F]/40 rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%] items-center justify-center transition-colors duration-300"
+        className="hidden md:flex fixed top-0 left-0 z-[9998] w-12 h-12 border border-white/20 rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%] items-center justify-center transition-colors duration-300"
       >
-        <span className="text-[7px] uppercase tracking-[0.2em] text-[#4D4D4F] opacity-0"></span>
+        <span className="text-[7px] uppercase tracking-[0.2em] text-white opacity-0"></span>
       </div>
       <div
-        className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.02] mix-blend-overlay"
+        className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.015] mix-blend-overlay"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
@@ -93,7 +94,7 @@ function CustomCursorAndGrain() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   2. CINEMATIC HERO (White Luxury Parallax)
+   2. CINEMATIC HERO (Dark Editorial Luxury)
 ═══════════════════════════════════════════════════════════════ */
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -106,7 +107,7 @@ function Hero() {
     gsap.fromTo(
       bgRef.current,
       { scale: 1.15, opacity: 0, filter: "blur(15px)" },
-      { scale: 1, opacity: 1, filter: "blur(0px)", duration: 2, ease: "expo.out" }
+      { scale: 1, opacity: 1, filter: "blur(0px)", duration: 2.5, ease: "expo.out" }
     );
 
     const heading = document.querySelector<HTMLElement>(".hero-headline");
@@ -121,7 +122,7 @@ function Hero() {
         {
           yPercent: 0,
           opacity: 1,
-          duration: 1.4,
+          duration: 1.8,
           stagger: 0.15,
           ease: "power4.out",
         },
@@ -129,8 +130,8 @@ function Hero() {
       );
     }
 
-    tl.from(".hero-sub", { opacity: 0, y: 30, duration: 1, ease: "power3.out" }, "-=0.8")
-      .from(".hero-cta", { opacity: 0, y: 30, duration: 1, ease: "power3.out" }, "-=0.8")
+    tl.from(".hero-sub", { opacity: 0, y: 30, duration: 1.2, ease: "power3.out" }, "-=0.8")
+      .from(".hero-cta", { opacity: 0, y: 30, duration: 1.2, ease: "power3.out" }, "-=0.8")
       .from(".live-indicator", { opacity: 0, scale: 0.8, duration: 1, ease: "back.out(1.7)" }, "-=0.5");
 
     // 2.5D Mouse Parallax
@@ -166,61 +167,61 @@ function Hero() {
   }, { scope: ref });
 
   return (
-    <section ref={ref} className="relative h-screen w-full bg-white overflow-hidden flex items-center">
+    <section ref={ref} className="relative h-screen w-full bg-[#0c0b0b] overflow-hidden flex items-center">
       {/* Background Image */}
       <div ref={bgRef} className="absolute inset-[-40px] z-0">
         <Image
-          src="https://images.unsplash.com/photo-1502810365585-9e3d2c92e88d?q=80&w=1920&auto=format&fit=crop"
+          src="/hero.jpg"
           alt="Luxury Highway"
           fill
           priority
-          className="object-cover"
+          className="object-cover opacity-50"
         />
-        {/* Luxury White Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/20 to-white/95"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-transparent to-transparent"></div>
+        {/* Luxury Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0c0b0b]/60 via-[#0c0b0b]/40 to-[#0c0b0b]"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0c0b0b] via-[#0c0b0b]/50 to-transparent"></div>
       </div>
 
       {/* Content */}
       <div ref={contentRef} className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 items-center">
-        <div className="lg:col-span-7 text-left">
-          <h2 className="hero-headline font-[family-name:var(--font-playfair)] text-[#4D4D4F] text-[clamp(3rem,9vw,8rem)] leading-[0.95] font-medium">
-            <div className="block">Get in</div>
-            <div className="block text-[#007DC6] italic">Touch.</div>
+        <div className="lg:col-span-8 text-left">
+          <h2 className="hero-headline font-[family-name:var(--font-playfair)] text-white text-[clamp(3.5rem,10vw,9rem)] leading-[0.9] tracking-[-0.04em] font-medium">
+            <div className="block">Contact</div>
+            <div className="block text-[#007DC6] italic font-light">Us.</div>
           </h2>
-          <p className="hero-sub mt-10 text-lg md:text-xl font-light text-[#4D4D4F]/70 max-w-xl leading-relaxed">
-            For membership enquiries, pricing, corporate events or general questions — we&apos;re here, right on the highway.
+          <p className="hero-sub mt-12 text-lg md:text-xl font-light text-white/60 max-w-2xl leading-relaxed tracking-[0.01em]">
+            We’re always here to connect with you. At Express Highway Inn, we believe in building strong relationships with our guests, investors, and partners. Whether you’re planning to visit, looking for investment opportunities, or simply want to know more about our world-class facilities, our team is ready to assist you 24/7.
           </p>
 
-          <div className="hero-cta mt-12 flex flex-wrap gap-4">
+          <div className="hero-cta mt-14 flex flex-wrap gap-6">
             <a
               href="#enquiry"
-              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#007DC6] text-white text-[11px] uppercase tracking-[0.3em] font-medium overflow-hidden hover:bg-[#0096E0] transition-colors duration-500"
+              className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-[#0c0b0b] text-[10px] uppercase tracking-[0.35em] font-medium overflow-hidden hover:bg-[#007DC6] hover:text-white transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
               data-cursor="ENQUIRE"
             >
               <span className="relative z-10">Start an Enquiry</span>
-              <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" />
             </a>
             <a
               href="#location"
-              className="group inline-flex items-center justify-center gap-3 px-8 py-4 border border-[#4D4D4F]/20 text-[#4D4D4F] text-[11px] uppercase tracking-[0.3em] font-medium hover:border-[#C3161C] hover:text-[#C3161C] transition-colors duration-300"
+              className="group inline-flex items-center justify-center gap-3 px-10 py-5 border border-white/20 text-white text-[10px] uppercase tracking-[0.35em] font-medium hover:border-white transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               Get Directions
             </a>
           </div>
         </div>
 
-        <div className="hidden lg:flex lg:col-span-5 justify-end items-center pr-12">
-          <div className="live-indicator relative flex flex-col items-end gap-2">
+        <div className="hidden lg:flex lg:col-span-4 justify-end items-center pr-12">
+          <div className="live-indicator relative flex flex-col items-end gap-3 border-r border-white/10 pr-8">
             <div className="relative flex items-center gap-3">
-              <div className="relative w-3 h-3">
-                <span className="absolute inset-0 rounded-full bg-[#007DC6]/60 animate-ping"></span>
-                <span className="relative inline-flex w-3 h-3 rounded-full bg-[#007DC6]"></span>
+              <div className="relative w-2.5 h-2.5">
+                <span className="absolute inset-0 rounded-full bg-[#007DC6]/40 animate-ping"></span>
+                <span className="relative inline-flex w-2.5 h-2.5 rounded-full bg-[#007DC6]"></span>
               </div>
-              <span className="text-[10px] uppercase tracking-[0.4em] text-[#4D4D4F]/60">Live Location</span>
+              <span className="text-[10px] uppercase tracking-[0.4em] text-white/50">Available 24/7</span>
             </div>
-            <span className="text-sm uppercase tracking-[0.2em] text-[#4D4D4F]">Express Highway Inn</span>
-            <span className="text-xs text-[#4D4D4F]/50">Your Destination</span>
+            <span className="text-sm uppercase tracking-[0.25em] text-white font-medium">Express Highway Inn</span>
+            <span className="text-xs text-white/40 font-light">Sampan Group</span>
           </div>
         </div>
       </div>
@@ -229,7 +230,7 @@ function Hero() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. LOCATION & INTERACTIVE MAP
+   3. LOCATION & INTERACTIVE MAP (High Contrast Luxury)
 ═══════════════════════════════════════════════════════════════ */
 function LocationSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -240,7 +241,7 @@ function LocationSection() {
       new SplitType(text, { types: "lines", lineClass: "overflow-hidden block" });
       gsap.from(".loc-head .line", {
         yPercent: 110,
-        duration: 1.2,
+        duration: 1.5,
         stagger: 0.1,
         ease: "power4.out",
         scrollTrigger: { trigger: text, start: "top 80%" },
@@ -261,56 +262,55 @@ function LocationSection() {
   }, { scope: ref });
 
   return (
-    <section id="location" ref={ref} className="bg-white text-[#4D4D4F] py-32 md:py-48 overflow-hidden">
+    <section id="location" ref={ref} className="bg-[#FAFAFA] text-[#0c0b0b] py-40 md:py-56 overflow-hidden border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="max-w-4xl mb-20">
-          <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-6">
-            Right on the Highway
+        <div className="max-w-4xl mb-24">
+          <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-8">
+            Head Office Location
           </span>
-          <h2 className="loc-head font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.05]">
+          <h2 className="loc-head font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-[-0.02em]">
             Easy to find.<br />Easy to reach.
           </h2>
-          <p className="mt-8 text-base md:text-lg font-light text-[#4D4D4F]/60 max-w-xl leading-relaxed">
-            Whether you&apos;re stopping for the night, visiting the Club & Lounge, planning an event or simply need directions, our team is ready to help.
+          <p className="mt-10 text-base md:text-lg font-light text-[#0c0b0b] max-w-xl leading-relaxed">
+            Whether you’re planning to visit, looking for investment opportunities, or simply want to know more about our world-class facilities, our team is ready to help.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-5 flex flex-col">
-            <div className="border border-[#4D4D4F]/10 p-8 mb-8 bg-[#FAFAFA]">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 block mb-4">Highway Landmark</span>
-              <p className="text-xl font-[family-name:var(--font-playfair)] mb-2 text-[#007DC6]">Dhaka - Chittagong Highway</p>
-              <p className="text-sm text-[#4D4D4F]/70">Mirsarai, Chittagong, Bangladesh</p>
+            <div className="border border-white/10 p-10 mb-8 bg-[#0c0b0b] backdrop-blur-sm">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-black/40 block mb-6">Corporate Landmark</span>
+              <p className="text-xl font-[family-name:var(--font-playfair)] mb-2 text-[#007DC6]">Bashundhara, Dhaka</p>
+              <p className="text-sm text-white/60 font-light">Sampan 21st Century, House-284, Block-B Road-1/A, Dhaka-1229, Bangladesh.</p>
             </div>
-            <div className="border border-[#4D4D4F]/10 p-8 bg-[#FAFAFA]">
-              <span className="font-[family-name:var(--font-playfair)] text-6xl md:text-7xl font-medium text-[#007DC6] block leading-none">24/7</span>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 block mt-4">Open Every Day</span>
+            <div className="border border-white/10 p-10 bg-black/[0.02] backdrop-blur-sm">
+              <span className="font-[family-name:var(--font-playfair)] text-7xl md:text-8xl font-extralight text-white block leading-none">24/7</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-black/40 block mt-6">Assistance Available</span>
             </div>
           </div>
 
-          <div className="lg:col-span-7 map-container relative w-full aspect-[4/5] md:aspect-square overflow-hidden border border-[#4D4D4F]/10" data-cursor="MAP">
+          <div className="lg:col-span-7 map-container relative w-full aspect-[4/5] md:aspect-square overflow-hidden border border-white/10" data-cursor="MAP">
             <iframe
               title="Express Highway Inn Location"
-              src="https://maps.google.com/maps?q=Mirsarai%20Chittagong&t=&z=12&ie=UTF8&iwloc=&output=embed"
-              className="absolute inset-0 w-full h-full grayscale contrast-[0.9] opacity-90"
+              src="https://maps.google.com/maps?q=Bashundhara%20Dhaka&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              className="absolute inset-0 w-full h-full opacity-40 invert"
               style={{ border: 0 }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent"></div>
-            <div className="pointer-events-none absolute inset-0 bg-[#007DC6]/[0.01] mix-blend-overlay"></div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0c0b0b] via-transparent to-transparent"></div>
             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
               <path className="map-route-path" d="M0,80 L40,80 L60,50 L60,20" fill="none" stroke="#007DC6" strokeWidth="0.5" strokeDasharray="4" />
             </svg>
             <div className="absolute top-[20%] left-[60%] flex flex-col items-center group cursor-pointer" data-cursor="OPEN">
               <div className="relative w-4 h-4">
                 <span className="absolute inset-0 rounded-full bg-[#007DC6]/50 animate-ping"></span>
-                <span className="relative w-4 h-4 rounded-full bg-[#007DC6] border-2 border-white shadow-lg"></span>
+                <span className="relative w-4 h-4 rounded-full bg-[#007DC6] border-2 border-[#0c0b0b] shadow-lg"></span>
               </div>
-              <div className="mt-2 bg-[#4D4D4F] backdrop-blur-md text-white p-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
-                <span className="block text-[9px] uppercase tracking-[0.3em] text-[#FCB813]">Your Destination</span>
-                <span className="block text-sm font-[family-name:var(--font-playfair)] mt-1">Express Highway Inn</span>
-                <span className="block text-[10px] text-white/60 mt-1">Open 24/7</span>
+              <div className="mt-4 bg-[#FAFAFA] text-[#0c0b0b] p-5 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 pointer-events-none shadow-2xl">
+                <span className="block text-[9px] uppercase tracking-[0.3em] text-[#007DC6]">Head Office</span>
+                <span className="block text-sm font-[family-name:var(--font-playfair)] mt-2">Sampan Group</span>
+                <span className="block text-[10px] text-[#0c0b0b]/50 mt-1">Bashundhara, Dhaka</span>
               </div>
             </div>
           </div>
@@ -321,45 +321,43 @@ function LocationSection() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   4. CONTACT DETAILS LIST
+   4. CONTACT DETAILS LIST (Minimalist Editorial)
 ═══════════════════════════════════════════════════════════════ */
 function ContactList() {
   const contacts = [
-    { num: "01", label: "Call Us", value: "+880 1710 000000", href: "tel:+8801710000000", Icon: Phone },
-    { num: "02", label: "WhatsApp", value: "+880 1710 000000", href: "https://wa.me/8801710000000", Icon: MessageSquare },
-    { num: "03", label: "Email", value: "info@expresshighwayinn.com", href: "mailto:info@expresshighwayinn.com", Icon: Mail },
-    { num: "04", label: "Visit", value: "Dhaka - Chittagong Hwy", href: "#location", Icon: MapPin },
+    { num: "01", label: "Call Us", value: "+880 1906-896326", href: "tel:+8801906896326", Icon: Phone },
+    { num: "02", label: "Email Us", value: "info@sampangroup.com.bd", href: "mailto:info@sampangroup.com.bd", Icon: Mail },
+    { num: "03", label: "Visit Us", value: "Bashundhara, Dhaka", href: "#location", Icon: MapPin },
+    { num: "04", label: "Office Hours", value: "10:00 AM - 06:00 PM", href: "#", Icon: Clock },
   ];
 
   return (
-    <section className="bg-[#F7F6F2] text-[#4D4D4F] py-32 md:py-48 overflow-hidden">
+    <section className="bg-[#F7F6F2] text-[#0c0b0b] py-32 md:py-48 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="border-t border-[#4D4D4F]/10">
+        <div className="border-t border-[#0c0b0b]/10">
           {contacts.map((c, i) => (
             <a
               key={i}
               href={c.href}
-              target={c.num === "02" ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              className="group relative flex items-center justify-between py-12 border-b border-[#4D4D4F]/10 cursor-pointer overflow-hidden"
+              className="group relative flex items-center justify-between py-12 md:py-16 border-b border-[#0c0b0b]/10 cursor-pointer overflow-hidden"
               data-cursor={c.label.toUpperCase()}
             >
-              <span className="absolute inset-0 bg-[#007DC6]/[0.03] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"></span>
+              <span className="absolute inset-0 bg-[#007DC6]/[0.02] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></span>
               <div className="relative flex items-center gap-8 md:gap-16">
-                <span className="text-[10px] tracking-[0.3em] text-[#4D4D4F]/30 group-hover:text-[#007DC6] transition-colors w-8">{c.num}</span>
-                <div className="flex items-center gap-6">
-                  <c.Icon className="h-6 w-6 text-[#4D4D4F]/40 group-hover:text-[#007DC6] transition-colors" />
+                <span className="text-[10px] tracking-[0.3em] text-[#0c0b0b]/30 group-hover:text-[#007DC6] transition-colors duration-500 w-8">{c.num}</span>
+                <div className="flex items-center gap-8">
+                  <c.Icon className="h-6 w-6 text-[#0c0b0b]/30 group-hover:text-[#007DC6] transition-colors duration-500" />
                   <div>
-                    <span className="block text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 mb-2">{c.label}</span>
-                    <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-4xl font-medium text-[#4D4D4F]/80 group-hover:text-[#007DC6] transition-all duration-500 group-hover:translate-x-3">
+                    <span className="block text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 mb-3">{c.label}</span>
+                    <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-4xl font-light text-[#0c0b0b]/80 group-hover:text-[#0c0b0b] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3">
                       {c.value}
                     </h3>
                   </div>
                 </div>
               </div>
               <div className="relative flex items-center gap-4">
-                <span className="hidden md:block w-0 h-px bg-[#007DC6] group-hover:w-16 transition-all duration-500"></span>
-                <ArrowUpRight className="h-6 w-6 md:h-8 md:w-8 text-[#4D4D4F]/30 group-hover:text-[#007DC6] transition-all duration-500 group-hover:translate-x-2 group-hover:rotate-45" />
+                <span className="hidden md:block w-0 h-px bg-[#007DC6] group-hover:w-16 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></span>
+                <ArrowUpRight className="h-6 w-6 md:h-8 md:w-8 text-[#0c0b0b]/20 group-hover:text-[#007DC6] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2 group-hover:rotate-45" />
               </div>
             </a>
           ))}
@@ -374,33 +372,33 @@ function ContactList() {
 ═══════════════════════════════════════════════════════════════ */
 function SampanOffice() {
   return (
-    <section className="bg-white text-[#4D4D4F] py-32 md:py-48 overflow-hidden border-t border-[#4D4D4F]/5">
+    <section className="bg-white text-[#0c0b0b] py-32 md:py-48 overflow-hidden border-t border-[#0c0b0b]/5">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16">
         <div className="flex flex-col justify-center">
-          <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-6">Corporate Connection</span>
-          <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-medium leading-[1.05] mb-8">
-            The Sampan Group<br /><span className="text-[#007DC6]">Head Office.</span>
+          <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-8">Corporate Connection</span>
+          <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-light leading-[1.05] mb-10 tracking-[-0.02em]">
+            The Sampan Group<br /><span className="text-[#007DC6] italic">Head Office.</span>
           </h2>
-          <p className="text-lg font-light text-[#4D4D4F]/60 max-w-md leading-relaxed">
+          <p className="text-lg font-light text-[#0c0b0b]/50 max-w-md leading-relaxed">
             For corporate enquiries, partnerships and wider Sampan Group matters, connect directly with our head office.
           </p>
         </div>
-        <div className="border border-[#4D4D4F]/10 divide-y divide-[#4D4D4F]/10 bg-[#FAFAFA]">
-          <div className="p-8 hover:bg-[#007DC6]/[0.02] transition-colors" data-cursor="CALL">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 block mb-2">Phone</span>
-            <a href="tel:+8801710000000" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors">+880 1710 000000</a>
+        <div className="border border-[#0c0b0b]/10 divide-y divide-[#0c0b0b]/10 bg-[#F7F6F2]">
+          <div className="p-10 hover:bg-white transition-colors duration-500" data-cursor="CALL">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 block mb-4">Phone</span>
+            <a href="tel:+8801906896326" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">+880 1906-896326</a>
           </div>
-          <div className="p-8 hover:bg-[#007DC5]/[0.02] transition-colors" data-cursor="CALL">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 block mb-2">WhatsApp</span>
-            <a href="https://wa.me/8801710000000" target="_blank" rel="noopener noreferrer" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors">+880 1710 000000</a>
+          <div className="p-10 hover:bg-white transition-colors duration-500" data-cursor="MAIL">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 block mb-4">Email</span>
+            <a href="mailto:info@sampangroup.com.bd" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">info@sampangroup.com.bd</a>
           </div>
-          <div className="p-8 hover:bg-[#007DC6]/[0.02] transition-colors" data-cursor="MAIL">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 block mb-2">Email</span>
-            <a href="mailto:info@sampangroup.com" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors">info@sampangroup.com</a>
+          <div className="p-10 hover:bg-white transition-colors duration-500">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 block mb-4">Address</span>
+            <p className="text-xl font-[family-name:var(--font-playfair)] text-[#0c0b0b]/80">Sampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229.</p>
           </div>
-          <div className="p-8 hover:bg-[#007DC6]/[0.02] transition-colors">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/50 block mb-2">Address</span>
-            <p className="text-xl font-[family-name:var(--font-playfair)] text-[#4D4D4F]/80">Gulshan, Dhaka, Bangladesh</p>
+          <div className="p-10 hover:bg-white transition-colors duration-500">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 block mb-4">Office Hours</span>
+            <p className="text-xl font-[family-name:var(--font-playfair)] text-[#0c0b0b]/80">10:00 AM - 06:00 PM</p>
           </div>
         </div>
       </div>
@@ -422,9 +420,9 @@ function EnquiryForm() {
     if (heading) {
       new SplitType(heading, { types: "lines", lineClass: "overflow-hidden block" });
       gsap.set(".form-head .line", { yPercent: 110 });
-      tl.to(".form-head .line", { yPercent: 0, duration: 1.5, stagger: 0.15, ease: "power4.out" });
+      tl.to(".form-head .line", { yPercent: 0, duration: 1.8, stagger: 0.15, ease: "power4.out" });
     }
-    tl.from(".form-anim", { opacity: 0, y: 30, duration: 0.8, stagger: 0.1, ease: "power3.out" }, "-=0.8");
+    tl.from(".form-anim", { opacity: 0, y: 30, duration: 1, stagger: 0.1, ease: "power3.out" }, "-=0.8");
 
     const btn = btnRef.current;
     if (btn) {
@@ -443,45 +441,45 @@ function EnquiryForm() {
   }, { scope: ref });
 
   return (
-    <section id="enquiry" ref={ref} className="relative bg-white text-[#4D4D4F] py-32 md:py-56 overflow-hidden">
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#007DC6]/[0.04] blur-[150px] rounded-full" />
+    <section id="enquiry" ref={ref} className="relative bg-[#F7F6F2] text-[#0c0b0b] py-32 md:py-56 overflow-hidden">
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#007DC6]/[0.03] blur-[150px] rounded-full" />
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16">
         <div className="flex flex-col justify-center">
-          <span className="form-anim block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-8">Let&apos;s Talk</span>
-          <h2 className="form-head font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,6vw,5rem)] font-medium leading-[1.05] mb-10">
+          <span className="form-anim block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-10">Let&apos;s Talk</span>
+          <h2 className="form-head font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,6vw,5rem)] font-light leading-[1.05] mb-12 tracking-[-0.03em]">
             <div>Start a</div>
             <div className="text-[#007DC6] italic">Conversation.</div>
           </h2>
-          <p className="form-anim text-lg font-light text-[#4D4D4F]/60 max-w-md leading-relaxed">Whether you are looking for membership information, planning an event or simply have a question, send us a message.</p>
+          <p className="form-anim text-lg font-light text-[#0c0b0b]/50 max-w-md leading-relaxed">Whether you are looking for membership information, planning an event or simply have a question, send us a message.</p>
         </div>
-        <form className="form-anim flex flex-col gap-10">
+        <form className="form-anim flex flex-col gap-12">
           <div className="relative">
-            <input type="text" id="name" required placeholder=" " className="peer w-full bg-transparent border-b border-[#4D4D4F]/20 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors text-[#4D4D4F]" />
-            <label htmlFor="name" className="absolute top-2 left-0 text-lg text-[#4D4D4F]/50 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Full Name</label>
+            <input type="text" id="name" required placeholder=" " className="peer w-full bg-transparent border-b border-[#0c0b0b]/15 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors duration-500 text-[#0c0b0b]" />
+            <label htmlFor="name" className="absolute top-2 left-0 text-lg text-[#0c0b0b]/40 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Full Name</label>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="relative">
-              <input type="tel" id="phone" required placeholder=" " className="peer w-full bg-transparent border-b border-[#4D4D4F]/20 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors text-[#4D4D4F]" />
-              <label htmlFor="phone" className="absolute top-2 left-0 text-lg text-[#4D4D4F]/50 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Phone</label>
+              <input type="tel" id="phone" required placeholder=" " className="peer w-full bg-transparent border-b border-[#0c0b0b]/15 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors duration-500 text-[#0c0b0b]" />
+              <label htmlFor="phone" className="absolute top-2 left-0 text-lg text-[#0c0b0b]/40 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Phone</label>
             </div>
             <div className="relative">
-              <input type="email" id="email" required placeholder=" " className="peer w-full bg-transparent border-b border-[#4D4D4F]/20 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors text-[#4D4D4F]" />
-              <label htmlFor="email" className="absolute top-2 left-0 text-lg text-[#4D4D4F]/50 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Email</label>
+              <input type="email" id="email" required placeholder=" " className="peer w-full bg-transparent border-b border-[#0c0b0b]/15 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors duration-500 text-[#0c0b0b]" />
+              <label htmlFor="email" className="absolute top-2 left-0 text-lg text-[#0c0b0b]/40 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Email</label>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#4D4D4F]/50">Enquiry Type</span>
+          <div className="flex flex-col gap-5">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[#0c0b0b]/40">Enquiry Type</span>
             <div className="relative flex gap-4">
               {["General", "Membership", "Inquiries"].map((t) => (
-                <button key={t} type="button" onClick={() => setType(t)} className={`relative px-6 py-3 text-[11px] uppercase tracking-[0.2em] border transition-colors duration-300 ${type === t ? "bg-[#007DC6] text-white border-[#007DC6]" : "border-[#4D4D4F]/20 text-[#4D4D4F]/70 hover:border-[#007DC6]"}`}>{t}</button>
+                <button key={t} type="button" onClick={() => setType(t)} className={`relative px-8 py-4 text-[10px] uppercase tracking-[0.25em] border transition-colors duration-500 ${type === t ? "bg-[#0c0b0b] text-white border-[#0c0b0b]" : "border-[#0c0b0b]/15 text-[#0c0b0b]/60 hover:border-[#0c0b0b]"}`}>{t}</button>
               ))}
             </div>
           </div>
           <div className="relative">
-            <textarea id="message" rows={3} required placeholder=" " className="peer w-full bg-transparent border-b border-[#4D4D4F]/20 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors resize-none text-[#4D4D4F]"></textarea>
-            <label htmlFor="message" className="absolute top-2 left-0 text-lg text-[#4D4D4F]/50 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Message</label>
+            <textarea id="message" rows={3} required placeholder=" " className="peer w-full bg-transparent border-b border-[#0c0b0b]/15 pb-4 pt-2 text-lg focus:outline-none focus:border-[#007DC6] transition-colors duration-500 resize-none text-[#0c0b0b]"></textarea>
+            <label htmlFor="message" className="absolute top-2 left-0 text-lg text-[#0c0b0b]/40 transition-all duration-300 peer-focus:top-[-16px] peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-[-16px] peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6]">Message</label>
           </div>
-          <button ref={btnRef} type="submit" className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#007DC6] text-white text-[11px] uppercase tracking-[0.3em] font-medium overflow-hidden cursor-pointer mt-4 self-start hover:bg-[#0096E0] transition-colors" data-cursor="SEND">
+          <button ref={btnRef} type="submit" className="group relative inline-flex items-center justify-center gap-3 px-12 py-6 bg-[#0c0b0b] text-white text-[10px] uppercase tracking-[0.35em] font-medium overflow-hidden cursor-pointer mt-4 self-start hover:bg-[#007DC6] transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" data-cursor="SEND">
             <span className="relative z-10">Send Message</span>
             <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:rotate-45" />
           </button>
@@ -496,11 +494,11 @@ function EnquiryForm() {
 ═══════════════════════════════════════════════════════════════ */
 function SocialRow() {
   const socials = [
-    { name: "Facebook", img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=800&auto=format&fit=crop", group: "Express Highway Inn" },
-    { name: "Facebook", img: "https://images.unsplash.com/photo-1502810365585-9e3d2c92e88d?q=80&w=800&auto=format&fit=crop", group: "Sampan Group" },
-    { name: "Instagram", img: "https://images.unsplash.com/photo-1540555700478-4be289caecef?q=80&w=800&auto=format&fit=crop", group: "Sampan Group" },
-    { name: "LinkedIn", img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=800&auto=format&fit=crop", group: "Sampan Group" },
-    { name: "YouTube", img: "https://images.unsplash.com/photo-1611132944641-7573e0c5b57e?q=80&w=800&auto=format&fit=crop", group: "Sampan Group" },
+    { name: "Facebook", img: "/logo/expresslogo.png", group: "Express Highway Inn" },
+    { name: "Facebook", img: "/logo/sampanretail.png", group: "Sampan Group" },
+    { name: "Instagram", img: "/logo/sampanretail.png", group: "Sampan Group" },
+    { name: "LinkedIn", img: "/logo/sampanretail.png", group: "Sampan Group" },
+    { name: "YouTube", img: "/logo/sampanretail.png", group: "Sampan Group" },
   ];
 
   const [hovered, setHovered] = useState<number | null>(null);
@@ -508,28 +506,28 @@ function SocialRow() {
 
   useGSAP(() => {
     if (imgRef.current && hovered !== null) {
-      gsap.fromTo(imgRef.current, { opacity: 0, scale: 0.7, rotate: -5 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.5, ease: "power3.out" });
+      gsap.fromTo(imgRef.current, { opacity: 0, scale: 0.7, rotate: -5 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.6, ease: "power3.out" });
     }
   }, [hovered]);
 
   return (
-    <section className="bg-[#F7F6F2] text-[#4D4D4F] py-32 md:py-48 overflow-hidden">
+    <section className="bg-[#0c0b0b] text-[#FAFAFA] py-32 md:py-48 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-6 text-center">Stay Connected</span>
-        <div className="border-t border-[#4D4D4F]/10 mt-12">
+        <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-12 text-center">Stay Connected</span>
+        <div className="border-t border-white/10">
           {socials.map((s, i) => (
-            <div key={i} className="group relative border-b border-[#4D4D4F]/10" onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}>
-              <a href="#" className="flex items-center justify-between py-8 md:py-12 cursor-pointer" data-cursor="OPEN">
+            <div key={i} className="group relative border-b border-white/10" onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}>
+              <a href="#" className="flex items-center justify-between py-12 md:py-16 cursor-pointer" data-cursor="OPEN">
                 <div className="flex items-center gap-8">
-                  <span className="text-[10px] uppercase tracking-[0.3em] text-[#4D4D4F]/30">{s.group}</span>
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-white/30">{s.group}</span>
                 </div>
                 <div className="flex items-center gap-6">
-                  <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-playfair)] font-medium text-[#4D4D4F]/40 group-hover:text-[#007DC6] transition-colors duration-500">{s.name}</h3>
-                  <ArrowUpRight className="h-6 w-6 text-[#4D4D4F]/30 group-hover:text-[#007DC6] group-hover:rotate-45 transition-all duration-500" />
+                  <h3 className="text-3xl md:text-5xl font-[family-name:var(--font-playfair)] font-light text-white/40 group-hover:text-white transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">{s.name}</h3>
+                  <ArrowUpRight className="h-6 w-6 text-white/30 group-hover:text-[#007DC6] group-hover:rotate-45 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 </div>
               </a>
               {hovered === i && (
-                <div ref={imgRef} className="hidden md:block absolute top-1/2 right-[30%] -translate-y-1/2 w-[200px] h-[130px] overflow-hidden border border-[#4D4D4F]/10 pointer-events-none z-20 shadow-2xl">
+                <div ref={imgRef} className="hidden md:block absolute top-1/2 right-[30%] -translate-y-1/2 w-[220px] h-[140px] overflow-hidden border border-white/10 pointer-events-none z-20 shadow-2xl">
                   <Image src={s.img} alt={s.name} fill className="object-cover" />
                 </div>
               )}
@@ -542,7 +540,7 @@ function SocialRow() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   8. FINAL CINEMATIC SECTION (White Background)
+   8. FINAL CINEMATIC SECTION (Minimalist High Contrast)
 ═══════════════════════════════════════════════════════════════ */
 function FinalCinematic() {
   const ref = useRef<HTMLDivElement>(null);
@@ -561,25 +559,25 @@ function FinalCinematic() {
     }
 
     const tl = gsap.timeline({ scrollTrigger: { trigger: ref.current, start: "top 60%" } });
-    tl.from(".final-text", { opacity: 0, y: 50, duration: 1.5, stagger: 0.2, ease: "power4.out" });
+    tl.from(".final-text", { opacity: 0, y: 50, duration: 1.8, stagger: 0.2, ease: "power4.out" });
   }, { scope: ref });
 
   return (
-    <section ref={ref} className="relative min-h-screen bg-[#F7F6F2] text-[#4D4D4F] overflow-hidden flex items-center justify-center">
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#007DC6]/[0.05] blur-[150px] rounded-full" />
+    <section ref={ref} className="relative min-h-screen bg-[#F7F6F2] text-[#0c0b0b] overflow-hidden flex items-center justify-center">
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#007DC6]/[0.04] blur-[150px] rounded-full" />
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
         <path className="final-route-path" d="M0,90 L40,90 L60,50 L60,10" fill="none" stroke="#007DC6" strokeWidth="0.2" strokeDasharray="4" />
       </svg>
       <div className="relative z-10 text-center px-6">
-        <h2 className="final-text font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,8vw,7rem)] font-medium leading-[1.05]">
+        <h2 className="final-text font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,8vw,7rem)] font-light leading-[1.05] tracking-[-0.03em]">
           <div>Wherever the road</div>
           <div className="text-[#007DC6] italic">takes you,</div>
           <div>we&apos;ll be here.</div>
         </h2>
-        <div className="final-text mt-12 flex flex-col items-center gap-4">
-          <span className="text-[10px] uppercase tracking-[0.4em] text-[#4D4D4F]/50">Express Highway Inn</span>
+        <div className="final-text mt-16 flex flex-col items-center gap-5">
+          <span className="text-[10px] uppercase tracking-[0.4em] text-[#0c0b0b]/40">Express Highway Inn</span>
           <span className="text-[10px] uppercase tracking-[0.4em] text-[#007DC6]">Club & Lounge</span>
-          <div className="w-16 h-px bg-[#007DC6]/50 mt-4"></div>
+          <div className="w-16 h-px bg-[#007DC6]/40 mt-4"></div>
         </div>
       </div>
     </section>
@@ -591,7 +589,7 @@ function FinalCinematic() {
 ═══════════════════════════════════════════════════════════════ */
 export default function ContactPage() {
   return (
-    <main className="bg-white">
+    <main className="bg-[#F7F6F2]">
       <CustomCursorAndGrain />
       <Hero />
       <LocationSection />

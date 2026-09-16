@@ -126,7 +126,7 @@ export default function Affiliations() {
         y: 30,
         scale: 0.95,
         duration: 1,
-        stagger: 0.05, // Faster stagger for large grid
+        stagger: 0.05,
         ease: "power3.out",
         scrollTrigger: {
           trigger: ".affil-grid",
@@ -134,33 +134,33 @@ export default function Affiliations() {
         },
       });
     },
-    { scope: containerRef },
+    { scope: containerRef }
   );
 
   return (
     <section
       id="affiliations"
       ref={containerRef}
-      className="relative w-full bg-[#030303] py-24 md:py-32 overflow-hidden"
+      className="relative w-full bg-[#F7F6F2] py-20 sm:py-24 md:py-32 overflow-hidden"
     >
-      {/* Ambient Background Glow */}
-      <div className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] bg-primary/[0.03] blur-[150px] rounded-full" />
+      {/* Ambient Background Glow - Responsive sizing */}
+      <div className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-primary/[0.04] blur-[120px] md:blur-[150px] rounded-full" />
 
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 relative z-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* ─── Section Header ─── */}
-        <div className="affil-header flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 md:mb-20">
+        <div className="affil-header flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-12 sm:mb-16 md:mb-20">
           <div className="max-w-2xl">
-            <span className="affil-header-anim text-[10px] uppercase tracking-[0.4em] text-primary/80 font-medium mb-6 block">
+            <span className="affil-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-4 sm:mb-6 block">
               Governance & Trust
             </span>
-            <h2 className="affil-header-anim font-[family-name:var(--font-playfair)] text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.05] text-foreground">
+            <h2 className="affil-header-anim font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.05] text-[#0c0b0b]">
               Affiliations &<br />
               Accreditations
             </h2>
           </div>
           <div className="max-w-sm md:text-right">
             <div className="hidden md:block w-16 h-px bg-primary/40 mb-6 ml-auto"></div>
-            <p className="affil-header-anim text-sm md:text-base font-light text-foreground/50 leading-relaxed">
+            <p className="affil-header-anim text-sm md:text-base font-light text-[#0c0b0b]/50 leading-relaxed">
               Our commitment to excellence is recognized by leading national and
               international bodies. We partner with the best to ensure
               unparalleled standards.
@@ -169,49 +169,51 @@ export default function Affiliations() {
         </div>
 
         {/* ─── Seamless Hairline Grid ─── */}
-        <div className="affil-grid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/[0.03] border border-white/[0.03]">
+        {/* 
+          Bulletproof 1px border grid: 
+          Container gets Top/Left borders. Cards get Bottom/Right borders. 
+          This eliminates subpixel rendering gaps and double borders.
+        */}
+        <div className="affil-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 border-t border-l border-[#E5E5E5]">
           {affiliations.map((item, i) => (
             <div
               key={`${item.num}-${i}`}
-              className="affil-card group relative bg-[#030303] aspect-[4/3] md:aspect-square overflow-hidden cursor-pointer p-6 flex flex-col items-center justify-center"
+              className="affil-card group relative bg-white border-r border-b border-[#E5E5E5] aspect-[4/3] sm:aspect-square overflow-hidden cursor-pointer p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center transition-colors duration-500 group-hover:bg-[#FAFAFA]"
             >
               {/* Top Index */}
-              <span className="absolute top-3 left-4 text-[9px] tracking-[0.3em] text-white/15 font-light transition-colors duration-500 group-hover:text-primary/50">
+              <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-[9px] sm:text-[10px] tracking-[0.3em] text-[#0c0b0b]/20 font-light transition-colors duration-500 group-hover:text-primary">
                 {item.num}
               </span>
 
               {/* Logo Wrapper */}
-              <div className="relative w-full h-12 md:h-14 flex items-center justify-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
+              <div className="relative w-full h-10 sm:h-12 md:h-14 flex items-center justify-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
                 <Image
                   src={item.logo}
                   alt={item.name}
                   fill
-                  className="object-contain transition-all duration-500 group-hover:opacity-100"
-                  style={{
-                    /* Converts any logo to elegant white silhouette */
-                    filter: "brightness(0) invert(1)",
-                    opacity: 0.4,
-                  }}
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                  className="object-contain transition-all duration-500 opacity-40"
                 />
-                {/* Glow effect on hover */}
+                {/* Subtle Glow effect on hover */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
                     background:
-                      "radial-gradient(circle, rgba(0,125,197,0.1), transparent 70%)",
+                      "radial-gradient(circle, rgba(0,125,197,0.08), transparent 70%)",
                   }}
                 />
               </div>
 
               {/* Masked Name Animation */}
-              <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 overflow-hidden">
+              {/* On mobile: text is visible by default. On desktop (sm+): animates on hover */}
+              <div className="absolute bottom-0 left-0 right-0 px-3 sm:px-4 pb-3 sm:pb-4 overflow-hidden">
                 <div className="overflow-hidden">
-                  <p className="text-center text-[10px] font-light tracking-wide text-white/0 translate-y-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:text-white/80">
+                  <p className="text-center text-[11px] sm:text-[10px] leading-tight font-light tracking-wide text-[#0c0b0b]/80 sm:text-[#0c0b0b]/0 translate-y-0 sm:translate-y-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:translate-y-0 sm:group-hover:text-[#0c0b0b]/80 line-clamp-2">
                     {item.name}
                   </p>
                 </div>
                 {/* Bottom Line Indicator */}
-                <div className="h-[1px] w-0 bg-primary mt-3 mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-8" />
+                <div className="h-[1px] w-6 sm:w-0 bg-primary mt-3 mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:w-8" />
               </div>
             </div>
           ))}

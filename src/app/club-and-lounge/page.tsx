@@ -22,79 +22,79 @@ const FACILITIES_GRID = [
   {
     name: "Billiard Room",
     tag: "Fun, skill, competition",
-    img: "https://images.unsplash.com/photo-1611132944641-7573e0c5b57e?q=80&w=800&auto=format&fit=crop",
+    img: "/club/game.jpg",
     size: "aspect-[3/4]",
   },
   {
     name: "Card Room",
     tag: "Play, strategy, enjoyment",
-    img: "https://images.unsplash.com/photo-1606167668584-78701c57f13d?q=80&w=800&auto=format&fit=crop",
+    img: "/club/rooms.jpg",
     size: "aspect-[3/4]",
   },
   {
     name: "Salon & Spa",
     tag: "Pamper yourself daily",
-    img: "https://images.unsplash.com/photo-1540555700478-4be289caecef?q=80&w=800&auto=format&fit=crop",
+    img: "/club/salon.jpg",
     size: "md:col-span-2 aspect-[16/9]",
   },
   {
     name: "Gym",
     tag: "Strength, fitness, wellness",
-    img: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=800&auto=format&fit=crop",
+    img: "/club/gym.jpg",
     size: "aspect-[3/4]",
   },
   {
     name: "Swimming Pool",
     tag: "Relax, refresh, rejuvenate",
-    img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=800&auto=format&fit=crop",
+    img: "/club/pool.webp",
     size: "aspect-[3/4]",
   },
   {
     name: "Premium Accommodation",
     tag: "Exclusive stays for members",
-    img: "https://images.unsplash.com/photo-1444201983204-c43cbd584d93?q=80&w=1200&auto=format&fit=crop",
+    img: "/club/lounge.png",
     size: "md:col-span-2 aspect-[16/9]",
   },
   {
     name: "Juice & Drinks Bar",
     tag: "Fresh, flavorful, refreshing",
-    img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop",
+    img: "/club/bar.jpg",
     size: "aspect-[3/4]",
   },
   {
     name: "Prayer Room",
     tag: "Peaceful, serene, sacred",
-    img: "https://images.unsplash.com/photo-1591453243431-1d6b2f4f6e2d?q=80&w=800&auto=format&fit=crop",
+    img: "/images/prayer.jpg",
     size: "aspect-[3/4]",
   },
   {
     name: "CRM Banking Booth",
     tag: "Convenient, accessible, 24/7",
-    img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=800&auto=format&fit=crop",
+    img: "/club/crm.webp",
     size: "md:col-span-2 aspect-[16/9]",
   },
   {
     name: "EV Car Charging",
     tag: "Fast, convenient",
-    img: "https://images.unsplash.com/photo-1593941707882-a5bba14938c1?q=80&w=800&auto=format&fit=crop",
+    img: "/images/evcharging.avif",
     size: "aspect-[3/4]",
   },
   {
     name: "Automatic Car Wash",
     tag: "Quick, efficient",
-    img: "https://images.unsplash.com/photo-1605164599901-db7f68c4b1d5?q=80&w=800&auto=format&fit=crop",
+    img: "/images/carwash.avif",
     size: "aspect-[3/4]",
   },
   {
     name: "Towing Service",
     tag: "Reliable, fast, safe",
-    img: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=800&auto=format&fit=crop",
+    img: "/club/twine.webp",
     size: "aspect-[3/4]",
   },
   {
     name: "Sampan Mart",
     tag: "Fulfil your daily needs, 24/7",
-    img: "https://images.unsplash.com/photo-1568834543543-38b8b36c1b78?q=80&w=800&auto=format&fit=crop",
+    img: "/club/mart.jpg",
     size: "aspect-[3/4]",
   },
 ];
@@ -103,40 +103,40 @@ const LOUNGE_JOURNEY = [
   {
     title: "VVIP Lounge",
     desc: "Exclusive, luxury, comfort",
-    img: "https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=1200&auto=format&fit=crop",
+    img: "/images/lounge.jpg",
   },
   {
     title: "Salon & Spa",
     desc: "Pamper yourself daily",
-    img: "https://images.unsplash.com/photo-1540555700478-4be289caecef?q=80&w=1200&auto=format&fit=crop",
+    img: "/club/salon.jpg",
   },
   {
     title: "Juice & Drinks Bar",
     desc: "Fresh, flavorful, refreshing",
-    img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=1200&auto=format&fit=crop",
+    img: "/club/bar.jpg",
   },
   {
     title: "Billiard Room",
     desc: "Fun, skill, competition",
-    img: "https://images.unsplash.com/photo-1611132944641-7573e0c5b57e?q=80&w=1200&auto=format&fit=crop",
+    img: "/club/billard.jpg",
   },
 ];
 
 const MOSAIC_IMAGES = [
   {
-    src: "https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=800&auto=format&fit=crop",
+    src: "/club/club.png",
     size: "col-span-2 row-span-2 aspect-square",
   },
   {
-    src: "https://images.unsplash.com/photo-1540555700478-4be289caecef?q=80&w=800&auto=format&fit=crop",
+    src: "/club/club1.png",
     size: "col-span-1 row-span-1 aspect-square",
   },
   {
-    src: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop",
+    src: "/club/club2.jpeg",
     size: "col-span-1 row-span-2 aspect-[1/2]",
   },
   {
-    src: "https://images.unsplash.com/photo-1611132944641-7573e0c5b57e?q=80&w=800&auto=format&fit=crop",
+    src: "/club/images.jpg",
     size: "col-span-2 row-span-1 aspect-[2/1]",
   },
 ];
@@ -386,7 +386,7 @@ function ClubHero() {
       {/* Multi-layer Background */}
       <div className="hero-bg-blur absolute inset-[-60px] z-0 opacity-50">
         <Image
-          src="https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=1920&auto=format&fit=crop"
+          src="/hero.jpg"
           alt="Lounge Blurred"
           fill
           priority
@@ -396,7 +396,7 @@ function ClubHero() {
       </div>
       <div className="hero-bg-sharp absolute inset-0 z-[1]">
         <Image
-          src="https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=1920&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1517248135467-3909d0bcfdd7?q=80&w=1920&auto=format&fit=crop"
           alt="VVIP Lounge"
           fill
           priority
@@ -410,7 +410,7 @@ function ClubHero() {
         <h2 className="hero-headline font-[family-name:var(--font-playfair)] text-white text-[clamp(2.5rem,8vw,7rem)] leading-[1.02] font-medium">
           <div className="block">Express Highway Inn</div>
           <div className="block relative w-fit mx-auto mt-2">
-            Club &
+            Club &amp;
             <span className="relative inline-block ml-4">
               <span className="relative z-10 text-primary/90 italic">
                 Lounge
@@ -677,7 +677,7 @@ function DayAtLounge() {
         <div className="relative w-full flex justify-center my-4 pointer-events-auto">
           <div className="float-img relative w-[250px] h-[150px] md:w-[400px] md:h-[250px] overflow-hidden border border-black/10">
             <Image
-              src="https://images.unsplash.com/photo-1540555700478-4be289caecef?q=80&w=800&auto=format&fit=crop"
+              src="/club/lounge.png"
               alt="Lounge Detail"
               fill
               className="object-cover"
@@ -1032,7 +1032,7 @@ function FinalCTA() {
         className="cta-bg absolute inset-0 z-0"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=1920&auto=format&fit=crop')",
+            "url('https://images.unsplash.com/photo-1517248135467-3909d0bcfdd7?q=80&w=1920&auto=format&fit=crop')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

@@ -274,7 +274,7 @@ function AboutHero() {
 
       <div className="hero-bg absolute inset-[-40px] z-0">
         <Image
-          src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1920&auto=format&fit=crop"
+          src="/banner/banner1.jpg"
           alt="Highway"
           fill
           priority
