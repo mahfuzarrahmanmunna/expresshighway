@@ -13,15 +13,16 @@ import {
   useActiveSection,
   useScrollLock,
 } from "@/lib/animation-provider";
+import Link from "next/link";
 
 /* ── Config ── */
 const NAV_ITEMS = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Club & Lounge", href: "#club-lounge" },
-  { label: "Membership", href: "#membership" }, // Commercial Page
-  { label: "Contact", href: "#contact" },
-  { label: "Sampan Group", href: "#sampan-group" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/aboutus" },
+  { label: "Club & Lounge", href: "/club-lounge" },
+  { label: "Membership", href: "/membership" }, // Commercial Page
+  { label: "Contact", href: "/contactus" },
+  { label: "Sampan Group", href: "/sampan-group" },
 ];
 
 const MOBILE_ITEMS = [...NAV_ITEMS];
@@ -352,7 +353,7 @@ export default function Navbar({ splashVisible }: NavbarProps) {
                 Premium Hospitality
               </span>
             </div>
-
+<Link href="/"></Link>
             {/* Right info */}
             <div className="flex items-center gap-4">
               <a

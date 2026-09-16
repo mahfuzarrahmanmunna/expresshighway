@@ -6,16 +6,20 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Menu, X, Phone, Mail } from "lucide-react";
 import { FaWhatsapp, FaFacebookF } from "react-icons/fa";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Create a valid Motion Link component for Next.js routing
+const MotionLink = motion(Link);
+
 const NAV_ITEMS = [
   { label: "Home", number: "01", href: "/" },
   { label: "About", number: "02", href: "/aboutus" },
   { label: "Club & Lounge", number: "03", href: "/club-and-lounge" },
-  { label: "Contact", number: "04", href: "/contact" },
+  { label: "Contact", number: "04", href: "/contactus" },
   { label: "Sampan Group", number: "05", href: "https://sampangroup.com" },
 ];
 
@@ -29,7 +33,6 @@ export default function GlassNavbar() {
   // --------------------------------------------------
   // MOUSE PARALLAX
   // --------------------------------------------------
-
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -64,7 +67,6 @@ export default function GlassNavbar() {
   // --------------------------------------------------
   // NAVBAR INTRO + SCROLL MORPH
   // --------------------------------------------------
-
   useEffect(() => {
     const nav = navRef.current;
     const inner = innerRef.current;
@@ -72,32 +74,11 @@ export default function GlassNavbar() {
     if (!nav || !inner) return;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        nav,
-        {
-          opacity: 0,
-          y: -40,
-          scale: 0.97,
-          filter: "blur(14px)",
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          filter: "blur(0px)",
-          duration: 1.4,
-          delay: 1.8,
-          ease: "power4.out",
-        },
-      );
-
       ScrollTrigger.create({
         start: "80px top",
         end: "200px top",
-
         onUpdate: (self) => {
           const p = self.progress;
-
           setIsScrolled(p > 0.15);
 
           gsap.to(nav, {
@@ -130,7 +111,6 @@ export default function GlassNavbar() {
   // --------------------------------------------------
   // CLOSE MOBILE MENU ON RESIZE
   // --------------------------------------------------
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -139,17 +119,14 @@ export default function GlassNavbar() {
     };
 
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // --------------------------------------------------
   // LOCK BODY WHEN MOBILE MENU OPEN
   // --------------------------------------------------
-
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -160,9 +137,11 @@ export default function GlassNavbar() {
       {/* =================================================
           DESKTOP / MAIN NAV
       ================================================= */}
-
       <motion.nav
         ref={navRef}
+        initial={{ opacity: 0, y: -40, scale: 0.97, filter: "blur(14px)" }}
+        animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+        transition={{ duration: 1.4, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
         style={{
           rotateX,
           rotateY,
@@ -176,8 +155,7 @@ export default function GlassNavbar() {
           md:top-6
           md:left-6
           md:right-6
-          z-[100]
-          opacity-0
+          z-[9000] 
           will-change-transform
         "
       >
@@ -212,7 +190,6 @@ export default function GlassNavbar() {
           {/* =================================================
               MOVING GLASS LIGHT
           ================================================= */}
-
           <motion.div
             className="
               absolute
@@ -255,7 +232,6 @@ export default function GlassNavbar() {
           {/* =================================================
               CONTENT
           ================================================= */}
-
           <div
             className="
               relative
@@ -270,11 +246,10 @@ export default function GlassNavbar() {
             "
           >
             {/* =================================================
-                LOGO
+                LOGO (Using NextLink)
             ================================================= */}
-
-            <motion.a
-              href="#home"
+            <MotionLink
+              href="/"
               className="group flex items-center gap-4"
               whileHover={{ x: 2 }}
               transition={{
@@ -301,11 +276,7 @@ export default function GlassNavbar() {
                 "
               >
                 <motion.div
-                  className="
-                    absolute
-                    inset-0
-                    bg-white
-                  "
+                  className="absolute inset-0 bg-white"
                   initial={{ scale: 0 }}
                   whileHover={{ scale: 1 }}
                   transition={{
@@ -355,15 +326,14 @@ export default function GlassNavbar() {
                   Highway Inn
                 </div>
               </div>
-            </motion.a>
+            </MotionLink>
 
             {/* =================================================
-                DESKTOP NAV
+                DESKTOP NAV (Using NextLink)
             ================================================= */}
-
             <div className="hidden xl:flex items-center gap-1">
               {NAV_ITEMS.map((item) => (
-                <motion.a
+                <MotionLink
                   key={item.label}
                   href={item.href}
                   target={item.label === "Sampan Group" ? "_blank" : undefined}
@@ -445,16 +415,15 @@ export default function GlassNavbar() {
                       ease: [0.16, 1, 0.3, 1],
                     }}
                   />
-                </motion.a>
+                </MotionLink>
               ))}
             </div>
 
             {/* =================================================
                 RIGHT SIDE (Contact Icons + CTA)
             ================================================= */}
-
             <div className="flex items-center gap-3">
-              {/* Contact & Social Icons */}
+              {/* Contact & Social Icons (Remains motion.a for tel:, mailto:, https:) */}
               <div className="hidden lg:flex items-center gap-2 mr-2">
                 <motion.a
                   href="tel:+8801710000000"
@@ -498,9 +467,9 @@ export default function GlassNavbar() {
                 </motion.a>
               </div>
 
-              {/* CTA (The only commercial page) */}
-              <motion.a
-                href="#membership"
+              {/* CTA (Using NextLink) */}
+              <MotionLink
+                href="/membership"
                 className="
                   hidden
                   md:flex
@@ -553,7 +522,7 @@ export default function GlassNavbar() {
                     group-hover:rotate-45
                   "
                 />
-              </motion.a>
+              </MotionLink>
 
               {/* Mobile Menu Toggle */}
               <motion.button
@@ -582,7 +551,6 @@ export default function GlassNavbar() {
       {/* =================================================
           MOBILE FULLSCREEN MENU
       ================================================= */}
-
       <motion.div
         initial={false}
         animate={{
@@ -592,7 +560,7 @@ export default function GlassNavbar() {
         className="
           fixed
           inset-0
-          z-[200]
+          z-[9500] 
           bg-[#080808]
           backdrop-blur-3xl
         "
@@ -605,7 +573,7 @@ export default function GlassNavbar() {
             opacity-[0.04]
             pointer-events-none
             bg-[linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)]
-            bg-[size:70px_70px]
+            bg-[length:70px_70px] 
           "
         />
 
@@ -662,7 +630,7 @@ export default function GlassNavbar() {
           </button>
         </div>
 
-        {/* Mobile Links */}
+        {/* Mobile Links (Using NextLink) */}
         <div
           className="
             relative
@@ -678,7 +646,7 @@ export default function GlassNavbar() {
         >
           <div>
             {NAV_ITEMS.map((item, index) => (
-              <motion.a
+              <MotionLink
                 key={item.label}
                 href={item.href}
                 target={item.label === "Sampan Group" ? "_blank" : undefined}
@@ -747,47 +715,31 @@ export default function GlassNavbar() {
                     duration-500
                   "
                 />
-              </motion.a>
+              </MotionLink>
             ))}
           </div>
 
           <div className="mt-8">
-            <motion.a
-              href="#membership"
+            <MotionLink
+              href="/membership"
               onClick={() => setMenuOpen(false)}
               className="flex items-center justify-center gap-3 w-full py-5 bg-primary text-white text-[11px] uppercase tracking-[0.2em] font-medium"
             >
               Get Membership
               <ArrowUpRight size={16} />
-            </motion.a>
+            </MotionLink>
 
             <div className="flex justify-center gap-6 mt-8">
-              <a
-                href="tel:+8801710000000"
-                className="text-white/50 hover:text-white"
-              >
+              <a href="tel:+8801710000000" className="text-white/50 hover:text-white">
                 <Phone size={16} />
               </a>
-              <a
-                href="https://wa.me/8801710000000"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/50 hover:text-white"
-              >
+              <a href="https://wa.me/8801710000000" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white">
                 <FaWhatsapp size={16} />
               </a>
-              <a
-                href="mailto:info@expresshighwayinn.com"
-                className="text-white/50 hover:text-white"
-              >
+              <a href="mailto:info@expresshighwayinn.com" className="text-white/50 hover:text-white">
                 <Mail size={16} />
               </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/50 hover:text-white"
-              >
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white">
                 <FaFacebookF size={16} />
               </a>
             </div>
