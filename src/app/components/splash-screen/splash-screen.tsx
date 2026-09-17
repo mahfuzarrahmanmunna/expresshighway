@@ -58,6 +58,9 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const exitFlashRef = useRef<HTMLDivElement>(null);
 
   const activeLabelRef = useRef(1);
+  const topCharRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const subCharRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const particleRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -71,54 +74,23 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       return;
     }
 
-    /* ═══════════════════════════════════════════════════ *
-     *  SPLIT TEXT HELPER                                    *
-     *  Blur + Opacity + Y translation + Slight rotation    *
-     * ═══════════════════════════════════════════════════ */
-    const splitText = (el: HTMLElement | null) => {
-      if (!el) return [];
-      const text = el.textContent || "";
-      el.textContent = "";
-      const chars: HTMLSpanElement[] = [];
-      text.split("").forEach((char) => {
-        const span = document.createElement("span");
-        span.textContent = char === " " ? "\u00A0" : char;
-        span.style.display = "inline-block";
-        span.style.opacity = "0";
-        span.style.transform = "translateY(110%) rotate(5deg)";
-        span.style.filter = "blur(8px)";
-        span.style.willChange = "transform, opacity, filter";
-        el.appendChild(span);
-        chars.push(span);
-      });
-      return chars;
-    };
+    const topChars = topCharRefs.current.filter(Boolean) as HTMLSpanElement[];
+    const subChars = subCharRefs.current.filter(Boolean) as HTMLSpanElement[];
+    const particles = particleRefs.current.filter(Boolean) as HTMLDivElement[];
 
-    const topChars = splitText(topLabelRef.current);
-    const subChars = splitText(subLabelRef.current);
-
-    /* ═══════════════════════════════════════════════════ *
-     *  FLOATING PARTICLES                                   *
-     *  Extremely few · Slow · Opacity < 5%                 *
-     * ═══════════════════════════════════════════════════ */
-    const particles: HTMLDivElement[] = [];
-    if (particleContainerRef.current) {
-      for (let i = 0; i < 7; i++) {
-        const p = document.createElement("div");
-        p.style.position = "absolute";
-        const size = 1 + Math.random() * 2;
-        p.style.width = `${size}px`;
-        p.style.height = `${size}px`;
-        p.style.borderRadius = "50%";
-        p.style.background = "rgba(255,255,255,0.5)";
-        p.style.left = `${10 + Math.random() * 80}%`;
-        p.style.top = `${10 + Math.random() * 80}%`;
-        p.style.opacity = "0";
-        p.style.willChange = "transform, opacity";
-        particleContainerRef.current.appendChild(p);
-        particles.push(p);
-      }
-    }
+    particles.forEach((p, i) => {
+      const size = 1 + Math.random() * 2;
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      p.style.borderRadius = "50%";
+      p.style.background = "rgba(255,255,255,0.5)";
+      p.style.left = `${10 + Math.random() * 80}%`;
+      p.style.top = `${10 + Math.random() * 80}%`;
+      p.style.opacity = "0";
+      p.style.willChange = "transform, opacity";
+      p.style.position = "absolute";
+      p.style.zIndex = `${i + 1}`;
+    });
 
     /* ═══════════════════════════════════════════════════ *
      *  GSAP CONTEXT                                         *
@@ -828,7 +800,25 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       <div
         ref={particleContainerRef}
         className="pointer-events-none absolute inset-0 will-change-transform"
-      />
+      >
+        {Array.from({ length: 7 }, (_, i) => (
+          <div
+            key={i}
+            ref={(el) => {
+              particleRefs.current[i] = el;
+            }}
+            className="absolute"
+            style={{
+              width: "1px",
+              height: "1px",
+              borderRadius: "50%",
+              background: "rgba(255,255,255,0.5)",
+              opacity: 0,
+              willChange: "transform, opacity",
+            }}
+          />
+        ))}
+      </div>
 
       {/* ════════════════════════════════════════════════
           LAYER 6: Vignette
@@ -980,7 +970,23 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             ref={topLabelRef}
             className="mb-10 overflow-hidden text-[8px] font-medium uppercase tracking-[0.35em] text-muted-foreground/30 sm:mb-14 sm:text-[9px] sm:tracking-[0.45em]"
           >
-            Loading Experience
+            {"Loading Experience".split("").map((char, index) => (
+              <span
+                key={`top-${index}`}
+                ref={(el) => {
+                  topCharRefs.current[index] = el;
+                }}
+                style={{
+                  display: "inline-block",
+                  opacity: 0,
+                  transform: "translateY(110%) rotate(5deg)",
+                  filter: "blur(8px)",
+                  willChange: "transform, opacity, filter",
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
           </div>
 
           {/* Sub label — Split Text */}
@@ -988,7 +994,23 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             ref={subLabelRef}
             className="mb-8 overflow-hidden text-[7px] font-light uppercase tracking-[0.5em] text-muted-foreground/15 sm:mb-10 sm:text-[8px]"
           >
-            Luxury Residences
+            {"Luxury Residences".split("").map((char, index) => (
+              <span
+                key={`sub-${index}`}
+                ref={(el) => {
+                  subCharRefs.current[index] = el;
+                }}
+                style={{
+                  display: "inline-block",
+                  opacity: 0,
+                  transform: "translateY(110%) rotate(5deg)",
+                  filter: "blur(8px)",
+                  willChange: "transform, opacity, filter",
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
           </div>
 
           {/* ════════════════════════════════════════════

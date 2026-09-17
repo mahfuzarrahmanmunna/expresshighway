@@ -1,6 +1,11 @@
 "use client";
 
-import { useState, useSyncExternalStore, type ReactNode } from "react";
+import {
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
+
 import { AnimationProvider } from "@/lib/animation-provider";
 import { SplashProvider } from "@/lib/splash-context";
 import { useDeviceCheck } from "@/lib/use-device-check";
@@ -14,24 +19,47 @@ import UnsupportedDevice from "../components/unsupported-device/unsupported-devi
 import SplashScreen from "../components/splash-screen/splash-screen";
 
 // ──────────────────────────────────────────────
-// External-system read: sessionStorage "has the splash
-// already played this session" flag. No live cross-tab
-// updates matter here, so subscribe is a no-op — but
-// useSyncExternalStore still gives us the correct SSR/
-// hydration handling without an effect.
+// Client / mounted detection
+// ──────────────────────────────────────────────
+
+function subscribeClient() {
+  return () => {};
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getClientServerSnapshot() {
+  return false;
+}
+
+// ──────────────────────────────────────────────
+// Splash session storage
 // ──────────────────────────────────────────────
 
 function subscribeSplashSeen() {
   return () => {};
 }
+
 function getSplashSeenSnapshot() {
+  if (typeof window === "undefined") return false;
+
   return sessionStorage.getItem("ERA-splash-seen") !== null;
 }
+
 function getSplashSeenServerSnapshot() {
-  return true; 
+  return false;
 }
 
 export function Providers({ children }: { children: ReactNode }) {
+  // Hydration-safe mounted/client detection
+  const isMounted = useSyncExternalStore(
+    subscribeClient,
+    getClientSnapshot,
+    getClientServerSnapshot,
+  );
+
   const specs = useDeviceCheck();
 
   const seenAlready = useSyncExternalStore(
@@ -40,14 +68,17 @@ export function Providers({ children }: { children: ReactNode }) {
     getSplashSeenServerSnapshot,
   );
 
-  // Local, event-driven override for "user just finished watching it."
-  // This setState lives in a click/timeout callback, not an effect
-  // body, so it's not subject to the same rule.
   const [dismissed, setDismissed] = useState(false);
-  const showSplash = !seenAlready && !dismissed;
+
+  const showSplash = isMounted
+    ? !seenAlready && !dismissed
+    : true;
 
   const handleSplashComplete = () => {
-    sessionStorage.setItem("ERA-splash-seen", "true");
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("ERA-splash-seen", "true");
+    }
+
     setDismissed(true);
   };
 
@@ -63,9 +94,11 @@ export function Providers({ children }: { children: ReactNode }) {
 
         <Footer />
 
-        {!specs.isSupported && <UnsupportedDevice specs={specs} />}
+        {isMounted && !specs.isSupported && (
+          <UnsupportedDevice specs={specs} />
+        )}
 
-        {showSplash && specs.isSupported && (
+        {isMounted && showSplash && specs.isSupported && (
           <SplashScreen onComplete={handleSplashComplete} />
         )}
       </SplashProvider>

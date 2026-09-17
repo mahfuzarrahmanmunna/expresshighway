@@ -14,10 +14,12 @@ export default function AboutLocation() {
 
   useGSAP(
     () => {
+      let splitInstance: SplitType | null = null;
+
       /* ── Split Type Heading ── */
       const heading = document.querySelector<HTMLElement>(".about-split-heading");
       if (heading) {
-        SplitType.create(heading, {
+        splitInstance = SplitType.create(heading, {
           types: "lines,words",
           lineClass: "overflow-hidden block",
           wordClass: "inline-block will-change-transform",
@@ -73,6 +75,10 @@ export default function AboutLocation() {
           scrub: 1,
         },
       });
+
+      return () => {
+        splitInstance?.revert();
+      };
     },
     { scope: containerRef },
   );

@@ -25,9 +25,9 @@ export default function Home() {
       <Affiliations/>
       <ContactTrust/>
       <About />
-      <FacilitiesExperience />
+      {/* <FacilitiesExperience /> */}
       {/* <Projects /> */}
-      <SisterCompanies />
+      {/* <SisterCompanies /> */}
     </>
   );
 }

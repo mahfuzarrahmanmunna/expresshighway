@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, X, ChevronLeft, ChevronRight, Expand } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -55,6 +55,48 @@ const GALLERY_IMAGES = [
 
 export default function GalleryTeaser() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [viewerIndex, setViewerIndex] = useState<number | null>(null);
+
+  /* ── Lightbox Keyboard Navigation & Scroll Lock ── */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (viewerIndex === null) return;
+      if (e.key === "Escape") setViewerIndex(null);
+      if (e.key === "ArrowRight")
+        setViewerIndex((prev) =>
+          prev === null ? null : (prev + 1) % GALLERY_IMAGES.length
+        );
+      if (e.key === "ArrowLeft")
+        setViewerIndex((prev) =>
+          prev === null
+            ? null
+            : (prev - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+        );
+    };
+
+    if (viewerIndex !== null) {
+      document.body.style.overflow = "hidden";
+      // Animate in
+      gsap.fromTo(
+        ".lightbox-overlay",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power2.out" }
+      );
+      gsap.fromTo(
+        ".lightbox-content",
+        { opacity: 0, scale: 0.95, y: 20 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "power3.out", delay: 0.1 }
+      );
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+    };
+  }, [viewerIndex]);
 
   useGSAP(
     () => {
@@ -76,9 +118,9 @@ export default function GalleryTeaser() {
       items.forEach((item, i) => {
         gsap.fromTo(
           item,
-          { clipPath: "inset(100% 0% 0% 0%)" }, // Start hidden from bottom
+          { clipPath: "inset(100% 0% 0% 0%)" },
           {
-            clipPath: "inset(0% 0% 0% 0%)", // Reveal to full
+            clipPath: "inset(0% 0% 0% 0%)",
             duration: 1.4,
             ease: "power4.out",
             scrollTrigger: {
@@ -116,7 +158,7 @@ export default function GalleryTeaser() {
         },
       });
     },
-    { scope: containerRef },
+    { scope: containerRef }
   );
 
   return (
@@ -149,11 +191,12 @@ export default function GalleryTeaser() {
         </div>
 
         {/* ─── Asymmetric 12-Column Grid ─── */}
-        <div className="gallery-grid group/grid grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-4">
+        <div className="gallery-grid group/grid grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-5">
           {GALLERY_IMAGES.map((item, i) => (
             <div
               key={i}
-              className={`gallery-item group relative ${item.size} overflow-hidden cursor-pointer bg-white`}
+              onClick={() => setViewerIndex(i)}
+              className={`gallery-item group relative ${item.size} overflow-hidden cursor-zoom-in bg-[#0c0b0b] select-none`}
             >
               {/* Parallax Image Wrapper */}
               <div className="absolute inset-0 z-0">
@@ -162,29 +205,26 @@ export default function GalleryTeaser() {
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="gallery-img object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover/grid:scale-[1.02]"
+                  className="gallery-img object-cover transition-all duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-[1.05] group-hover/grid:opacity-50 group-hover:opacity-100"
                   quality={90}
                 />
               </div>
 
-              {/* Hover Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0b0b]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-[1]" />
-              
-              {/* Dimming Effect: When grid is hovered, dim image. If this item is hovered, keep it bright */}
-              <div className="absolute inset-0 bg-[#F7F6F2] opacity-0 group-hover/grid:opacity-60 group-hover:opacity-0 transition-opacity duration-500 z-[2]" />
+              {/* Hover Gradient Overlay for Text Legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0b0b]/90 via-[#0c0b0b]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-[1]" />
 
               {/* Top Index Indicator */}
               <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
-                <span className="text-[10px] tracking-[0.3em] text-[#0c0b0b]/40 font-light transition-colors duration-500 group-hover:text-white">
+                <span className="text-[10px] tracking-[0.3em] text-white/70 transition-colors duration-500 group-hover:text-white">
                   0{i + 1} / 08
                 </span>
-                <ArrowUpRight className="h-4 w-4 text-[#0c0b0b]/40 transition-all duration-500 group-hover:text-white group-hover:rotate-45" />
+                <Expand className="h-4 w-4 text-white/70 transition-all duration-500 group-hover:text-white group-hover:scale-110" />
               </div>
 
               {/* Bottom Title Reveal */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
                 <div className="overflow-hidden">
-                  <h3 className="font-[family-name:var(--font-playfair)] text-xl md:text-3xl text-white font-medium leading-tight translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                  <h3 className="font-[family-name:var(--font-playfair)] text-xl md:text-3xl text-white font-medium leading-tight translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
                     {item.title}
                   </h3>
                 </div>
@@ -209,6 +249,79 @@ export default function GalleryTeaser() {
           </div>
         </div>
       </div>
+
+      {/* ────────────────────────────────────────────────── */}
+      {/* ─── Luxury Lightbox / Image Viewer ─────────────── */}
+      {/* ────────────────────────────────────────────────── */}
+      {viewerIndex !== null && (
+        <div
+          className="lightbox-overlay fixed inset-0 z-[100] bg-[#0c0b0b]/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8"
+          onClick={() => setViewerIndex(null)}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setViewerIndex(null)}
+            className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors duration-300 p-2 z-50"
+            aria-label="Close viewer"
+          >
+            <X className="h-7 w-7" />
+          </button>
+
+          {/* Previous Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setViewerIndex(
+                (viewerIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+              );
+            }}
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors duration-300 p-2 z-50 group"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="h-10 w-10 transition-transform duration-300 group-hover:-translate-x-1" />
+          </button>
+
+          {/* Image Content */}
+          <div
+            className="lightbox-content relative w-full max-w-6xl h-full max-h-[85vh] flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative flex-1 w-full flex items-center justify-center">
+              <Image
+                src={GALLERY_IMAGES[viewerIndex].src}
+                alt={GALLERY_IMAGES[viewerIndex].title}
+                width={1600}
+                height={1000}
+                className="object-contain max-w-full max-h-[75vh] rounded-sm shadow-2xl"
+                quality={100}
+                priority
+              />
+            </div>
+            
+            {/* Caption */}
+            <div className="mt-8 text-center">
+              <span className="text-[10px] uppercase tracking-[0.4em] text-white/40 mb-3 block">
+                0{viewerIndex + 1} / 0{GALLERY_IMAGES.length}
+              </span>
+              <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-medium">
+                {GALLERY_IMAGES[viewerIndex].title}
+              </h3>
+            </div>
+          </div>
+
+          {/* Next Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setViewerIndex((viewerIndex + 1) % GALLERY_IMAGES.length);
+            }}
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors duration-300 p-2 z-50 group"
+            aria-label="Next image"
+          >
+            <ChevronRight className="h-10 w-10 transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+        </div>
+      )}
     </section>
   );
 }

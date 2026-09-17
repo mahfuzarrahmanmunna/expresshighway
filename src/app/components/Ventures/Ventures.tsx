@@ -17,7 +17,7 @@ const VENTURES = [
     title: "Express Highway Club & Lounge",
     tag: "VVIP Lounge",
     desc: "An exclusive sanctuary of comfort and privilege for the modern traveller.",
-    img: "https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=800&auto=format&fit=crop",
+    img: "/club/resturant.webp",
     link: "https://sampangroup.com",
   },
   {
@@ -25,7 +25,7 @@ const VENTURES = [
     title: "Sampan Condominium",
     tag: "Hotel & Motel",
     desc: "Premium living spaces designed for rest and rejuvenation on the road.",
-    img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=800&auto=format&fit=crop",
+    img: "/club/condominium.png",
     link: "https://sampangroup.com",
   },
   {
@@ -33,7 +33,7 @@ const VENTURES = [
     title: "Sampan Trade Emporium",
     tag: "Super Mall",
     desc: "A comprehensive retail destination bringing daily needs and luxury together.",
-    img: "https://images.unsplash.com/photo-1568834543543-38b8b36c1b78?q=80&w=800&auto=format&fit=crop",
+    img: "/club/emporium.jpeg",
     link: "https://sampangroup.com",
   },
 ];

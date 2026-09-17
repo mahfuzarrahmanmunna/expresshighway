@@ -158,6 +158,7 @@ function AboutHero() {
 
   useGSAP(
     () => {
+      let splitInstance: SplitType | null = null;
       const tl = gsap.timeline({ delay: 0.2 });
 
       // 3D Rotate Intro
@@ -195,7 +196,7 @@ function AboutHero() {
       // Text Mask Slide for Headline
       const heading = document.querySelector<HTMLElement>(".hero-headline");
       if (heading) {
-        new SplitType(heading, {
+        splitInstance = new SplitType(heading, {
           types: "lines,words",
           lineClass: "overflow-hidden block",
         });
@@ -240,7 +241,11 @@ function AboutHero() {
         bgY(ny * -10);
       };
       window.addEventListener("mousemove", onMouseMove);
-      return () => window.removeEventListener("mousemove", onMouseMove);
+
+      return () => {
+        splitInstance?.revert();
+        window.removeEventListener("mousemove", onMouseMove);
+      };
     },
     { scope: ref },
   );
@@ -332,6 +337,8 @@ function OurStory() {
 
   useGSAP(
     () => {
+      let eyebrowSplit: SplitType | null = null;
+      let headingSplit: SplitType | null = null;
       const tl = gsap.timeline({
         scrollTrigger: { trigger: ref.current, start: "top 65%" },
       });
@@ -339,7 +346,7 @@ function OurStory() {
       // Character Reveal (Eyebrow)
       const eyebrow = document.querySelector<HTMLElement>(".story-eyebrow");
       if (eyebrow) {
-        new SplitType(eyebrow, { types: "chars", charClass: "inline-block" });
+        eyebrowSplit = new SplitType(eyebrow, { types: "chars", charClass: "inline-block" });
         tl.from(".story-eyebrow .char", {
           opacity: 0,
           y: 20,
@@ -352,7 +359,7 @@ function OurStory() {
       // Word Reveal (Heading)
       const heading = document.querySelector<HTMLElement>(".story-headline");
       if (heading) {
-        new SplitType(heading, { types: "words", wordClass: "inline-block" });
+        headingSplit = new SplitType(heading, { types: "words", wordClass: "inline-block" });
         tl.from(
           ".story-headline .word",
           {
@@ -393,6 +400,11 @@ function OurStory() {
         { xPercent: 100, duration: 1.5, ease: "power4.out" },
         "<",
       );
+
+      return () => {
+        eyebrowSplit?.revert();
+        headingSplit?.revert();
+      };
     },
     { scope: ref },
   );
@@ -477,10 +489,11 @@ function StoryStatement() {
 
   useGSAP(
     () => {
+      let splitInstance: SplitType | null = null;
       const text = document.querySelector<HTMLElement>(".statement-text");
       if (text) {
         // Morphing Text (simulated via blur/scale scrub)
-        new SplitType(text, { types: "chars", charClass: "inline-block" });
+        splitInstance = new SplitType(text, { types: "chars", charClass: "inline-block" });
         gsap.fromTo(
           ".statement-text .char",
           { filter: "blur(15px)", scale: 0.5, opacity: 0 },
@@ -799,10 +812,11 @@ function AlliedOrganizations() {
 
   useGSAP(
     () => {
+      let splitInstance: SplitType | null = null;
       // Line Reveal for Text
       const text = document.querySelector<HTMLElement>(".allied-head");
       if (text) {
-        new SplitType(text, {
+        splitInstance = new SplitType(text, {
           types: "lines",
           lineClass: "overflow-hidden block",
         });

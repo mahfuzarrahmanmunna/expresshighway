@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -18,6 +17,7 @@ export default function Hero() {
   const loadingRef = useRef<HTMLDivElement>(null);
   const loadingLineRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -32,9 +32,13 @@ export default function Hero() {
 
   useGSAP(
     () => {
-      // ── Split Type ──
-      if (headlineRef.current) {
-        SplitType.create(headlineRef.current, {
+      let splitInstance: SplitType | undefined;
+      
+      // ── Only run SplitType on Desktop to prevent mobile DOM conflicts ──
+      const isDesktop = window.innerWidth > 768;
+
+      if (isDesktop && headlineRef.current) {
+        splitInstance = new SplitType(headlineRef.current, {
           types: "lines,words",
           lineClass: "overflow-hidden block",
           wordClass: "inline-block will-change-transform",
@@ -43,7 +47,6 @@ export default function Hero() {
         const words = headlineRef.current.querySelectorAll(".word");
         words.forEach((word) => {
           const text = word.textContent?.trim().toLowerCase();
-          // Apply shimmer to "Luxury" or "Highway"
           if (text === "luxury" || text === "highway") {
             word.classList.add("text-shimmer");
           }
@@ -56,6 +59,9 @@ export default function Hero() {
           opacity: 0,
           transformOrigin: "bottom center",
         });
+      } else if (headlineRef.current) {
+        // On mobile, just set it to opacity 0 so it can fade in normally
+        gsap.set(headlineRef.current, { opacity: 0 });
       }
 
       // ── Cinematic Loading Sequence ──
@@ -67,42 +73,45 @@ export default function Hero() {
       tl.fromTo(
         loadingLineRef.current,
         { scaleX: 0 },
-        { scaleX: 1, duration: 1.2, ease: "power4.inOut" },
+        { scaleX: 1, duration: 1.2, ease: "power4.inOut" }
       )
         .fromTo(
           "#loading-text",
           { opacity: 0, y: 10 },
           { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
-          "-=0.6",
+          "-=0.6"
         )
         .to(
           loadingLineRef.current,
           { scaleX: 0, duration: 0.8, ease: "power4.inOut" },
-          "+=0.3",
+          "+=0.3"
         )
         .to(
           loadingRef.current,
           { yPercent: -100, duration: 1, ease: "power4.inOut" },
-          "-=0.4",
+          "-=0.4"
         )
         .fromTo(
           bgRef.current,
-          { scale: 1.25, opacity: 0, filter: "blur(10px)" },
+          { scale: 1.15, opacity: 0, filter: "blur(15px)" },
           {
             scale: 1,
             opacity: 1,
             filter: "blur(0px)",
-            duration: 1.8,
-            ease: "power2.out",
+            duration: 2,
+            ease: "power3.out",
           },
-          "-=0.6",
+          "-=0.6"
         )
         .to(
           tagRef.current,
           { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-          "-=1",
-        )
-        .to(
+          "-=1.2"
+        );
+
+      // Animate headline differently based on device
+      if (isDesktop) {
+        tl.to(
           "#hero-headline .line > div",
           {
             yPercent: 0,
@@ -112,100 +121,86 @@ export default function Hero() {
             stagger: 0.12,
             ease: "power4.out",
           },
-          "-=0.8",
-        )
-        .to(
+          "-=1"
+        );
+      } else {
+        tl.to(
+          "#hero-headline",
+          { opacity: 1, duration: 1.2, ease: "power3.out" },
+          "-=1"
+        );
+      }
+
+      tl.to(
           descRef.current,
           { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
-          "-=0.9",
+          "-=0.9"
         )
         .to(
           ctaRef.current,
           { scale: 1, opacity: 1, duration: 0.8, ease: "power3.out" },
-          "-=0.6",
+          "-=0.6"
         )
         .to(scrollRef.current, { opacity: 1, duration: 0.6 }, "-=0.3")
         .to(
           [sideLeftRef.current, sideRightRef.current],
           { opacity: 1, duration: 1, ease: "power2.out" },
-          "-=0.8",
+          "-=0.8"
         );
 
-      // ── Ken Burns ──
-      gsap.to(bgRef.current, {
-        scale: 1.08,
-        duration: 30,
-        ease: "none",
-        repeat: -1,
-        yoyo: true,
-      });
+      // ── 2.5D Parallax (Desktop only) ──
+      if (isDesktop) {
+        const bgXTo = gsap.quickTo(bgRef.current, "x", { duration: 2, ease: "power2.out" });
+        const bgYTo = gsap.quickTo(bgRef.current, "y", { duration: 2, ease: "power2.out" });
+        const textXTo = gsap.quickTo(contentRef.current, "x", { duration: 1.5, ease: "power2.out" });
+        const textYTo = gsap.quickTo(contentRef.current, "y", { duration: 1.5, ease: "power2.out" });
 
-      // ── 2.5D Parallax (Subtler for a professional feel) ──
-      const bgXTo = gsap.quickTo(bgRef.current, "x", {
-        duration: 2,
-        ease: "power2.out",
-      });
-      const bgYTo = gsap.quickTo(bgRef.current, "y", {
-        duration: 2,
-        ease: "power2.out",
-      });
-      const textXTo = gsap.quickTo(contentRef.current, "x", {
-        duration: 1.5,
-        ease: "power2.out",
-      });
-      const textYTo = gsap.quickTo(contentRef.current, "y", {
-        duration: 1.5,
-        ease: "power2.out",
-      });
+        const handleMouseMove = (e: MouseEvent) => {
+          const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+          const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+          bgXTo(nx * -10);
+          bgYTo(ny * -8);
+          textXTo(nx * 12);
+          textYTo(ny * 6);
+        };
 
-      const handleMouseMove = (e: MouseEvent) => {
-        const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-        bgXTo(nx * -10); // Reduced movement
-        bgYTo(ny * -8);
-        textXTo(nx * 12);
-        textYTo(ny * 6);
-      };
-
-      if (window.innerWidth > 1024) {
         window.addEventListener("mousemove", handleMouseMove);
+
+        // ── Scroll Exit ──
+        const heroScrollTrigger = ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1.5,
+          onUpdate: (self) => {
+            const p = self.progress;
+            gsap.set(bgRef.current, { scale: 1 + p * 0.15, y: p * -50 });
+            gsap.set(contentRef.current, {
+              y: p * -150,
+              opacity: 1 - p * 2,
+              scale: 1 - p * 0.08,
+            });
+
+            if (overlayRef.current) {
+              overlayRef.current.style.backgroundColor = `rgba(0,0,0,${0.5 + p * 0.5})`;
+            }
+
+            const nav = document.querySelector(".nav-main");
+            if (nav) {
+              if (p > 0.02) nav.classList.add("nav-scrolled");
+              else nav.classList.remove("nav-scrolled");
+            }
+          },
+        });
+
+        return () => {
+          window.removeEventListener("mousemove", handleMouseMove);
+          heroScrollTrigger.kill();
+          if (splitInstance) splitInstance.revert();
+        };
       }
-
-      // ── Scroll Exit ──
-      const heroScrollTrigger = ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.5,
-        onUpdate: (self) => {
-          const p = self.progress;
-          gsap.set(bgRef.current, { scale: 1 + p * 0.2, y: p * -50 });
-          gsap.set(contentRef.current, {
-            y: p * -150,
-            opacity: 1 - p * 2,
-            scale: 1 - p * 0.08,
-          });
-
-          if (overlayRef.current) {
-            overlayRef.current.style.backgroundColor = `rgba(0,0,0,${
-              0.4 + p * 0.6
-            })`;
-          }
-
-          const nav = document.querySelector(".nav-main");
-          if (nav) {
-            if (p > 0.02) nav.classList.add("nav-scrolled");
-            else nav.classList.remove("nav-scrolled");
-          }
-        },
-      });
-
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-        heroScrollTrigger.kill();
-      };
     },
-    { scope: containerRef },
+    { scope: containerRef }
   );
 
   return (
@@ -221,7 +216,7 @@ export default function Hero() {
         <div className="relative flex flex-col items-center">
           <div
             id="loading-text"
-            className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl tracking-[0.4em] font-medium opacity-0"
+            className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl tracking-[0.4em] font-medium opacity-0 text-white"
           >
             EXPRESS HIGHWAY INN
           </div>
@@ -233,27 +228,36 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Background Image - Moody Highway/Property aesthetic */}
+      {/* Background Video Container */}
       <div
         ref={bgRef}
-        className="absolute inset-[-60px] will-change-transform opacity-0"
+        className="absolute inset-[-60px] will-change-transform opacity-0 z-[0]"
       >
-        <Image
-          src="/hero.jpg"
-          alt="Express Highway Inn Luxury Property at Night"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          quality={90}
-        />
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/hero.jpg"
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/herovideo.mp4" type="video/mp4" />
+        </video>
       </div>
 
-      {/* Overlay */}
+      {/* Luxury Cinematic Overlays */}
       <div
         ref={overlayRef}
-        className="absolute inset-0 z-[2] bg-gradient-to-b from-black/60 via-black/30 to-black/80 transition-colors"
+        className="absolute inset-0 z-[2] transition-colors duration-300"
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       />
+      <div 
+        className="absolute inset-0 z-[3] pointer-events-none" 
+        style={{ background: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.8) 100%)" }} 
+      />
+      <div className="absolute inset-0 z-[3] bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
 
       {/* WebGL Light Leaks */}
       {isLoaded && <WebGLDepth />}
@@ -275,16 +279,15 @@ export default function Hero() {
           <h1
             ref={headlineRef}
             id="hero-headline"
-            className="font-[family-name:var(--font-playfair)] text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] font-medium tracking-tight leading-[1.05] text-white"
+            className="font-[family-name:var(--font-playfair)] text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] font-medium tracking-tight leading-[1.05] text-white drop-shadow-2xl"
             style={{ perspective: "1200px" }}
             data-cursor="text"
-          >
-            Where the Highway Leads to Luxury
-          </h1>
+            dangerouslySetInnerHTML={{ __html: "Where the Highway Leads to Luxury" }}
+          />
 
           <p
             ref={descRef}
-            className="mt-8 text-sm md:text-lg font-light text-white/60 max-w-2xl mx-auto leading-relaxed opacity-0 translate-y-10 will-change-transform"
+            className="mt-8 text-sm md:text-lg font-light text-white/70 max-w-2xl mx-auto leading-relaxed opacity-0 translate-y-10 will-change-transform drop-shadow-lg"
           >
             Express Highway Inn brings fine dining, an exclusive Club & Lounge,
             and everyday convenience together in one address, for every
@@ -319,7 +322,7 @@ export default function Hero() {
         className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 opacity-0 flex flex-col items-center gap-4"
       >
         <div className="w-px h-16 bg-white/10 relative overflow-hidden hero-scroll-line" />
-        <span className="text-[8px] uppercase tracking-[0.4em] text-white/25 font-medium">
+        <span className="text-[8px] uppercase tracking-[0.4em] text-white/40 font-medium">
           Scroll to discover
         </span>
       </div>
@@ -330,7 +333,7 @@ export default function Hero() {
         className="absolute left-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block opacity-0"
       >
         <span
-          className="text-[7px] tracking-[0.5em] uppercase text-white/20"
+          className="text-[7px] tracking-[0.5em] uppercase text-white/30"
           style={{ writingMode: "vertical-rl" }}
         >
           Est. 2025 — Premium Hospitality
@@ -341,7 +344,7 @@ export default function Hero() {
         className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block opacity-0"
       >
         <span
-          className="text-[7px] tracking-[0.5em] uppercase text-white/20"
+          className="text-[7px] tracking-[0.5em] uppercase text-white/30"
           style={{ writingMode: "vertical-rl" }}
         >
           Expressway — KM 42

@@ -172,35 +172,35 @@ export default function Affiliations() {
         {/* 
           Bulletproof 1px border grid: 
           Container gets Top/Left borders. Cards get Bottom/Right borders. 
-          This eliminates subpixel rendering gaps and double borders.
         */}
         <div className="affil-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 border-t border-l border-[#E5E5E5]">
           {affiliations.map((item, i) => (
             <div
               key={`${item.num}-${i}`}
-              className="affil-card group relative bg-white border-r border-b border-[#E5E5E5] aspect-[4/3] sm:aspect-square overflow-hidden cursor-pointer p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center transition-colors duration-500 group-hover:bg-[#FAFAFA]"
+              className="affil-card group relative bg-white border-r border-b border-[#E5E5E5] aspect-[4/3] sm:aspect-square overflow-hidden cursor-pointer p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center transition-colors duration-500 hover:bg-[#FAFAFA]"
             >
               {/* Top Index */}
-              <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-[9px] sm:text-[10px] tracking-[0.3em] text-[#0c0b0b]/20 font-light transition-colors duration-500 group-hover:text-primary">
+              <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-[9px] sm:text-[10px] tracking-[0.3em] text-[#0c0b0b]/20 font-light transition-colors duration-500 group-hover:text-primary z-10">
                 {item.num}
               </span>
 
               {/* Logo Wrapper */}
               <div className="relative w-full h-10 sm:h-12 md:h-14 flex items-center justify-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
+                {/* Subtle Glow effect on hover (Behind Image) */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(0,125,197,0.1), transparent 70%)",
+                  }}
+                />
                 <Image
                   src={item.logo}
                   alt={item.name}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
-                  className="object-contain transition-all duration-500 opacity-40"
-                />
-                {/* Subtle Glow effect on hover */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgba(0,125,197,0.08), transparent 70%)",
-                  }}
+                  // Added grayscale & opacity hover effects for luxury feel
+                  className="object-contain relative z-10 transition-all duration-500 opacity-40 grayscale group-hover:opacity-100 group-hover:grayscale-0"
                 />
               </div>
 
@@ -208,7 +208,7 @@ export default function Affiliations() {
               {/* On mobile: text is visible by default. On desktop (sm+): animates on hover */}
               <div className="absolute bottom-0 left-0 right-0 px-3 sm:px-4 pb-3 sm:pb-4 overflow-hidden">
                 <div className="overflow-hidden">
-                  <p className="text-center text-[11px] sm:text-[10px] leading-tight font-light tracking-wide text-[#0c0b0b]/80 sm:text-[#0c0b0b]/0 translate-y-0 sm:translate-y-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:translate-y-0 sm:group-hover:text-[#0c0b0b]/80 line-clamp-2">
+                  <p className="text-center text-[11px] sm:text-[10px] leading-tight font-light tracking-wide text-[#0c0b0b]/80 sm:opacity-0 sm:translate-y-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:opacity-100 sm:group-hover:translate-y-0 line-clamp-2">
                     {item.name}
                   </p>
                 </div>
