@@ -95,11 +95,11 @@ const affiliations = [
     name: "Sampan Golf Academy",
     logo: "/images/affiliation/Sampan Golf Academy.png",
   },
-  {
-    num: "18",
-    name: "Sampan Golf Academy",
-    logo: "/images/affiliation/Asset 26@4x.png",
-  },
+  // {
+  //   num: "18",
+  //   name: "Sampan Golf Academy",
+  //   logo: "/images/affiliation/Sampan Golf Academy.png",
+  // },
 ];
 
 export default function Affiliations() {
@@ -199,21 +199,19 @@ export default function Affiliations() {
                   alt={item.name}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
-                  // Full color by default, no grayscale, no scale on hover
                   className="object-contain relative z-10 transition-opacity duration-500"
                 />
               </div>
 
-              {/* Masked Name Animation */}
-              {/* On mobile: text is visible by default. On desktop (sm+): animates on hover */}
+              {/* Name & Line - Always Visible */}
               <div className="absolute bottom-0 left-0 right-0 px-3 sm:px-4 pb-3 sm:pb-4 overflow-hidden">
                 <div className="overflow-hidden">
-                  <p className="text-center text-[11px] sm:text-[10px] leading-tight font-light tracking-wide text-[#0c0b0b]/80 sm:opacity-0 sm:translate-y-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:opacity-100 sm:group-hover:translate-y-0 line-clamp-2">
+                  <p className="text-center text-[11px] sm:text-[10px] leading-tight font-light tracking-wide text-[#0c0b0b]/80 line-clamp-2">
                     {item.name}
                   </p>
                 </div>
                 {/* Bottom Line Indicator */}
-                <div className="h-[1px] w-6 sm:w-0 bg-primary mt-3 mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:w-8" />
+                <div className="h-[1px] w-6 sm:w-8 bg-primary mt-3 mx-auto" />
               </div>
             </div>
           ))}

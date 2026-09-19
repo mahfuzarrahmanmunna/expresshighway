@@ -72,15 +72,25 @@ const DIVISIONS = [
   },
 ];
 
-const ALLIED_LOGOS = [
-  "REHAB",
-  "FBCCI",
-  "BARVIDA",
-  "BPL",
-  "Mercedes-Benz",
-  "CIPS",
-  "DGDP",
-  "BVF",
+const AFFILIATIONS = [
+  { num: "01", name: "Real Estate & Housing Association of Bangladesh", logo: "/images/affiliation/rehab.png" },
+  { num: "02", name: "Federation of Bangladesh Chambers of Commerce & Industry (FBCCI)", logo: "/images/affiliation/fbcci.png" },
+  { num: "03", name: "Bangladesh Reconditioned Vehicles Importers & Dealers Assoc. (BARVIDA)", logo: "/images/affiliation/barvia.png" },
+  { num: "04", name: "Bangladesh Arm's Dealer and Importer Association", logo: "/images/affiliation/bad.png" },
+  { num: "05", name: "Bangladesh PABX Association", logo: "/images/affiliation/pabx.png" },
+  { num: "06", name: "Bangladesh LPG Autogas Station Owner’s Association", logo: "/images/affiliation/lpg.png" },
+  { num: "07", name: "Bangladesh Volleyball Federation (AD-Hoc Community)", logo: "/images/affiliation/bvf.png" },
+  { num: "08", name: "Barisal Bulls", logo: "/images/affiliation/barishalbulls.png" },
+  { num: "09", name: "Barisal Club (1864)", logo: "/images/affiliation/lis.png" },
+  { num: "10", name: "Bangladesh Premier League (BPL)", logo: "/images/affiliation/bpl.png" },
+  { num: "11", name: "Mercedes-Benz", logo: "/images/affiliation/mercedes.png" },
+  { num: "12", name: "Chartered Institute of Procurement & Supply UK (CIPS)", logo: "/images/affiliation/cips.png" },
+  { num: "13", name: "Directorate General Defence Purchase (DGDP)", logo: "/images/affiliation/dgdp.png" },
+  { num: "14", name: "Shooter's Shooting Club", logo: "/images/affiliation/shoot.png" },
+  { num: "15", name: "Express Highway Club And Lounge", logo: "/images/affiliation/EHCl.png" },
+  { num: "16", name: "Bangladesh Archery Federation", logo: "/images/affiliation/Archery.png" },
+  { num: "17", name: "Sampan Golf Academy", logo: "/images/affiliation/Sampan Golf Academy.png" },
+  // { num: "18", name: "Sampan Golf Academy", logo: "/images/affiliation/Asset 26@4x.png" },
 ];
 
 // Luxury Theme Colors
@@ -375,7 +385,7 @@ function OurStory() {
           <div className="absolute top-0 left-0 w-1/2 h-full overflow-hidden">
             <div className="story-img-left w-[200%] h-full">
               <Image
-                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1400&auto=format&fit=crop"
+                src="/images/condomenium.jpg"
                 alt="Architecture Left"
                 fill
                 className="object-cover"
@@ -386,7 +396,7 @@ function OurStory() {
           <div className="absolute top-0 right-0 w-1/2 h-full overflow-hidden">
             <div className="story-img-right w-[200%] h-full -translate-x-1/2">
               <Image
-                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1400&auto=format&fit=crop"
+                src="/images/condomenium.jpg"
                 alt="Architecture Right"
                 fill
                 className="object-cover"
@@ -543,16 +553,14 @@ function TownshipVisual() {
       const L = (window as any).L;
       if (!L || !mapContainerRef.current) return;
 
-      // Prevent double initialization
       if ((mapContainerRef.current as any)._leaflet_map) return;
 
-      // Exact coordinates from Google Maps link for Express Highway Inn
       const targetLat = 23.5433;
       const targetLng = 90.4012;
 
       map = L.map(mapContainerRef.current, {
         center: [targetLat, targetLng], 
-        zoom: 13, // Zoomed in closer to the exact property
+        zoom: 13,
         zoomControl: false,
         scrollWheelZoom: false,
         attributionControl: false
@@ -560,22 +568,17 @@ function TownshipVisual() {
 
       (mapContainerRef.current as any)._leaflet_map = map;
 
-      // Add Zoom Control bottom right
       L.control.zoom({ position: "bottomright" }).addTo(map);
-      // Add Attribution bottom left
       L.control.attribution({ position: 'bottomleft' }).addAttribution('Tiles &copy; Esri').addTo(map);
 
-      // ─── ESRI DARK GRAY CANVAS TILES (NO API KEY REQUIRED) ───
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 16
       }).addTo(map);
       
-      // Optional: Add reference labels (roads, city names) on top of the dark base
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 16
       }).addTo(map);
 
-      // Custom Gold Marker
       const goldIcon = L.divIcon({
         className: "custom-gold-marker",
         html: `<div style="position: relative; width: 24px; height: 24px;">
@@ -586,7 +589,6 @@ function TownshipVisual() {
         iconAnchor: [12, 12],
       });
 
-      // Marker Position placed exactly on the provided coordinates
       L.marker([targetLat, targetLng], { icon: goldIcon })
         .addTo(map)
         .bindPopup(
@@ -596,20 +598,17 @@ function TownshipVisual() {
            </div>`
         );
         
-      // Invalidate size after a short delay to ensure tiles load correctly
       setTimeout(() => map.invalidateSize(), 1000);
     };
 
     if ((window as any).L) {
       initializeMap();
     } else {
-      // Load CSS dynamically
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
       document.head.appendChild(link);
 
-      // Load JS dynamically
       const script = document.createElement("script");
       script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
       script.async = true;
@@ -672,13 +671,10 @@ function TownshipVisual() {
             className="town-image-wrap relative w-full h-[60vh] md:h-[85vh] overflow-hidden border border-[#141414]/10 z-10"
             data-cursor="EXPLORE"
           >
-            {/* Leaflet Map Container */}
             <div ref={mapContainerRef} className="absolute inset-0 w-full h-full bg-[#0B0B0B]" />
             
-            {/* Overlay Gradient for text readability */}
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0B0B0B]/60 via-transparent to-transparent z-[400]"></div>
             
-            {/* Overlay Info Box */}
             <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md border border-[#141414]/10 px-8 py-5 flex items-center gap-5 shadow-2xl z-[500]">
               <div className="relative w-2.5 h-2.5">
                 <span className="absolute inset-0 rounded-full bg-[#C5A572]/40 animate-ping"></span>
@@ -693,7 +689,6 @@ function TownshipVisual() {
         </div>
       </div>
 
-      {/* Leaflet customizations to match luxury theme */}
       <style jsx global>{`
         .leaflet-container {
           background: #0B0B0B !important;
@@ -903,7 +898,7 @@ function Timeline() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   7. ALLIED ORGANIZATIONS — CLIP-PATH REVEAL + LINE REVEAL
+   7. ALLIED ORGANIZATIONS — IMAGE GRID LOGOS
 ═══════════════════════════════════════════════════════════════ */
 function AlliedOrganizations() {
   const ref = useRef<HTMLDivElement>(null);
@@ -963,21 +958,30 @@ function AlliedOrganizations() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 border-t border-l border-[#141414]/10">
-          {ALLIED_LOGOS.map((logo, i) => (
+        {/* Changed to 6 columns to nicely accommodate the 18 logos */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border-t border-l border-[#141414]/10">
+          {AFFILIATIONS.map((item, i) => (
             <div
-              key={i}
+              key={item.num}
               className="allied-logo group border-r border-b border-[#141414]/10 aspect-[3/2] flex items-center justify-center p-8 cursor-pointer relative overflow-hidden"
               data-cursor="OPEN →"
             >
+              {/* Hover Border Accents */}
               <span className="absolute top-0 left-0 w-full h-px bg-[#C5A572] origin-left transition-all duration-500 scale-x-0 group-hover:scale-x-100"></span>
               <span className="absolute top-0 right-0 h-full w-px bg-[#C5A572] origin-top transition-all duration-500 delay-100 scale-y-0 group-hover:scale-y-100"></span>
               <span className="absolute bottom-0 right-0 w-full h-px bg-[#C5A572] origin-right transition-all duration-500 delay-200 scale-x-0 group-hover:scale-x-100"></span>
               <span className="absolute bottom-0 left-0 h-full w-px bg-[#C5A572] origin-bottom transition-all duration-500 delay-300 scale-y-0 group-hover:scale-y-100"></span>
 
-              <span className="text-xl md:text-2xl font-[family-name:var(--font-playfair)] tracking-wide text-[#141414]/30 transition-all duration-500 group-hover:text-[#141414] group-hover:scale-110">
-                {logo}
-              </span>
+              {/* Logo Image */}
+              <div className="relative w-full h-full flex items-center justify-center">
+                <Image
+                  src={item.logo}
+                  alt={item.name}
+                  fill
+                  className="object-contain transition-all duration-500 p-2 md:p-4"
+                  sizes="(max-width: 768px) 50vw, 16vw"
+                />
+              </div>
             </div>
           ))}
         </div>
@@ -1260,7 +1264,7 @@ function FinalCTA() {
         className="cta-bg absolute inset-0 z-0"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1920&auto=format&fit=crop')",
+            "url('/images/cta.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

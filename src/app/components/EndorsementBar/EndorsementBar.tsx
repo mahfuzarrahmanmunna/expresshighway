@@ -82,11 +82,11 @@ export default function EndorsementBar() {
                 alt={concern.name}
                 width={260}
                 height={90}
-                className="h-20 md:h-24 w-auto object-contain opacity-50  transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                className="h-20 md:h-24 w-auto object-contain   transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
               />
               
               {/* Subtle text reveal on hover */}
-              <span className="mt-8 text-[10px] uppercase tracking-[0.3em] text-foreground/30 group-hover:text-primary transition-colors duration-500">
+              <span className="mt-8 text-[14px] uppercase tracking-[0.3em] text-foreground/80 group-hover:text-primary transition-colors duration-500">
                 Visit Website
               </span>
             </a>
@@ -99,10 +99,10 @@ export default function EndorsementBar() {
             href="https://sampangroup.com" 
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-foreground/60 hover:text-primary transition-colors duration-300"
+            className="group inline-flex items-center gap-4 text-[16px] uppercase tracking-[0.4em] text-foreground/60 hover:text-primary transition-colors duration-300"
           >
             Explore the whole ecosystem
-            <span className="relative w-16 h-px bg-foreground/20 group-hover:bg-primary transition-all duration-500 group-hover:w-24">
+            <span className="relative w-16 h-px bg-foreground/80 group-hover:bg-primary transition-all duration-500 group-hover:w-24">
               <ArrowUpRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0" />
             </span>
           </a>

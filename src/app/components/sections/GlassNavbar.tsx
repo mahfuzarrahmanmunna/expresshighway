@@ -19,7 +19,7 @@ const NAV_ITEMS = [
   { label: "About", number: "02", href: "/aboutus" },
   { label: "Club & Lounge", number: "03", href: "/club-and-lounge" },
   { label: "Contact", number: "04", href: "/contactus" },
-  { label: "Sampan Group", number: "05", href: "https://sampangroup.com" },
+  { label: "Sampan Group", number: "05", href: "https://sampangroup.com.bd" },
 ];
 
 export default function GlassNavbar() {

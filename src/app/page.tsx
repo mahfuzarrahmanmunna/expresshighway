@@ -24,7 +24,7 @@ export default function Home() {
       <EndorsementBar/>
       <Affiliations/>
       <ContactTrust/>
-      <About />
+      {/* <About /> */}
       {/* <FacilitiesExperience /> */}
       {/* <Projects /> */}
       {/* <SisterCompanies /> */}

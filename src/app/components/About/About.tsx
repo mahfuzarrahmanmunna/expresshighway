@@ -62,14 +62,14 @@ export default function AboutLocation() {
           scale: 1,
           duration: 2,
           ease: "expo.out",
+          onComplete: () => {
+            if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
+              (mapContainerRef.current as any)._leaflet_map.invalidateSize();
+            }
+          },
           scrollTrigger: {
             trigger: ".map-wrapper",
             start: "top 85%",
-            onComplete: () => {
-              if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
-                (mapContainerRef.current as any)._leaflet_map.invalidateSize();
-              }
-            }
           },
         }
       );
