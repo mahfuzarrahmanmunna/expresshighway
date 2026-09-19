@@ -67,10 +67,10 @@ function TownshipCanvas() {
     // Architectural Wireframe Terrain
     const geometry = new THREE.PlaneGeometry(25, 25, 40, 40);
     const material = new THREE.MeshBasicMaterial({
-      color: 0x0a4a74,
+      color: 0x0a4a74, // Subtle blue wireframe
       wireframe: true,
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.25, // Slightly more visible but still subtle
     });
     const terrain = new THREE.Mesh(geometry, material);
     terrain.rotation.x = -Math.PI / 2.2;
@@ -136,7 +136,7 @@ function TownshipCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none opacity-40"
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-50" // Brightened canvas slightly
     />
   );
 }
@@ -180,61 +180,63 @@ export default function Ventures() {
     <section
       id="ventures"
       ref={containerRef}
-      className="relative w-full bg-[#030303] py-24 md:py-32 overflow-hidden"
+      className="relative w-full bg-[#080808] py-24 md:py-32 overflow-hidden" // Slightly lifted dark background for luxury vibe
     >
       {/* Three.js Ambient Background */}
       <TownshipCanvas />
 
       {/* Gradient Overlays for Readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303] z-[1]" />
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-primary/[0.03] blur-[150px] rounded-full z-[1]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080808] via-transparent to-[#080808] z-[1]" />
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-primary/[0.04] blur-[150px] rounded-full z-[1]" />
 
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 relative z-10">
         {/* ─── Section Header ─── */}
         <div className="venture-header flex flex-col items-center text-center mb-20 md:mb-24">
-          <span className="venture-header-anim text-[10px] uppercase tracking-[0.4em] text-primary/80 font-medium mb-6 block">
+          <span className="venture-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6 block">
             Our Ventures
           </span>
           <h2 className="venture-header-anim font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.05] text-foreground max-w-4xl">
             One Address,{" "}
-            <span className="text-primary/80 italic">A Complete</span> Highway
+            <span className="text-primary italic">A Complete</span> Highway
             Township
           </h2>
-          <p className="venture-header-anim mt-8 text-sm md:text-base font-light text-foreground/50 leading-relaxed max-w-2xl">
+          <p className="venture-header-anim mt-8 text-sm md:text-base font-light text-foreground/60 leading-relaxed max-w-2xl">
             Express Highway Inn sits alongside three sister projects that make
             this stretch of highway a destination in itself.
           </p>
         </div>
 
         {/* ─── Ventures Grid ─── */}
-        <div className="venture-grid grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.03] border border-white/[0.03]">
+        <div className="venture-grid grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.05] border border-white/[0.05]">
           {VENTURES.map((item) => (
             <div
               key={item.index}
-              className="venture-card group relative bg-[#030303] aspect-[3/4] md:aspect-auto md:min-h-[600px] overflow-hidden cursor-pointer"
+              className="venture-card group relative aspect-[3/4] md:aspect-auto md:min-h-[600px] overflow-hidden cursor-pointer"
             >
-              {/* Image Layer */}
+              {/* Image Layer - Natural bright colors, slight zoom on hover */}
               <Image
                 src={item.img}
                 alt={item.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-all duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:opacity-20"
-                quality={85}
+                className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                quality={90}
               />
 
-              {/* Gradients */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent transition-opacity duration-700 group-hover:from-black" />
-              <div className="absolute inset-0 bg-[#030303] opacity-50 group-hover:opacity-0 transition-opacity duration-700" />
+              {/* Luxury Light Tint - Subtle dark overlay that clears on hover */}
+              <div className="absolute inset-0 bg-[#080808]/30 group-hover:bg-[#080808]/10 transition-colors duration-700" />
+
+              {/* Gradient for Text Readability - Strong only at the bottom */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/40 to-transparent" />
 
               {/* Content */}
               <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-between z-10">
                 {/* Top */}
                 <div className="flex justify-between items-start">
-                  <span className="text-[10px] tracking-[0.3em] text-white/20 font-light transition-colors duration-500 group-hover:text-primary/60">
+                  <span className="text-[10px] tracking-[0.3em] text-white/50 font-light transition-colors duration-500 group-hover:text-primary bg-black/20 backdrop-blur-sm px-2 py-1 rounded">
                     {item.index}
                   </span>
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-white/40 transition-colors duration-500 group-hover:text-white/80 bg-white/5 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-white/80 bg-white/10 px-3 py-1 rounded-full backdrop-blur-md border border-white/10 transition-colors duration-500 group-hover:bg-primary/20 group-hover:text-white">
                     {item.tag}
                   </span>
                 </div>
@@ -243,12 +245,12 @@ export default function Ventures() {
                 <div className="relative">
                   {/* Masked Blurb Animation */}
                   <div className="overflow-hidden mb-5">
-                    <p className="text-sm font-light text-foreground/60 translate-y-full opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
+                    <p className="text-sm font-light text-gray-500 translate-y-full opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
                       {item.desc}
                     </p>
                   </div>
 
-                  <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-medium leading-tight mb-8">
+                  <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-medium leading-tight mb-8 drop-shadow-lg">
                     {item.title}
                   </h3>
 
@@ -257,10 +259,10 @@ export default function Ventures() {
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/link inline-flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-primary transition-colors duration-300"
+                    className="group/link inline-flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/80 hover:text-primary transition-colors duration-300"
                   >
                     Learn More
-                    <span className="relative w-8 h-px bg-foreground/40 group-hover/link:bg-primary transition-all duration-500 group-hover/link:w-14">
+                    <span className="relative w-8 h-px bg-white/60 group-hover/link:bg-primary transition-all duration-500 group-hover/link:w-14">
                       <ArrowUpRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary opacity-0 group-hover/link:opacity-100 transition-all duration-300 translate-x-2 group-hover/link:translate-x-0" />
                     </span>
                   </a>

@@ -5,11 +5,12 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
 import { ArrowUpRight, X, ChevronLeft, ChevronRight, Expand } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/* ── Curated Gallery Data (with custom grid spans) ── */
+/* ── Curated Gallery Data ── */
 const GALLERY_IMAGES = [
   {
     src: "/images/lounge.jpg",
@@ -76,7 +77,6 @@ export default function GalleryTeaser() {
 
     if (viewerIndex !== null) {
       document.body.style.overflow = "hidden";
-      // Animate in
       gsap.fromTo(
         ".lightbox-overlay",
         { opacity: 0 },
@@ -100,11 +100,35 @@ export default function GalleryTeaser() {
 
   useGSAP(
     () => {
-      /* Header Animation */
+      let splitInstance: SplitType | null = null;
+      
+      /* ── Premium Split Heading Reveal ── */
+      const heading = document.querySelector<HTMLElement>(".gallery-heading");
+      if (heading) {
+        splitInstance = new SplitType(heading, {
+          types: "lines,words",
+          lineClass: "overflow-hidden block",
+          wordClass: "inline-block will-change-transform",
+        });
+
+        gsap.from(".gallery-heading .word", {
+          yPercent: 120,
+          opacity: 0,
+          duration: 1.4,
+          stagger: 0.1,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: heading,
+            start: "top 85%",
+          },
+        });
+      }
+
+      /* Header Sub-elements Animation */
       gsap.from(".gallery-header-anim", {
         opacity: 0,
-        y: 50,
-        duration: 1.4,
+        y: 30,
+        duration: 1.2,
         stagger: 0.15,
         ease: "power3.out",
         scrollTrigger: {
@@ -157,6 +181,10 @@ export default function GalleryTeaser() {
           start: "top 90%",
         },
       });
+
+      return () => {
+        splitInstance?.revert();
+      };
     },
     { scope: containerRef }
   );
@@ -165,33 +193,36 @@ export default function GalleryTeaser() {
     <section
       id="gallery"
       ref={containerRef}
-      className="relative w-full bg-[#F7F6F2] py-24 md:py-32 overflow-hidden"
+      // Changed to overflow-x-hidden to prevent text clipping vertically
+      className="relative w-full bg-[#F7F6F2] py-32 md:py-48 overflow-x-hidden"
     >
       {/* Ambient Background Glow */}
       <div className="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 w-[600px] h-[600px] bg-primary/[0.04] blur-[150px] rounded-full" />
 
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 relative z-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         {/* ─── Section Header ─── */}
-        <div className="gallery-header flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16 md:mb-20">
-          <div className="max-w-2xl">
-            <span className="gallery-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6 block">
+        <div className="gallery-header flex flex-col md:flex-row md:items-end md:justify-between gap-12 mb-20 md:mb-28">
+          <div className="max-w-3xl">
+            <span className="gallery-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-8 block">
               Visual Tour
             </span>
-            <h2 className="gallery-header-anim font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.02] text-[#0c0b0b]">
-              Our Curated Gallery
+            <h2 
+              className="gallery-heading font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,7vw,6rem)] font-light leading-[1.05] text-[#0c0b0b] tracking-[-0.02em]"
+              style={{ perspective: "1000px" }}
+            >
+              Curated <span className="italic text-primary/80">Gallery.</span>
             </h2>
           </div>
           <div className="max-w-sm md:text-right">
-            <div className="hidden md:block w-16 h-px bg-primary/40 mb-6 ml-auto"></div>
-            <p className="gallery-header-anim text-sm md:text-base font-light text-[#0c0b0b]/50 leading-relaxed">
-              A glimpse into the architecture, ambiance, and meticulously
-              curated spaces that define the Express Highway Inn experience.
+            <div className="hidden md:block w-16 h-px bg-primary/40 mb-6 ml-auto gallery-header-anim"></div>
+            <p className="gallery-header-anim text-sm md:text-base font-light text-[#0c0b0b]/50 leading-[1.8]">
+              A glimpse into the architecture, ambiance, and meticulously curated spaces that define the Express Highway Inn experience.
             </p>
           </div>
         </div>
 
         {/* ─── Asymmetric 12-Column Grid ─── */}
-        <div className="gallery-grid group/grid grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-5">
+        <div className="gallery-grid grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-5">
           {GALLERY_IMAGES.map((item, i) => (
             <div
               key={i}
@@ -205,13 +236,13 @@ export default function GalleryTeaser() {
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="gallery-img object-cover transition-all duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-[1.05] group-hover/grid:opacity-50 group-hover:opacity-100"
+                  className="gallery-img object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-[1.05]"
                   quality={90}
                 />
               </div>
 
               {/* Hover Gradient Overlay for Text Legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0b0b]/90 via-[#0c0b0b]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-[1]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0b0b]/90 via-[#0c0b0b]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-[1]" />
 
               {/* Top Index Indicator */}
               <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
@@ -235,7 +266,7 @@ export default function GalleryTeaser() {
         </div>
 
         {/* ─── CTA Wrap ─── */}
-        <div className="gallery-cta-wrap flex justify-center mt-20">
+        <div className="gallery-cta-wrap flex justify-center mt-24">
           <div className="gallery-cta-anim">
             <a
               href="#full-gallery"

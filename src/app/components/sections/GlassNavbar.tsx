@@ -172,21 +172,16 @@ export default function GlassNavbar() {
               whileHover={{ x: 2 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <div className="relative w-9 h-9 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center overflow-hidden">
+              <div className="relative  flex items-center justify-center overflow-hidden">
                 <motion.div
                   className="absolute inset-0 bg-white"
                   initial={{ scale: 0 }}
                   whileHover={{ scale: 1 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 />
-                <span className="relative z-10 text-[10px] tracking-[0.15em] text-white group-hover:text-black transition-colors duration-500">
-                  E
-                </span>
+                <img src="/logo/Logo1.png" alt="Logo" className="w-5 h-5 md:w-32 md:h-12  relative z-10" />
               </div>
-              <div className="hidden sm:block">
-                <div className="text-[17px] tracking-[0.38em] text-white font-light">EXPRESS</div>
-                <div className="mt-0.5 text-[7px] tracking-[0.3em] uppercase text-white/35">Highway Inn</div>
-              </div>
+              
             </MotionLink>
 
             <div className="hidden xl:flex items-center gap-1">

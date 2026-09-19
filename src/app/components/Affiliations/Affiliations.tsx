@@ -185,7 +185,7 @@ export default function Affiliations() {
               </span>
 
               {/* Logo Wrapper */}
-              <div className="relative w-full h-10 sm:h-12 md:h-14 flex items-center justify-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105">
+              <div className="relative w-full h-10 sm:h-12 md:h-14 flex items-center justify-center">
                 {/* Subtle Glow effect on hover (Behind Image) */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -199,8 +199,8 @@ export default function Affiliations() {
                   alt={item.name}
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
-                  // Added grayscale & opacity hover effects for luxury feel
-                  className="object-contain relative z-10 transition-all duration-500 opacity-40 grayscale group-hover:opacity-100 group-hover:grayscale-0"
+                  // Full color by default, no grayscale, no scale on hover
+                  className="object-contain relative z-10 transition-opacity duration-500"
                 />
               </div>
 

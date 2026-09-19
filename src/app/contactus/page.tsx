@@ -12,7 +12,6 @@ import {
   MapPin,
   Phone,
   Mail,
-  MessageSquare,
   Clock,
 } from "lucide-react";
 
@@ -55,6 +54,7 @@ function CustomCursorAndGrain() {
         });
         if (cursorText) {
           ringLabel.textContent = cursorText;
+          gsap.to(ringLabel, { opacity: 1, duration: 0.3 });
         }
       } else {
         gsap.to(ring, {
@@ -62,7 +62,7 @@ function CustomCursorAndGrain() {
           borderColor: "rgba(255, 255, 255, 0.2)",
           backgroundColor: "transparent",
         });
-        ringLabel.textContent = "";
+        gsap.to(ringLabel, { opacity: 0, duration: 0.3 });
       }
     };
 
@@ -80,7 +80,7 @@ function CustomCursorAndGrain() {
         ref={ringRef}
         className="hidden md:flex fixed top-0 left-0 z-[9998] w-12 h-12 border border-white/20 rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%] items-center justify-center transition-colors duration-300"
       >
-        <span ref={ringLabelRef} className="text-[7px] uppercase tracking-[0.2em] text-white opacity-0"></span>
+        <span ref={ringLabelRef} className="text-[7px] uppercase tracking-[0.2em] text-white opacity-0 transition-opacity duration-300"></span>
       </div>
       <div
         className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.015] mix-blend-overlay"
@@ -234,10 +234,11 @@ function Hero() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. LOCATION & INTERACTIVE MAP (High Contrast Luxury)
+   3. LOCATION & INTERACTIVE MAP (Leaflet + Esri Dark Tiles)
 ═══════════════════════════════════════════════════════════════ */
 function LocationSection() {
   const ref = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const text = document.querySelector<HTMLElement>(".loc-head");
@@ -252,21 +253,105 @@ function LocationSection() {
       });
     }
 
-    const path = ref.current?.querySelector<SVGPathElement>(".map-route-path");
-    if (path) {
-      const length = path.getTotalLength();
-      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        duration: 3,
-        ease: "power2.inOut",
+    gsap.fromTo(
+      ".map-container",
+      { clipPath: "inset(0 0 100% 0)" },
+      {
+        clipPath: "inset(0 0 0% 0)",
+        duration: 2,
+        ease: "expo.out",
         scrollTrigger: { trigger: ".map-container", start: "top 75%" },
-      });
-    }
+        onComplete: () => {
+          if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
+            (mapContainerRef.current as any)._leaflet_map.invalidateSize();
+          }
+        }
+      }
+    );
   }, { scope: ref });
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !mapContainerRef.current) return;
+    let map: any = null;
+
+    const initializeMap = () => {
+      const L = (window as any).L;
+      if (!L || !mapContainerRef.current) return;
+      if ((mapContainerRef.current as any)._leaflet_map) return;
+
+      map = L.map(mapContainerRef.current, {
+        center: [23.8132, 90.4254], // Bashundhara, Dhaka coordinates
+        zoom: 14,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false
+      });
+
+      (mapContainerRef.current as any)._leaflet_map = map;
+
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      L.control.attribution({ position: 'bottomleft' }).addAttribution('Tiles &copy; Esri').addTo(map);
+
+      // Esri Dark Gray Base Map (No API Key Required)
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16
+      }).addTo(map);
+      
+      // Esri Dark Gray Reference (Labels & Roads)
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16
+      }).addTo(map);
+
+      // Custom Blue Marker
+      const blueIcon = L.divIcon({
+        className: "custom-blue-marker",
+        html: `<div style="position: relative; width: 24px; height: 24px;">
+                 <span style="position: absolute; inset: 0; background: #007DC6; border-radius: 50%; opacity: 0.4; animation: mapPing 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
+                 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #007DC6; border-radius: 50%; border: 2px solid #0c0b0b; box-shadow: 0 0 15px rgba(0, 125, 198, 0.8);"></span>
+               </div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+      });
+
+      L.marker([23.8132, 90.4254], { icon: blueIcon })
+        .addTo(map)
+        .bindPopup(
+          `<div style="background: #0c0b0b; color: #fff; padding: 8px; border: 1px solid #007DC6; border-radius: 4px;">
+             <b style="color: #007DC6; font-family: serif; font-weight: 500; font-size: 14px;">Express Highway Inn</b><br/>
+             <span style="font-size: 11px; opacity: 0.8;">Head Office Location</span>
+           </div>`
+        );
+
+      setTimeout(() => map.invalidateSize(), 1000);
+    };
+
+    if ((window as any).L) {
+      initializeMap();
+    } else {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      document.head.appendChild(link);
+
+      const script = document.createElement("script");
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.async = true;
+      script.onload = initializeMap;
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      if (map) {
+        map.remove();
+        if (mapContainerRef.current) {
+           delete (mapContainerRef.current as any)._leaflet_map;
+        }
+      }
+    };
+  }, []);
+
   return (
-    <section id="location" ref={ref} className="bg-[#FAFAFA] text-[#0c0b0b] py-40 md:py-56 overflow-hidden border-t border-white/5">
+    <section id="location" ref={ref} className="bg-[#0c0b0b] text-white py-40 md:py-56 overflow-hidden border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="max-w-4xl mb-24">
           <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-8">
@@ -275,39 +360,31 @@ function LocationSection() {
           <h2 className="loc-head font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-[-0.02em]">
             Easy to find.<br />Easy to reach.
           </h2>
-          <p className="mt-10 text-base md:text-lg font-light text-[#0c0b0b] max-w-xl leading-relaxed">
+          <p className="mt-10 text-base md:text-lg font-light text-white/50 max-w-xl leading-relaxed">
             Whether you’re planning to visit, looking for investment opportunities, or simply want to know more about our world-class facilities, our team is ready to help.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-5 flex flex-col">
-            <div className="border border-white/10 p-10 mb-8 bg-[#0c0b0b] backdrop-blur-sm">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-black/40 block mb-6">Corporate Landmark</span>
+            <div className="border border-white/10 p-10 mb-8 bg-white/[0.02] backdrop-blur-sm">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 block mb-6">Corporate Landmark</span>
               <p className="text-xl font-[family-name:var(--font-playfair)] mb-2 text-[#007DC6]">Bashundhara, Dhaka</p>
               <p className="text-sm text-white/60 font-light">Sampan 21st Century, House-284, Block-B Road-1/A, Dhaka-1229, Bangladesh.</p>
             </div>
-            <div className="border border-white/10 p-10 bg-black/[0.02] backdrop-blur-sm">
+            <div className="border border-white/10 p-10 bg-white/[0.02] backdrop-blur-sm">
               <span className="font-[family-name:var(--font-playfair)] text-7xl md:text-8xl font-extralight text-white block leading-none">24/7</span>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-black/40 block mt-6">Assistance Available</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 block mt-6">Assistance Available</span>
             </div>
           </div>
 
           <div className="lg:col-span-7 map-container relative w-full aspect-[4/5] md:aspect-square overflow-hidden border border-white/10" data-cursor="MAP">
-            <iframe
-              title="Express Highway Inn Location"
-              src="https://maps.google.com/maps?q=Bashundhara%20Dhaka&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              className="absolute inset-0 w-full h-full opacity-40 invert"
-              style={{ border: 0 }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0c0b0b] via-transparent to-transparent"></div>
-            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <path className="map-route-path" d="M0,80 L40,80 L60,50 L60,20" fill="none" stroke="#007DC6" strokeWidth="0.5" strokeDasharray="4" />
-            </svg>
-            <div className="absolute top-[20%] left-[60%] flex flex-col items-center group cursor-pointer" data-cursor="OPEN">
-              <div className="relative w-4 h-4">
+            <div ref={mapContainerRef} className="absolute inset-0 w-full h-full bg-[#111]"></div>
+            
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0c0b0b] via-transparent to-transparent z-[400]"></div>
+            
+            <div className="absolute top-[20%] left-[60%] flex flex-col items-center group cursor-pointer z-[500]" data-cursor="OPEN">
+              <div className="relative w-4 h-4 hidden">
                 <span className="absolute inset-0 rounded-full bg-[#007DC6]/50 animate-ping"></span>
                 <span className="relative w-4 h-4 rounded-full bg-[#007DC6] border-2 border-[#0c0b0b] shadow-lg"></span>
               </div>
@@ -320,6 +397,46 @@ function LocationSection() {
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .leaflet-container {
+          background: #111 !important;
+          font-family: var(--font-sans) !important;
+          outline: none;
+        }
+        .leaflet-popup-content-wrapper {
+          background: transparent;
+          box-shadow: none;
+        }
+        .leaflet-popup-content {
+          margin: 0;
+        }
+        .leaflet-popup-tip-container {
+          display: none;
+        }
+        .leaflet-control-zoom a {
+          background: #0c0b0b !important;
+          color: #007DC6 !important;
+          border: 1px solid rgba(0, 125, 198, 0.3) !important;
+          font-weight: 300;
+        }
+        .leaflet-control-zoom a:hover {
+          background: #1a1a1a !important;
+        }
+        .leaflet-control-attribution {
+          background: rgba(12, 11, 11, 0.8) !important;
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+        .leaflet-control-attribution a {
+          color: rgba(0, 125, 198, 0.6) !important;
+        }
+        @keyframes mapPing {
+          75%, 100% {
+            transform: scale(2.5);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </section>
   );
 }

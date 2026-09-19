@@ -474,10 +474,11 @@ function StoryStatement() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   5. TOWNSHIP — EDITORIAL SPLIT LAYOUT + CLIP-PATH REVEAL
+   5. TOWNSHIP VISUAL + LEAFLET MAP INTEGRATION (ESRI TILES - NO API KEY)
 ═══════════════════════════════════════════════════════════════ */
 function TownshipVisual() {
   const ref = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -518,19 +519,13 @@ function TownshipVisual() {
           duration: 2,
           ease: "expo.out",
           scrollTrigger: { trigger: ".town-image-wrap", start: "top 85%" },
+          onComplete: () => {
+            if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
+              (mapContainerRef.current as any)._leaflet_map.invalidateSize();
+            }
+          }
         }
       );
-
-      gsap.to(".town-image", {
-        yPercent: -15,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5,
-        },
-      });
 
       return () => {
         splitInstance?.revert();
@@ -538,6 +533,99 @@ function TownshipVisual() {
     },
     { scope: ref }
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !mapContainerRef.current) return;
+
+    let map: any = null;
+
+    const initializeMap = () => {
+      const L = (window as any).L;
+      if (!L || !mapContainerRef.current) return;
+
+      // Prevent double initialization
+      if ((mapContainerRef.current as any)._leaflet_map) return;
+
+      // Exact coordinates from Google Maps link for Express Highway Inn
+      const targetLat = 23.5433;
+      const targetLng = 90.4012;
+
+      map = L.map(mapContainerRef.current, {
+        center: [targetLat, targetLng], 
+        zoom: 13, // Zoomed in closer to the exact property
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false
+      });
+
+      (mapContainerRef.current as any)._leaflet_map = map;
+
+      // Add Zoom Control bottom right
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      // Add Attribution bottom left
+      L.control.attribution({ position: 'bottomleft' }).addAttribution('Tiles &copy; Esri').addTo(map);
+
+      // ─── ESRI DARK GRAY CANVAS TILES (NO API KEY REQUIRED) ───
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16
+      }).addTo(map);
+      
+      // Optional: Add reference labels (roads, city names) on top of the dark base
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16
+      }).addTo(map);
+
+      // Custom Gold Marker
+      const goldIcon = L.divIcon({
+        className: "custom-gold-marker",
+        html: `<div style="position: relative; width: 24px; height: 24px;">
+                 <span style="position: absolute; inset: 0; background: #C5A572; border-radius: 50%; opacity: 0.4; animation: mapPing 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
+                 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #C5A572; border-radius: 50%; border: 2px solid #0B0B0B; box-shadow: 0 0 15px rgba(197, 165, 114, 0.8);"></span>
+               </div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+      });
+
+      // Marker Position placed exactly on the provided coordinates
+      L.marker([targetLat, targetLng], { icon: goldIcon })
+        .addTo(map)
+        .bindPopup(
+          `<div style="background: #0B0B0B; color: #fff; padding: 8px; border: 1px solid #C5A572; border-radius: 4px;">
+             <b style="color: #C5A572; font-family: serif; font-weight: 500; font-size: 14px;">Express Highway Inn</b><br/>
+             <span style="font-size: 11px; opacity: 0.8;">Dhaka - Chittagong Highway</span>
+           </div>`
+        );
+        
+      // Invalidate size after a short delay to ensure tiles load correctly
+      setTimeout(() => map.invalidateSize(), 1000);
+    };
+
+    if ((window as any).L) {
+      initializeMap();
+    } else {
+      // Load CSS dynamically
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      document.head.appendChild(link);
+
+      // Load JS dynamically
+      const script = document.createElement("script");
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.async = true;
+      script.onload = initializeMap;
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      if (map) {
+        map.remove();
+        if (mapContainerRef.current) {
+           delete (mapContainerRef.current as any)._leaflet_map;
+        }
+      }
+    };
+  }, []);
 
   return (
     <section ref={ref} className="bg-[#F9F8F6] text-[#141414] py-40 md:py-56 overflow-hidden">
@@ -584,16 +672,14 @@ function TownshipVisual() {
             className="town-image-wrap relative w-full h-[60vh] md:h-[85vh] overflow-hidden border border-[#141414]/10 z-10"
             data-cursor="EXPLORE"
           >
-            <Image
-              src="https://images.unsplash.com/photo-1502810365585-9e3d2c92e88d?q=80&w=1920&auto=format&fit=crop"
-              alt="Panoramic Highway Township"
-              fill
-              className="town-image object-cover scale-110"
-              quality={90}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/60 via-transparent to-transparent" />
+            {/* Leaflet Map Container */}
+            <div ref={mapContainerRef} className="absolute inset-0 w-full h-full bg-[#0B0B0B]" />
             
-            <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md border border-[#141414]/10 px-8 py-5 flex items-center gap-5 shadow-2xl">
+            {/* Overlay Gradient for text readability */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0B0B0B]/60 via-transparent to-transparent z-[400]"></div>
+            
+            {/* Overlay Info Box */}
+            <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md border border-[#141414]/10 px-8 py-5 flex items-center gap-5 shadow-2xl z-[500]">
               <div className="relative w-2.5 h-2.5">
                 <span className="absolute inset-0 rounded-full bg-[#C5A572]/40 animate-ping"></span>
                 <span className="relative inline-flex w-2.5 h-2.5 rounded-full bg-[#C5A572]"></span>
@@ -606,6 +692,47 @@ function TownshipVisual() {
           </div>
         </div>
       </div>
+
+      {/* Leaflet customizations to match luxury theme */}
+      <style jsx global>{`
+        .leaflet-container {
+          background: #0B0B0B !important;
+          font-family: var(--font-sans) !important;
+          outline: none;
+        }
+        .leaflet-popup-content-wrapper {
+          background: transparent;
+          box-shadow: none;
+        }
+        .leaflet-popup-content {
+          margin: 0;
+        }
+        .leaflet-popup-tip-container {
+          display: none;
+        }
+        .leaflet-control-zoom a {
+          background: #0B0B0B !important;
+          color: #C5A572 !important;
+          border: 1px solid rgba(197, 165, 114, 0.3) !important;
+          font-weight: 300;
+        }
+        .leaflet-control-zoom a:hover {
+          background: #141414 !important;
+        }
+        .leaflet-control-attribution {
+          background: rgba(11, 11, 11, 0.8) !important;
+          color: rgba(255, 255, 255, 0.4) !important;
+        }
+        .leaflet-control-attribution a {
+          color: rgba(197, 165, 114, 0.6) !important;
+        }
+        @keyframes mapPing {
+          75%, 100% {
+            transform: scale(2.5);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </section>
   );
 }
@@ -890,7 +1017,7 @@ function Divisions() {
               key={i}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
-              className="relative flex-1 p-10 border-r border-white/10 last:border-r-0 cursor-pointer overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="group relative flex-1 p-10 border-r border-white/10 last:border-r-0 cursor-pointer overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
               style={{ flexGrow: hovered === i ? 2.5 : 1 }}
             >
               <div className="absolute inset-0 z-0 overflow-hidden">
