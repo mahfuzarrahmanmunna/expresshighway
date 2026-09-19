@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, Menu, X, Phone, Mail } from "lucide-react";
-import { FaWhatsapp, FaFacebookF } from "react-icons/fa";
+import { ArrowUpRight, Menu, X, Phone, Mail, MapPin } from "lucide-react";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import Link from "next/link";
 
 if (typeof window !== "undefined") {
@@ -219,16 +219,16 @@ export default function GlassNavbar() {
 
             <div className="flex items-center gap-3">
               <div className="hidden lg:flex items-center gap-2 mr-2">
-                <motion.a href="tel:+8801710000000" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="tel:+8801906896326" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Phone size={13} strokeWidth={1.5} />
                 </motion.a>
-                <motion.a href="https://wa.me/8801710000000" target="_blank" rel="noopener noreferrer" data-cursor="CHAT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
-                  <FaWhatsapp size={13} />
+                <motion.a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                  <FaLinkedinIn size={13} />
                 </motion.a>
-                <motion.a href="mailto:info@expresshighwayinn.com" data-cursor="MAIL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="mailto:info@sampangroup.com.bd" data-cursor="MAIL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Mail size={13} strokeWidth={1.5} />
                 </motion.a>
-                <motion.a href="https://facebook.com" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <FaFacebookF size={13} />
                 </motion.a>
               </div>
@@ -275,7 +275,7 @@ export default function GlassNavbar() {
           </button>
         </div>
 
-        <div className="relative z-10 px-6 pt-12 pb-8 flex flex-col h-[calc(100vh-100px)] justify-between">
+        <div className="relative z-10 px-6 pt-8 pb-8 flex flex-col h-[calc(100vh-100px)] justify-between overflow-y-auto">
           <div>
             {NAV_ITEMS.map((item, index) => (
               <MotionLink
@@ -298,7 +298,7 @@ export default function GlassNavbar() {
             ))}
           </div>
 
-          <div className="mt-8">
+          <div className="mt-10">
             <MotionLink
               href="#membership"
               initial={false}
@@ -309,11 +309,40 @@ export default function GlassNavbar() {
               <ArrowUpRight size={16} />
             </MotionLink>
 
-            <div className="flex justify-center gap-6 mt-8">
-              <a href="tel:+8801710000000" className="text-white/50 hover:text-white"><Phone size={16} /></a>
-              <a href="https://wa.me/8801710000000" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white"><FaWhatsapp size={16} /></a>
-              <a href="mailto:info@expresshighwayinn.com" className="text-white/50 hover:text-white"><Mail size={16} /></a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white"><FaFacebookF size={16} /></a>
+            {/* Detailed Contact Info Grid */}
+            <div className="mt-10 grid grid-cols-2 gap-8 text-left">
+              <div>
+                <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
+                  <Phone size={10} strokeWidth={1.5} /> Call us
+                </p>
+                <a href="tel:+8801906896326" className="text-[13px] text-white/60 hover:text-white transition-colors block">
+                  +880 1906-896326
+                </a>
+              </div>
+              <div>
+                <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
+                  <Mail size={10} strokeWidth={1.5} /> Email us
+                </p>
+                <a href="mailto:info@sampangroup.com.bd" className="text-[13px] text-white/60 hover:text-white transition-colors block break-all">
+                  info@sampangroup.com.bd
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-6 text-left">
+              <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
+                <MapPin size={10} strokeWidth={1.5} /> Visit us
+              </p>
+              <p className="text-[13px] text-white/60 leading-relaxed">
+                Head Office: Sampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229, Bangladesh.
+              </p>
+            </div>
+
+            <div className="flex justify-center gap-6 mt-10 pt-8 border-t border-white/[0.04]">
+              <a href="tel:+8801906896326" className="text-white/50 hover:text-white transition-colors"><Phone size={16} /></a>
+              <a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors"><FaLinkedinIn size={16} /></a>
+              <a href="mailto:info@sampangroup.com.bd" className="text-white/50 hover:text-white transition-colors"><Mail size={16} /></a>
+              <a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors"><FaFacebookF size={16} /></a>
             </div>
           </div>
         </div>
