@@ -182,7 +182,8 @@ export default function Hero() {
             });
 
             if (overlayRef.current) {
-              overlayRef.current.style.backgroundColor = `rgba(0,0,0,${0.5 + p * 0.5})`;
+              // Slightly darken on scroll, but kept lighter than before
+              overlayRef.current.style.backgroundColor = `rgba(0,0,0,${0.2 + p * 0.4})`;
             }
 
             const nav = document.querySelector(".nav-main");
@@ -247,17 +248,18 @@ export default function Hero() {
         </video>
       </div>
 
-      {/* Luxury Cinematic Overlays */}
+      {/* Luxury Cinematic Overlays - Lightened for visibility */}
       <div
         ref={overlayRef}
         className="absolute inset-0 z-[2] transition-colors duration-300"
-        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        style={{ backgroundColor: "rgba(0,0,0,0.2)" }} // Reduced base darkness
       />
       <div 
         className="absolute inset-0 z-[3] pointer-events-none" 
-        style={{ background: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.8) 100%)" }} 
+        style={{ background: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0.4) 100%)" }} // Softer vignette
       />
-      <div className="absolute inset-0 z-[3] bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
+      {/* Stronger gradient only at the bottom to keep text readable */}
+      <div className="absolute inset-0 z-[3] bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
       {/* WebGL Light Leaks */}
       {isLoaded && <WebGLDepth />}
@@ -271,7 +273,7 @@ export default function Hero() {
         <div className="max-w-4xl">
           <p
             ref={tagRef}
-            className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-primary/80 mb-8 font-medium opacity-0 translate-y-5 will-change-transform"
+            className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-primary bg-white/20  mb-8 font-medium opacity-0 translate-y-5 will-change-transform"
           >
             Premium Hospitality & Club
           </p>
@@ -279,7 +281,7 @@ export default function Hero() {
           <h1
             ref={headlineRef}
             id="hero-headline"
-            className="font-[family-name:var(--font-playfair)] text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] font-medium tracking-tight leading-[1.05] text-white drop-shadow-2xl"
+            className="font-[family-name:var(--font-playfair)] text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] font-medium tracking-tight leading-[1.05] text-white drop-shadow-lg"
             style={{ perspective: "1200px" }}
             data-cursor="text"
             dangerouslySetInnerHTML={{ __html: "Where the Highway Leads to Luxury" }}
@@ -287,29 +289,33 @@ export default function Hero() {
 
           <p
             ref={descRef}
-            className="mt-8 text-sm md:text-lg font-light text-white/70 max-w-2xl mx-auto leading-relaxed opacity-0 translate-y-10 will-change-transform drop-shadow-lg"
+            className="mt-8 text-sm md:text-lg font-light text-white/80 max-w-2xl mx-auto leading-relaxed opacity-0 translate-y-10 will-change-transform drop-shadow-md"
           >
             Express Highway Inn brings fine dining, an exclusive Club & Lounge,
             and everyday convenience together in one address, for every
             traveller on the road and every member who calls it their stop.
           </p>
 
+          {/* Glassmorphism CTA Buttons */}
           <div
             ref={ctaRef}
             className="mt-12 flex flex-col sm:flex-row gap-5 justify-center opacity-0 scale-90 will-change-transform"
           >
             <MagneticButton strength={0.4}>
-              <a href="#club-lounge" className="btn-primary block">
-                Explore Club & Lounge Facilities
+              <a 
+                href="#club-lounge" 
+                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 bg-white/10 border border-white/20 backdrop-blur-md text-[10px] uppercase tracking-[0.35em] font-medium text-white overflow-hidden transition-all duration-500 hover:bg-white/20 hover:border-white/40"
+              >
+                <span className="relative z-10">Explore Club & Lounge</span>
               </a>
             </MagneticButton>
             <MagneticButton strength={0.3}>
               <a
                 href="#contact"
-                className="btn-ghost flex items-center justify-center gap-3"
+                className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-black/20 border border-white/10 backdrop-blur-md text-[10px] uppercase tracking-[0.35em] font-medium text-white/80 overflow-hidden transition-all duration-500 hover:bg-black/40 hover:text-white hover:border-white/20"
               >
-                <span className="w-1.5 h-1.5 bg-current rounded-full" />
-                Contact Us
+                <span className="w-1.5 h-1.5 bg-current rounded-full transition-transform duration-500 group-hover:scale-150" />
+                <span className="relative z-10">Contact Us</span>
               </a>
             </MagneticButton>
           </div>
@@ -322,7 +328,7 @@ export default function Hero() {
         className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 opacity-0 flex flex-col items-center gap-4"
       >
         <div className="w-px h-16 bg-white/10 relative overflow-hidden hero-scroll-line" />
-        <span className="text-[8px] uppercase tracking-[0.4em] text-white/40 font-medium">
+        <span className="text-[8px] uppercase tracking-[0.4em] text-white/50 font-medium">
           Scroll to discover
         </span>
       </div>
@@ -333,7 +339,7 @@ export default function Hero() {
         className="absolute left-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block opacity-0"
       >
         <span
-          className="text-[7px] tracking-[0.5em] uppercase text-white/30"
+          className="text-[7px] tracking-[0.5em] uppercase text-white/50"
           style={{ writingMode: "vertical-rl" }}
         >
           Est. 2025 — Premium Hospitality
@@ -344,7 +350,7 @@ export default function Hero() {
         className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden lg:block opacity-0"
       >
         <span
-          className="text-[7px] tracking-[0.5em] uppercase text-white/30"
+          className="text-[7px] tracking-[0.5em] uppercase text-white/50"
           style={{ writingMode: "vertical-rl" }}
         >
           Expressway — KM 42

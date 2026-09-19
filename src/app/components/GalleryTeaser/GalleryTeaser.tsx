@@ -6,51 +6,59 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
-import { ArrowUpRight, X, ChevronLeft, ChevronRight, Expand } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/* ── Curated Gallery Data ── */
+/* ── Curated Editorial Gallery Data ── */
+/* 
+   Layout Math (Desktop 12-col grid):
+   Row 1: 12 cols (21/9 cinematic ratio) = Full width feature intro
+   Row 2: 8 cols (16/10 ratio -> height 5 units) + 4 cols (4/5 ratio -> height 5 units) = Perfect match
+   Row 3: 4 cols (4/5 ratio -> height 5 units) + 8 cols (16/10 ratio -> height 5 units) = Perfect match
+   Row 4: 4 x 3 cols (3/2 ratio -> height 2 units) = Perfect match
+   
+   Mobile (2-col grid):
+   - Features span 2 cols (full width)
+   - Portraits/Squares span 1 col
+   - Math pairs perfectly to prevent layout gaps
+*/
 const GALLERY_IMAGES = [
   {
+    src: "/banner/banner1.jpg",
+    size: "col-span-2 md:col-span-12 aspect-[16/9] md:aspect-[21/9]",
+  },
+  {
     src: "/images/lounge.jpg",
-    title: "VVIP Lounge",
-    size: "col-span-2 md:col-span-6 aspect-[4/5] md:aspect-[16/10]",
+    size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]",
   },
   {
     src: "/club/salon.jpg",
-    title: "Wellness & Spa",
-    size: "col-span-1 md:col-span-3 aspect-[4/5]",
+    size: "col-span-1 md:col-span-4 aspect-[4/5]",
   },
   {
     src: "/club/bar.jpg",
-    title: "Recreation Room",
-    size: "col-span-1 md:col-span-3 aspect-[4/5]",
+    size: "col-span-1 md:col-span-4 aspect-[4/5]",
   },
   {
     src: "/club/lounge.png",
-    title: "Fine Dining",
-    size: "col-span-1 md:col-span-3 aspect-[4/5]",
+    size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]",
   },
   {
     src: "/images/swimmingpool.jpg",
-    title: "Infinity Pool",
-    size: "col-span-1 md:col-span-3 aspect-[4/5]",
+    size: "col-span-1 md:col-span-3 aspect-[3/2]",
   },
   {
     src: "/club/gym.jpg",
-    title: "Fitness Center",
-    size: "col-span-2 md:col-span-6 aspect-[4/5] md:aspect-[16/10]",
+    size: "col-span-1 md:col-span-3 aspect-[3/2]",
   },
   {
     src: "/club/room.jpg",
-    title: "Luxury Suites",
-    size: "col-span-2 md:col-span-4 aspect-[4/5] md:aspect-square",
+    size: "col-span-1 md:col-span-3 aspect-[3/2]",
   },
   {
     src: "/club/rooms.jpg",
-    title: "Architectural Details",
-    size: "col-span-2 md:col-span-8 aspect-[4/5] md:aspect-[16/9]",
+    size: "col-span-1 md:col-span-3 aspect-[3/2]",
   },
 ];
 
@@ -77,15 +85,17 @@ export default function GalleryTeaser() {
 
     if (viewerIndex !== null) {
       document.body.style.overflow = "hidden";
+      
+      // Animate Lightbox In
       gsap.fromTo(
         ".lightbox-overlay",
         { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: "power2.out" }
+        { opacity: 1, duration: 0.5, ease: "power2.out" }
       );
       gsap.fromTo(
-        ".lightbox-content",
-        { opacity: 0, scale: 0.95, y: 20 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "power3.out", delay: 0.1 }
+        ".lightbox-image",
+        { opacity: 0, scale: 0.95, filter: "blur(10px)" },
+        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "power3.out", delay: 0.1 }
       );
     } else {
       document.body.style.overflow = "auto";
@@ -137,16 +147,18 @@ export default function GalleryTeaser() {
         },
       });
 
-      /* Grid Items Clip-Path Reveal */
+      /* Grid Items Clip-Path Reveal & Parallax */
       const items = gsap.utils.toArray<HTMLElement>(".gallery-item");
-      items.forEach((item) => {
+      
+      items.forEach((item, i) => {
         gsap.fromTo(
           item,
           { clipPath: "inset(100% 0% 0% 0%)" },
           {
             clipPath: "inset(0% 0% 0% 0%)",
-            duration: 1.4,
+            duration: 1.6,
             ease: "power4.out",
+            delay: (i % 3) * 0.15, // Stagger based on column position
             scrollTrigger: {
               trigger: item,
               start: "top 90%",
@@ -154,32 +166,24 @@ export default function GalleryTeaser() {
           }
         );
 
-        /* Image Parallax (Counter-scroll) */
-        const img = item.querySelector(".gallery-img");
-        if (img) {
-          gsap.to(img, {
+        /* 
+          Subtle Vertical Parallax on Inner Wrapper.
+          By animating the wrapper instead of the image, 
+          we prevent GSAP transform conflicts with CSS hover transforms.
+        */
+        const imgWrap = item.querySelector(".gallery-img-wrap");
+        if (imgWrap) {
+          gsap.to(imgWrap, {
             yPercent: -15,
             ease: "none",
             scrollTrigger: {
               trigger: item,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1,
+              scrub: 1.5,
             },
           });
         }
-      });
-
-      /* CTA Reveal */
-      gsap.from(".gallery-cta-anim", {
-        opacity: 0,
-        y: 30,
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".gallery-cta-wrap",
-          start: "top 90%",
-        },
       });
 
       return () => {
@@ -191,18 +195,18 @@ export default function GalleryTeaser() {
 
   return (
     <section
-      id="gallery"
       ref={containerRef}
-      className="relative w-full bg-[#F7F6F2] py-32 md:py-48 overflow-x-hidden"
+      className="relative w-full bg-[#F7F6F2] py-24 md:py-32 overflow-x-hidden"
     >
-      {/* Ambient Background Glow */}
-      <div className="pointer-events-none absolute top-1/2 left-0 -translate-y-1/2 w-[600px] h-[600px] bg-primary/[0.04] blur-[150px] rounded-full" />
+      {/* Ambient Subtle Background Tone */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#F9F8F6] via-[#F7F6F2] to-[#F0EFEA]" />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-        {/* ─── Section Header ─── */}
-        <div className="gallery-header flex flex-col md:flex-row md:items-end md:justify-between gap-12 mb-20 md:mb-28">
-          <div className="max-w-3xl">
-            <span className="gallery-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-8 block">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-8 relative z-10">
+        
+        {/* ─── Editorial Header Block ─── */}
+        <div className="gallery-header flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-12 mb-16 md:mb-24">
+          <div className="max-w-3xl w-full md:w-auto">
+            <span className="gallery-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6 block">
               Visual Tour
             </span>
             <h2 
@@ -212,7 +216,7 @@ export default function GalleryTeaser() {
               Curated <span className="italic text-primary/80">Gallery.</span>
             </h2>
           </div>
-          <div className="max-w-sm md:text-right">
+          <div className="max-w-sm w-full md:w-auto md:text-right">
             <div className="hidden md:block w-16 h-px bg-primary/40 mb-6 ml-auto gallery-header-anim"></div>
             <p className="gallery-header-anim text-sm md:text-base font-light text-[#0c0b0b]/50 leading-[1.8]">
               A glimpse into the architecture, ambiance, and meticulously curated spaces that define the Express Highway Inn experience.
@@ -220,79 +224,49 @@ export default function GalleryTeaser() {
           </div>
         </div>
 
-        {/* ─── Asymmetric 12-Column Grid ─── */}
-        <div className="gallery-grid grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-5">
+        {/* ─── Pure Editorial 12-Column Grid ─── */}
+        <div className="gallery-grid grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-3">
           {GALLERY_IMAGES.map((item, i) => (
             <div
               key={i}
               onClick={() => setViewerIndex(i)}
               className={`gallery-item group relative ${item.size} overflow-hidden cursor-zoom-in bg-[#0c0b0b] select-none`}
             >
-              {/* Parallax Image Wrapper */}
-              <div className="absolute inset-0 z-0">
+              {/* Parallax Wrapper (Moved by GSAP) */}
+              <div className="gallery-img-wrap absolute inset-0 top-[-10%] h-[120%] w-full z-0 overflow-hidden">
+                {/* Inner Image (Scaled by CSS Hover) */}
                 <Image
                   src={item.src}
-                  alt={item.title}
+                  alt="Express Highway Inn Visual"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="gallery-img object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-[1.05]"
+                  className="object-cover h-full w-full transition-all duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-[1.04] group-hover:brightness-110 group-hover:contrast-[1.05]"
                   quality={90}
                 />
               </div>
 
-              {/* Persistent Gradient Overlay for Text Legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0b0b]/90 via-[#0c0b0b]/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700 z-[1]" />
-
-              {/* Top Index Indicator */}
-              <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10">
-                <span className="text-[10px] tracking-[0.3em] text-white/70 transition-colors duration-500 group-hover:text-white">
-                  0{i + 1} / 08
-                </span>
-                <Expand className="h-4 w-4 text-white/70 transition-all duration-500 group-hover:text-white group-hover:scale-110" />
-              </div>
-
-              {/* Bottom Title - Always Visible, lifts on hover */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
-                <h3 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl text-white font-medium leading-tight transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1">
-                  {item.title}
-                </h3>
-                <div className="h-[1px] w-8 bg-primary mt-3 group-hover:w-16 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              </div>
+              {/* Extremely Subtle Vignette for Depth (No text) */}
+              <div className="absolute inset-0 bg-[#0c0b0b]/0 group-hover:bg-[#0c0b0b]/10 transition-colors duration-700 z-[1] pointer-events-none" />
             </div>
           ))}
-        </div>
-
-        {/* ─── CTA Wrap ─── */}
-        <div className="gallery-cta-wrap flex justify-center mt-24">
-          <div className="gallery-cta-anim">
-            <a
-              href="#full-gallery"
-              className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-[#0c0b0b]/80 hover:text-primary transition-colors duration-300"
-            >
-              View Full Gallery
-              <span className="relative w-12 h-px bg-[#0c0b0b]/40 group-hover:bg-primary transition-all duration-500 group-hover:w-20">
-                <ArrowUpRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0" />
-              </span>
-            </a>
-          </div>
         </div>
       </div>
 
       {/* ────────────────────────────────────────────────── */}
-      {/* ─── Luxury Lightbox / Image Viewer ─────────────── */}
+      {/* ─── Pure Luxury Lightbox / Image Viewer ─── */}
       {/* ────────────────────────────────────────────────── */}
       {viewerIndex !== null && (
         <div
-          className="lightbox-overlay fixed inset-0 z-[100] bg-[#0c0b0b]/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8"
+          className="lightbox-overlay fixed inset-0 z-[9999] bg-[#0B0B0B]/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8"
           onClick={() => setViewerIndex(null)}
         >
           {/* Close Button */}
           <button
             onClick={() => setViewerIndex(null)}
-            className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors duration-300 p-2 z-50"
+            className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors duration-500 p-2 z-50"
             aria-label="Close viewer"
           >
-            <X className="h-7 w-7" />
+            <X className="h-8 w-8" strokeWidth={1} />
           </button>
 
           {/* Previous Button */}
@@ -303,38 +277,26 @@ export default function GalleryTeaser() {
                 (viewerIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
               );
             }}
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors duration-300 p-2 z-50 group"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors duration-500 p-2 z-50 group"
             aria-label="Previous image"
           >
-            <ChevronLeft className="h-10 w-10 transition-transform duration-300 group-hover:-translate-x-1" />
+            <ChevronLeft className="h-10 w-10 transition-transform duration-500 group-hover:-translate-x-2" strokeWidth={1} />
           </button>
 
-          {/* Image Content */}
+          {/* Pure Image Content - No Captions */}
           <div
-            className="lightbox-content relative w-full max-w-6xl h-full max-h-[85vh] flex flex-col items-center justify-center"
+            className="lightbox-content relative w-full max-w-[90vw] max-h-[90vh] flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative flex-1 w-full flex items-center justify-center">
-              <Image
-                src={GALLERY_IMAGES[viewerIndex].src}
-                alt={GALLERY_IMAGES[viewerIndex].title}
-                width={1600}
-                height={1000}
-                className="object-contain max-w-full max-h-[75vh] rounded-sm shadow-2xl"
-                quality={100}
-                priority
-              />
-            </div>
-            
-            {/* Caption */}
-            <div className="mt-8 text-center">
-              <span className="text-[10px] uppercase tracking-[0.4em] text-white/40 mb-3 block">
-                0{viewerIndex + 1} / 0{GALLERY_IMAGES.length}
-              </span>
-              <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-medium">
-                {GALLERY_IMAGES[viewerIndex].title}
-              </h3>
-            </div>
+            <Image
+              src={GALLERY_IMAGES[viewerIndex].src}
+              alt="Express Highway Inn Expanded View"
+              width={1920}
+              height={1080}
+              className="lightbox-image object-contain max-w-full max-h-[85vh] md:max-h-[80vh] shadow-2xl"
+              quality={100}
+              priority
+            />
           </div>
 
           {/* Next Button */}
@@ -343,10 +305,10 @@ export default function GalleryTeaser() {
               e.stopPropagation();
               setViewerIndex((viewerIndex + 1) % GALLERY_IMAGES.length);
             }}
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors duration-300 p-2 z-50 group"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors duration-500 p-2 z-50 group"
             aria-label="Next image"
           >
-            <ChevronRight className="h-10 w-10 transition-transform duration-300 group-hover:translate-x-1" />
+            <ChevronRight className="h-10 w-10 transition-transform duration-500 group-hover:translate-x-2" strokeWidth={1} />
           </button>
         </div>
       )}

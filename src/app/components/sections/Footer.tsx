@@ -10,26 +10,26 @@ import { BsFacebook, BsLinkedin } from "react-icons/bs";
 /* ═══════════════════════════════════════════════════════════════
    CONFIG
    ═══════════════════════════════════════════════════════════════ */
-const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
-  Navigation: [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/aboutus" },
-    { label: "Club & Lounge", href: "/club-and-lounge" },
-    { label: "Membership", href: "/membership" },
-    { label: "Contact", href: "/contactus" },
-  ],
-  "Sampan Ecosystem": [
-    { label: "Sampan Group", href: "https://sampangroup.com" },
-    { label: "LSHS", href: "#" },
-    { label: "Sampan Agro & Golf", href: "#" },
-    { label: "Sampan Highway Inn", href: "#" },
-  ],
-  Legal: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Membership Terms", href: "#" },
-  ],
-};
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/aboutus" },
+  { label: "Club & Lounge", href: "/club-and-lounge" },
+  { label: "Membership", href: "/membership" },
+  { label: "Contact", href: "/contactus" },
+];
+
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms of Service", href: "/terms-of-service" },
+  { label: "Membership Terms", href: "/membership-terms" },
+];
+
+const ECOSYSTEM_LINKS = [
+  { label: "Sampan Group", href: "https://sampangroup.com" },
+  { label: "London School Of Higher Studies", href: "https://cips.lshs.co.uk/" },
+  { label: "Sampan Agro & Golf", href: "https://www.sampangroup.com.bd/our-divisions/hospitality-highway-travel/sampan-agro-golf-club-lounge" },
+  { label: "Sampan Highway Inn", href: "https://www.sampangroup.com.bd/our-divisions/hospitality-highway-travel/sampan-highway-inn" },
+];
 
 const CONTACT_ICONS = [
   { Icon: Phone, label: "Phone", href: "tel:+8801906896326" },
@@ -39,48 +39,67 @@ const CONTACT_ICONS = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   BACK TO TOP
+   REUSABLE COMPONENTS
    ═══════════════════════════════════════════════════════════════ */
-function BackToTop() {
-  const btnRef = useRef<HTMLButtonElement>(null);
+function SectionHeading({ num, title }: { num: string; title: string }) {
+  return (
+    <h4 className="text-[11px] sm:text-[12px] font-medium tracking-[0.28em] uppercase text-white/50 pb-4 border-b border-white/10 mb-6 flex items-center gap-2">
+      <span className="text-primary/70">{num}</span>
+      {title}
+    </h4>
+  );
+}
 
+function FooterLink({ href, label }: { href: string; label: string }) {
+  const isExternal = href.startsWith("http");
+  return (
+    <li>
+      <a
+        href={href}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        className="group relative inline-block text-[13px] sm:text-[14px] leading-[1.5] text-white/40 hover:text-white transition-all duration-300 ease-out hover:translate-x-1"
+      >
+        {label}
+      </a>
+    </li>
+  );
+}
+
+function BackToTop() {
   const handleClick = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
     <button
-      ref={btnRef}
       onClick={handleClick}
       className="group flex items-center gap-3 cursor-pointer border-none bg-transparent py-4"
     >
-      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-gray-400 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:border-primary/40 group-hover:text-primary group-hover:bg-primary/[0.05] group-hover:-translate-y-0.5">
-        <ArrowUp className="h-3.5 w-3.5" />
+      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:border-primary/40 group-hover:text-primary group-hover:bg-primary/[0.05] group-hover:scale-105">
+        <ArrowUp className="h-4 w-4" />
       </span>
-      <span className="text-[9px] tracking-[0.3em] uppercase text-gray-400 transition-colors duration-300 group-hover:text-foreground/80">
+      <span className="text-[12px] tracking-[0.2em] uppercase text-white/50 transition-colors duration-300 group-hover:text-white">
         Back to top
       </span>
     </button>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   NEWSLETTER INPUT
-   ═══════════════════════════════════════════════════════════════ */
 function NewsletterInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [focused, setFocused] = useState(false);
 
   return (
     <div className="mt-10">
-      <p className="text-[9px] font-medium tracking-[0.3em] uppercase text-gray-400 mb-4">
+      <p className="text-[11px] sm:text-[12px] font-medium tracking-[0.28em] uppercase text-white/50 mb-5">
         Stay Informed
       </p>
       <div className="flex items-center gap-0">
         <div
           className={cn(
             "flex-1 border-b transition-colors duration-[400ms]",
-            focused ? "border-primary/60" : "border-white/20",
+            focused ? "border-primary/60" : "border-white/15",
           )}
         >
           <input
@@ -89,18 +108,18 @@ function NewsletterInput() {
             placeholder="Enter your email address"
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="w-full border-none bg-transparent py-3 pr-2 text-[13px] text-gray-400 outline-none placeholder:text-gray-400"
+            className="w-full border-none bg-transparent py-3 pr-2 text-[14px] text-white outline-none placeholder:text-white/30"
           />
         </div>
         <button
           type="button"
-          className="flex h-10 w-10 shrink-0 items-center justify-center border-none bg-transparent cursor-pointer text-gray-400 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-primary hover:translate-x-1"
+          className="flex h-10 w-10 shrink-0 items-center justify-center border-none bg-transparent cursor-pointer text-white/40 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-primary hover:translate-x-1"
           aria-label="Subscribe to newsletter"
         >
           <ArrowUpRight className="h-4 w-4" />
         </button>
       </div>
-      <p className="mt-3 text-[9px] leading-relaxed text-gray-400">
+      <p className="mt-4 text-[12px] leading-relaxed text-white/30 font-light">
         Exclusive updates on highway events and membership tiers. No spam.
       </p>
     </div>
@@ -108,7 +127,7 @@ function NewsletterInput() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FOOTER COMPONENT
+   MAIN FOOTER COMPONENT
    ═══════════════════════════════════════════════════════════════ */
 export default function Footer() {
   const { isReducedMotion } = useAnimation();
@@ -120,15 +139,14 @@ export default function Footer() {
   useScrollReveal(dividerRef, { y: 20, disabled: isReducedMotion });
   useScrollReveal(logoRef, { y: 60, disabled: isReducedMotion });
 
-  return (
-    <footer className="relative bg-[#050608] overflow-hidden">
-      {/* ── Top Blend Gradient ── */}
-      <div className="pointer-events-none absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#080808] to-transparent z-[1]" />
+  // Container classes for consistent alignment
+  const containerClasses = "mx-auto w-full max-w-[1440px] px-6 sm:px-8 lg:px-12 xl:px-16";
 
-      {/* ── Ambient Background Glow ── */}
+  return (
+    <footer className="relative w-full bg-[#050608] overflow-hidden">
+      {/* ── Ambient Background Elements ── */}
+      <div className="pointer-events-none absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#080808] to-transparent z-[1]" />
       <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-primary/[0.04] blur-[180px] rounded-full" />
-      
-      {/* ── Grain Texture ── */}
       <div 
         className="pointer-events-none absolute inset-0 opacity-[0.03] mix-blend-overlay"
         style={{
@@ -140,30 +158,27 @@ export default function Footer() {
       {/* ARCHITECTURAL DIVIDER                 */}
       {/* ════════════════════════════════════════ */}
       <div ref={dividerRef} className={cn("relative z-10", !isReducedMotion && "opacity-0")}>
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-24 pb-12">
+        <div className={cn(containerClasses, "pt-24 pb-12")}>
           <div className="flex items-center justify-between">
-            {/* Left accent */}
             <div className="flex items-center gap-4">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/25" />
-              <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-gray-400">
+              <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-white/40">
                 Expressway — KM 42
               </span>
             </div>
 
-            {/* Center — coordinates */}
             <div className="hidden items-center gap-3 sm:flex">
-              <span className="text-[8px] font-mono tracking-[0.2em] text-gray-400">
+              <span className="text-[11px] font-mono tracking-[0.2em] text-white/40">
                 22°27&apos;N
               </span>
               <span className="h-1 w-1 bg-primary/60 rounded-full" />
-              <span className="text-[8px] font-mono tracking-[0.2em] text-gray-400">
+              <span className="text-[11px] font-mono tracking-[0.2em] text-white/40">
                 91°48&apos;E
               </span>
             </div>
 
-            {/* Right accent */}
             <div className="flex items-center gap-4">
-              <span className="text-[8px] font-mono tracking-[0.2em] text-gray-400">
+              <span className="text-[11px] font-mono tracking-[0.2em] text-white/40">
                 Dhaka — Ctg
               </span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/25" />
@@ -173,9 +188,9 @@ export default function Footer() {
       </div>
 
       {/* ════════════════════════════════════════ */}
-      {/* MASSIVE TYPOGRAPHY LOGO              */}
+      {/* GIANT TYPOGRAPHY LOGO                 */}
       {/* ════════════════════════════════════════ */}
-      <div ref={logoRef} className={cn("relative z-10 mx-auto max-w-7xl px-6 lg:px-8 pb-20", !isReducedMotion && "opacity-0")}>
+      <div ref={logoRef} className={cn("relative z-10", containerClasses, !isReducedMotion && "opacity-0", "pb-20")}>
         <h2 className="font-[family-name:var(--font-playfair)] text-[clamp(3rem,12vw,11rem)] leading-[0.85] font-medium tracking-tight select-none bg-gradient-to-b from-white via-white/70 to-white/30 bg-clip-text text-transparent">
           Express<br/>
           <span className="italic text-primary/80">Highway Inn.</span>
@@ -183,73 +198,72 @@ export default function Footer() {
       </div>
 
       {/* ════════════════════════════════════════ */}
-      {/* MAIN FOOTER CONTENT                   */}
+      {/* MAIN 12-COLUMN GRID                   */}
       {/* ════════════════════════════════════════ */}
-      <div ref={mainRef} className={cn("relative z-10 mx-auto max-w-7xl px-6 lg:px-8 pb-20", !isReducedMotion && "opacity-0")}>
-        <div className="grid gap-14 lg:grid-cols-12 lg:gap-8 xl:gap-12">
+      <div ref={mainRef} className={cn("relative z-10", containerClasses, !isReducedMotion && "opacity-0", "pb-20")}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-x-8 xl:gap-x-12">
           
-          {/* ── Brand & Newsletter ── */}
-          <div className="lg:col-span-5 xl:col-span-5">
-            <p className="text-[13px] leading-[1.8] text-gray-400 max-w-sm font-light">
+          {/* ── 01. Brand & Newsletter (4 Cols) ── */}
+          <div className="sm:col-span-2 lg:col-span-4">
+            <p className="text-[14px] leading-[1.8] text-white/40 max-w-[340px] font-light">
               Where the highway leads to luxury. A private retreat for travellers, members, and corporate journeys, anchored by Sampan Group.
             </p>
             <NewsletterInput />
           </div>
 
-          {/* ── Link Columns ── */}
-          <div className="lg:col-span-4 xl:col-span-4 grid grid-cols-2 sm:grid-cols-3 gap-8">
-            {Object.entries(FOOTER_LINKS).map(([heading, links], colIdx) => (
-              <div key={heading}>
-                <h4 className="text-[9px] font-medium tracking-[0.3em] uppercase text-gray-400 pb-4 border-b border-white/15 mb-5 flex items-center gap-2">
-                  <span className="text-primary/70">{`0${colIdx + 1}`}</span>
-                  {heading}
-                </h4>
-                <ul className="space-y-3.5">
-                  {links.map((link) => (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        target={link.href.startsWith("http") ? "_blank" : undefined}
-                        rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="group relative inline-flex items-center text-[12px] leading-none text-gray-400 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-foreground hover:pl-2"
-                      >
-                        {/* Hover dot indicator */}
-                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-1 w-1 bg-primary rounded-full opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:-left-3" />
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          {/* ── 02. Navigation & Legal (2 Cols) ── */}
+          <div className="sm:col-span-1 lg:col-span-2 flex flex-col gap-12">
+            <div>
+              <SectionHeading num="01" title="Navigation" />
+              <ul className="space-y-4">
+                {NAV_LINKS.map((link) => (
+                  <FooterLink key={link.label} {...link} />
+                ))}
+              </ul>
+            </div>
+            
+            
           </div>
 
-          {/* ── Contact & Connect Column ── */}
-          <div className="lg:col-span-3 xl:col-span-3">
-            <h4 className="text-[9px] font-medium tracking-[0.3em] uppercase text-gray-400 pb-4 border-b border-white/15 mb-5 flex items-center gap-2">
-              <span className="text-primary/70">04</span>
-              Connect
-            </h4>
-            <div className="space-y-5">
-              {[
-                { label: "Phone", value: "+8801906-896326", href: "tel:+8801906896326" },
-                { label: "Email", value: "info@sampangroup.com.bd", href: "mailto:info@sampangroup.com.bd" },
-              ].map((item) => (
-                <div key={item.label}>
-                  <p className="text-[8px] tracking-[0.2em] uppercase text-gray-400 mb-1.5">
-                    {item.label}
-                  </p>
-                  <a 
-                    href={item.href}
-                    className="text-[13px] text-gray-400 transition-colors duration-300 hover:text-foreground cursor-pointer font-light block"
-                  >
-                    {item.value}
-                  </a>
-                </div>
+          {/* ── 03. Ecosystem (3 Cols) ── */}
+          <div className="sm:col-span-1 lg:col-span-3">
+            <SectionHeading num="02" title="Ecosystem" />
+            <ul className="space-y-4">
+              {ECOSYSTEM_LINKS.map((link) => (
+                <FooterLink key={link.label} {...link} />
               ))}
+            </ul>
+          </div>
+
+          {/* ── 04. Connect (3 Cols) ── */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <SectionHeading num="04" title="Connect" />
+            <div className="space-y-6">
+              <div>
+                <p className="text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">
+                  Phone
+                </p>
+                <a 
+                  href="tel:+8801906896326" 
+                  className="text-[14px] text-white/60 hover:text-white transition-colors duration-300 font-light block"
+                >
+                  +880 1906-896326
+                </a>
+              </div>
+              <div>
+                <p className="text-[11px] tracking-[0.2em] uppercase text-white/50 mb-2">
+                  Email
+                </p>
+                <a 
+                  href="mailto:info@sampangroup.com.bd" 
+                  className="text-[14px] text-white/60 hover:text-white transition-colors duration-300 font-light block break-all"
+                >
+                  info@sampangroup.com.bd
+                </a>
+              </div>
             </div>
 
-            {/* Socials / Contact Icons */}
+            {/* Socials */}
             <div className="mt-8 flex items-center gap-3">
               {CONTACT_ICONS.map(({ Icon, label, href }) => (
                 <a
@@ -259,28 +273,33 @@ export default function Footer() {
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                   aria-label={label}
                   data-cursor={label.toUpperCase()}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-gray-400 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-primary/50 hover:text-primary hover:bg-primary/[0.05] hover:scale-110"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/40 transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-primary/50 hover:text-primary hover:bg-primary/[0.05] hover:scale-105"
                 >
-                  <Icon className="h-3.5 w-3.5" />
+                  <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
           </div>
+
         </div>
       </div>
 
       {/* ════════════════════════════════════════ */}
-      {/* BOTTOM BAR                           */}
+      {/* BOTTOM BAR                            */}
       {/* ════════════════════════════════════════ */}
-      <div className="relative z-10 border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-6">
-          <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
-            {/* Copyright */}
-            <p className="text-[9px] tracking-[0.15em] text-gray-400 font-light">
+      <div className="relative z-10 border-t border-white/[0.08]">
+        <div className={cn(containerClasses, "py-8")}>
+          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+            <p className="text-[12px] tracking-[0.15em] text-white/40 font-light text-center sm:text-left">
               &copy; {new Date().getFullYear()} Express Highway Inn. A Sampan Group Venture. All rights reserved.
             </p>
-
-            {/* Back to top */}
+            <div>
+              <ul className="md:flex gap-6 items-center justify-center block">
+                {LEGAL_LINKS.map((link) => (
+                  <FooterLink key={link.label} {...link} />
+                ))}
+              </ul>
+            </div>
             <BackToTop />
           </div>
         </div>

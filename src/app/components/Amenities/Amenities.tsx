@@ -9,14 +9,20 @@ import { ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/* ── Data (Extended with layout properties) ── */
+/* ── Data (Layout Math Perfectly Calculated for 12-Col Grid) ── */
+/* 
+   Row 1: 8 cols (16/10 ratio -> height 5 units) + 4 cols (4/5 ratio -> height 5 units) = Perfect match
+   Row 2: 6 cols (4/3 ratio -> height 4.5 units) + 6 cols (4/3 ratio -> height 4.5 units) = Perfect match
+   Row 3: 4 cols (4/5 ratio -> height 5 units) + 8 cols (16/10 ratio -> height 5 units) = Perfect match
+   Row 4: 8 cols (4/3 ratio -> height 6 units) + 4 cols (2/3 ratio -> height 6 units) = Perfect match
+*/
 const AMENITIES = [
   {
     index: "01",
     title: "Highway Restaurant & Party Center",
     desc: "Open 24/7",
     img: "/images/resturant.png",
-    size: "aspect-[4/5] lg:col-span-7 lg:aspect-[16/10]",
+    size: "aspect-[4/5] sm:col-span-2 sm:aspect-[16/10] lg:col-span-8 lg:aspect-[16/10]",
     offset: "",
   },
   {
@@ -24,15 +30,15 @@ const AMENITIES = [
     title: "VVIP Lounge",
     desc: "Premium comfort, exclusively for members",
     img: "/images/lounge.jpg",
-    size: "aspect-[4/5] lg:col-span-4 lg:col-start-9 lg:aspect-[4/5]",
-    offset: "lg:mt-32",
+    size: "aspect-[4/5] sm:col-span-1 sm:aspect-[4/5] lg:col-span-4 lg:aspect-[4/5]",
+    offset: "lg:mt-24",
   },
   {
     index: "03",
-    title: "Billiards & Game Zone",
+    title: "Billiards & Card Room",
     desc: "Play, relax, compete",
     img: "/images/billiards.png",
-    size: "aspect-[4/5] lg:col-span-5 lg:aspect-[4/5]",
+    size: "aspect-[4/5] sm:col-span-1 sm:aspect-[4/5] lg:col-span-6 lg:aspect-[4/3]",
     offset: "",
   },
   {
@@ -40,40 +46,40 @@ const AMENITIES = [
     title: "Sampan Mart",
     desc: "Your daily needs, on the way",
     img: "/images/sampanmart.jpeg",
-    size: "aspect-[16/10] lg:col-span-6 lg:col-start-7 lg:aspect-[16/10]",
-    offset: "lg:mt-12",
+    size: "aspect-[4/5] sm:col-span-2 sm:aspect-[16/10] lg:col-span-6 lg:aspect-[4/3]",
+    offset: "lg:mt-16",
   },
   {
     index: "05",
     title: "EV Car Charging",
     desc: "Fast, convenient",
     img: "/images/evcharging.avif",
-    size: "aspect-[4/5] lg:col-span-7 lg:aspect-[16/10]",
-    offset: "",
+    size: "aspect-[4/5] sm:col-span-1 sm:aspect-[4/5] lg:col-span-4 lg:aspect-[4/5]",
+    offset: "lg:mt-8",
   },
   {
     index: "06",
     title: "Automatic Car Wash",
     desc: "Quick, efficient",
     img: "/images/carwash.webp",
-    size: "aspect-[4/5] lg:col-span-4 lg:col-start-9 lg:aspect-[4/5]",
-    offset: "lg:mt-24",
+    size: "aspect-[4/5] sm:col-span-2 sm:aspect-[16/10] lg:col-span-8 lg:aspect-[16/10]",
+    offset: "lg:mt-20",
   },
   {
     index: "07",
     title: "Salon & Spa",
     desc: "Pamper yourself daily",
     img: "/images/spa.jpeg",
-    size: "aspect-[4/5] lg:col-span-5 lg:aspect-[4/5]",
-    offset: "",
+    size: "aspect-[4/5] sm:col-span-1 sm:aspect-[4/5] lg:col-span-8 lg:aspect-[4/3]",
+    offset: "lg:mt-12",
   },
   {
     index: "08",
     title: "Prayer Room",
     desc: "Peaceful, always open",
     img: "/images/prayerroom.jpg",
-    size: "aspect-[16/10] lg:col-span-6 lg:col-start-7 lg:aspect-[16/10]",
-    offset: "lg:mt-16",
+    size: "aspect-[4/5] sm:col-span-1 sm:aspect-[4/5] lg:col-span-4 lg:aspect-[2/3]",
+    offset: "lg:mt-32",
   },
 ];
 
@@ -100,9 +106,9 @@ export default function Amenities() {
       items.forEach((item) => {
         gsap.fromTo(
           item,
-          { clipPath: "inset(100% 0% 0% 0%)" }, // Start hidden from bottom
+          { clipPath: "inset(100% 0% 0% 0%)" },
           {
-            clipPath: "inset(0% 0% 0% 0%)", // Reveal to full
+            clipPath: "inset(0% 0% 0% 0%)",
             duration: 1.4,
             ease: "power4.out",
             scrollTrigger: {
@@ -172,52 +178,60 @@ export default function Amenities() {
         </div>
 
         {/* ─── Asymmetric Editorial Grid ─── */}
-        <div className="amenities-grid grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 lg:gap-x-8 lg:gap-y-24">
+        <div className="amenities-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-x-8 lg:gap-y-24">
           {AMENITIES.map((item) => (
             <div
               key={item.index}
               className={`amenity-card group relative ${item.size} ${item.offset} overflow-hidden cursor-pointer`}
             >
               {/* Parallax Image Wrapper */}
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 z-0 overflow-hidden">
                 <Image
                   src={item.img}
                   alt={item.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="amenity-img object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                  className="amenity-img object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   quality={90}
                 />
               </div>
 
-              {/* Cinematic Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-700 group-hover:from-black/90 z-[1]" />
+              {/* Refined Bottom Gradient for Permanent Readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent z-[1] pointer-events-none" />
 
-              {/* Content Layer */}
+              {/* Architectural Hover Border */}
+              <div className="absolute inset-4 border border-white/0 group-hover:border-white/20 transition-all duration-700 z-[2] pointer-events-none"></div>
+
+              {/* Content Layer (Always Visible) */}
               <div className="absolute inset-0 p-6 md:p-8 lg:p-10 flex flex-col justify-between z-10">
+                
                 {/* Top Row: Index & Arrow */}
                 <div className="flex justify-between items-start">
-                  <span className="font-[family-name:var(--font-playfair)] text-xl text-white/30 transition-colors duration-500 group-hover:text-white/80">
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-white/70 transition-colors duration-500 group-hover:text-primary drop-shadow-md">
                     {item.index}
                   </span>
-                  <ArrowUpRight className="h-5 w-5 text-white/0 transition-all duration-500 group-hover:text-white/90 -translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0" />
+                  {/* Elegant Circular Arrow Button */}
+                  <div className="relative w-10 h-10 flex items-center justify-center">
+                    <div className="absolute inset-0 border border-white/20 rounded-full group-hover:border-primary/50 transition-colors duration-500"></div>
+                    <ArrowUpRight className="h-4 w-4 text-white/70 transition-all duration-500 group-hover:text-primary group-hover:rotate-45" />
+                  </div>
                 </div>
 
-                {/* Bottom Content */}
-                <div className="relative">
-                  {/* Masked Subtitle Animation */}
-                  <div className="overflow-hidden mb-3">
-                    <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/60 translate-y-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 opacity-0 group-hover:opacity-100">
-                      {item.desc}
-                    </p>
-                  </div>
+                {/* Bottom Content - Always Visible */}
+                {/* Subtle lift on hover for a premium feel */}
+                <div className="relative transform translate-y-2 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                  {/* Static Description */}
+                  <p className="text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-white/80 mb-3 font-medium drop-shadow-md">
+                    {item.desc}
+                  </p>
 
-                  <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl lg:text-4xl text-white font-medium leading-tight tracking-tight">
+                  {/* Title with Drop Shadow for maximum pop */}
+                  <h3 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl lg:text-3xl text-white font-medium leading-tight tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.7)]">
                     {item.title}
                   </h3>
 
-                  {/* Bottom Line Indicator */}
-                  <div className="h-[1px] w-0 bg-white/60 mt-5 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-16" />
+                  {/* Static Bottom Line Indicator that expands on hover */}
+                  <div className="h-[1px] w-12 bg-primary/80 mt-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-20" />
                 </div>
               </div>
             </div>

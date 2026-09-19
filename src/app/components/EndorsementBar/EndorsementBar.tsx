@@ -12,7 +12,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const SISTER_CONCERNS = [
   { name: "Express Highway Inn", link: "#", logo: "/logo/expresshighwayinn.png" },
   { name: "LSHS", link: "https://cips.lshs.co.uk/", logo: "/logo/lshs.png" },
-  { name: "Sampan Group", link: "https://sampangroup.com", logo: "/logo/sampanretail.png" },
+  { name: "Sampan Group", link: "https://sampangroup.com.bd", logo: "/logo/sampanretail.png" },
 ];
 
 export default function EndorsementBar() {
@@ -38,10 +38,10 @@ export default function EndorsementBar() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full bg-[#080808] py-24 md:py-32 border-y border-white/[0.05] overflow-hidden"
+      className="relative w-full bg-[#080808] py-28 md:py-40 border-y border-white/[0.05] overflow-hidden"
     >
       {/* Ambient Center Glow */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-primary/[0.05] blur-[150px] rounded-full" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-primary/[0.06] blur-[150px] rounded-full" />
 
       {/* Grain Texture for Premium Feel */}
       <div 
@@ -54,11 +54,11 @@ export default function EndorsementBar() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         
         {/* ─── Brand Statement ─── */}
-        <div className="flex flex-col items-center text-center mb-20">
+        <div className="flex flex-col items-center text-center mb-20 md:mb-24">
           <span className="endorsement-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-8 block">
             The Sampan Group Legacy
           </span>
-          <p className="endorsement-anim font-[family-name:var(--font-playfair)] text-2xl md:text-3xl lg:text-4xl font-light text-foreground/80 leading-[1.4] max-w-4xl">
+          <p className="endorsement-anim font-[family-name:var(--font-playfair)] text-2xl md:text-3xl lg:text-4xl font-light text-white/90 leading-[1.4] max-w-4xl">
             Built on a foundation of trust, delivering excellence in hospitality, education, and real estate across Bangladesh.
           </p>
         </div>
@@ -71,23 +71,30 @@ export default function EndorsementBar() {
               href={concern.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex flex-col items-center justify-center p-12 md:p-16 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-white/[0.02]"
+              className="group relative flex flex-col items-center justify-center p-16 md:p-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-white/[0.03]"
               data-cursor="OPEN"
             >
               {/* Hover Accent Line (Top) */}
-              <span className="absolute top-0 left-0 right-0 h-px bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] origin-left"></span>
+              <span className="absolute top-0 left-0 right-0 h-[2px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] origin-left"></span>
               
-              <Image
-                src={concern.logo}
-                alt={concern.name}
-                width={260}
-                height={90}
-                className="h-20 md:h-24 w-auto object-contain   transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-              />
+              {/* Logo Wrapper - Grayscale to Color on Hover */}
+              <div className="relative w-full h-20 md:h-24 flex items-center justify-center mb-8">
+                {/* Subtle Gold Glow Behind Logo on Hover */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ background: "radial-gradient(circle, rgba(197,165,114,0.1), transparent 70%)" }}></div>
+                
+                <Image
+                  src={concern.logo}
+                  alt={concern.name}
+                  fill
+                  sizes="(max-width: 768px) 80vw, 33vw"
+                  className="object-contain relative z-10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]  group-hover:scale-105"
+                />
+              </div>
               
-              {/* Subtle text reveal on hover */}
-              <span className="mt-8 text-[14px] uppercase tracking-[0.3em] text-foreground/80 group-hover:text-primary transition-colors duration-500">
+              {/* Elegant text reveal on hover */}
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 group-hover:text-primary transition-colors duration-500 flex items-center gap-2">
                 Visit Website
+                <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </span>
             </a>
           ))}
@@ -96,13 +103,13 @@ export default function EndorsementBar() {
         {/* ─── Learn More CTA ─── */}
         <div className="endorsement-anim flex justify-center mt-20">
           <a 
-            href="https://sampangroup.com" 
+            href="https://sampangroup.com.bd" 
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-4 text-[16px] uppercase tracking-[0.4em] text-foreground/60 hover:text-primary transition-colors duration-300"
+            className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-white/70 hover:text-primary transition-colors duration-300"
           >
             Explore the whole ecosystem
-            <span className="relative w-16 h-px bg-foreground/80 group-hover:bg-primary transition-all duration-500 group-hover:w-24">
+            <span className="relative w-16 h-px bg-white/40 group-hover:bg-primary transition-all duration-500 group-hover:w-24">
               <ArrowUpRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0" />
             </span>
           </a>

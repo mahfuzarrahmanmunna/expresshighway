@@ -172,16 +172,15 @@ export default function GlassNavbar() {
               whileHover={{ x: 2 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <div className="relative  flex items-center justify-center overflow-hidden">
+              <div className="relative flex items-center justify-center overflow-hidden">
                 <motion.div
                   className="absolute inset-0 bg-white"
                   initial={{ scale: 0 }}
                   whileHover={{ scale: 1 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 />
-                <img src="/logo/Logo1.png" alt="Logo" className="w-5 h-5 md:w-32 md:h-12  relative z-10" />
+                <img src="/logo/Logo1.png" alt="Logo" className="w-5 h-5 md:w-32 md:h-12 relative z-10" />
               </div>
-              
             </MotionLink>
 
             <div className="hidden xl:flex items-center gap-1">
@@ -196,14 +195,15 @@ export default function GlassNavbar() {
                   whileHover={{ backgroundColor: "rgba(255,255,255,0.045)" }}
                   transition={{ duration: 0.3 }}
                 >
-                  <span className="text-[8px] tracking-[0.15em] text-white/25 group-hover:text-white/60 transition-colors">
+                  {/* Changed to light by default, darker on hover */}
+                  <span className="text-[10px] tracking-[0.15em] text-white/50 group-hover:text-white/20 transition-colors duration-300">
                     {item.number}
                   </span>
-                  <span className="relative z-10 text-[10px] uppercase tracking-[0.18em] text-white/50 group-hover:text-white transition-all duration-500">
+                  <span className="relative z-10 text-[13px] uppercase tracking-[0.18em] text-white group-hover:text-white/40 transition-all duration-300">
                     {item.label}
                   </span>
                   <motion.span
-                    className="absolute bottom-0 left-4 right-4 h-px origin-left bg-gradient-to-r from-white via-white/60 to-transparent"
+                    className="absolute bottom-0 left-4 right-4 h-px origin-left bg-gradient-to-r from-primary via-primary/60 to-transparent"
                     initial={{ scaleX: 0, opacity: 0 }}
                     whileHover={{ scaleX: 1, opacity: 1 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -214,16 +214,16 @@ export default function GlassNavbar() {
 
             <div className="flex items-center gap-3">
               <div className="hidden lg:flex items-center gap-2 mr-2">
-                <motion.a href="tel:+8801906896326" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="tel:+8801906896326" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Phone size={13} strokeWidth={1.5} />
                 </motion.a>
-                <motion.a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <FaLinkedinIn size={13} />
                 </motion.a>
-                <motion.a href="mailto:info@sampangroup.com.bd" data-cursor="MAIL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="mailto:info@sampangroup.com.bd" data-cursor="MAIL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Mail size={13} strokeWidth={1.5} />
                 </motion.a>
-                <motion.a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <FaFacebookF size={13} />
                 </motion.a>
               </div>
@@ -283,12 +283,13 @@ export default function GlassNavbar() {
                 className="group flex items-center justify-between py-5 border-b border-white/[0.08]"
               >
                 <div className="flex items-center gap-5">
-                  <span className="text-[9px] text-white/25">{item.number}</span>
-                  <span className="text-2xl font-light tracking-tight text-white/70 group-hover:text-white transition-colors">
+                  {/* Changed to light by default, darker on hover */}
+                  <span className="text-[9px] text-white/50 group-hover:text-white/20 transition-colors">{item.number}</span>
+                  <span className="text-2xl font-light tracking-tight text-white group-hover:text-white/40 transition-colors duration-300">
                     {item.label}
                   </span>
                 </div>
-                <ArrowUpRight size={18} className="text-white/30 group-hover:text-white group-hover:rotate-45 transition-all duration-500" />
+                <ArrowUpRight size={18} className="text-white/30 group-hover:text-primary group-hover:rotate-45 transition-all duration-500" />
               </MotionLink>
             ))}
           </div>
@@ -334,10 +335,10 @@ export default function GlassNavbar() {
             </div>
 
             <div className="flex justify-center gap-6 mt-10 pt-8 border-t border-white/[0.04]">
-              <a href="tel:+8801906896326" className="text-white/50 hover:text-white transition-colors"><Phone size={16} /></a>
-              <a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors"><FaLinkedinIn size={16} /></a>
-              <a href="mailto:info@sampangroup.com.bd" className="text-white/50 hover:text-white transition-colors"><Mail size={16} /></a>
-              <a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors"><FaFacebookF size={16} /></a>
+              <a href="tel:+8801906896326" className="text-white/50 hover:text-primary transition-colors"><Phone size={16} /></a>
+              <a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-primary transition-colors"><FaLinkedinIn size={16} /></a>
+              <a href="mailto:info@sampangroup.com.bd" className="text-white/50 hover:text-primary transition-colors"><Mail size={16} /></a>
+              <a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-primary transition-colors"><FaFacebookF size={16} /></a>
             </div>
           </div>
         </div>

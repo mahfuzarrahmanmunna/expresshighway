@@ -677,7 +677,7 @@ function DayAtLounge() {
         <div className="relative w-full flex justify-center my-4 pointer-events-auto">
           <div className="float-img relative w-[250px] h-[150px] md:w-[400px] md:h-[250px] overflow-hidden border border-black/10">
             <Image
-              src="/club/lounge.png"
+              src="/hero.jpg"
               alt="Lounge Detail"
               fill
               className="object-cover"

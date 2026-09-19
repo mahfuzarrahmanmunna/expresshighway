@@ -46,97 +46,118 @@ function TownshipCanvas() {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000,
-    );
-    camera.position.set(0, 5, 6);
-    camera.lookAt(0, 0, 0);
+    let renderer: THREE.WebGLRenderer | null = null;
+    let animationFrameId: number;
+    let geometry: THREE.PlaneGeometry | null = null;
+    let material: THREE.MeshBasicMaterial | null = null;
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: true,
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Architectural Wireframe Terrain
-    const geometry = new THREE.PlaneGeometry(25, 25, 40, 40);
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x0a4a74, // Subtle blue wireframe
-      wireframe: true,
-      transparent: true,
-      opacity: 0.25, // Slightly more visible but still subtle
-    });
-    const terrain = new THREE.Mesh(geometry, material);
-    terrain.rotation.x = -Math.PI / 2.2;
-    terrain.position.y = -2;
-    scene.add(terrain);
-
-    // Store original positions for morphing
-    const positions = geometry.attributes.position.array as Float32Array;
-    const originalPositions = [...positions];
-
-    const mouse = { x: 0, y: 0 };
-    const onMouseMove = (e: MouseEvent) => {
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    const handleContextLoss = (event: Event) => {
+      console.warn("WebGL context lost. Disposing 3D background.");
+      event.preventDefault();
+      cancelAnimationFrame(animationFrameId);
+      if (renderer) renderer.dispose();
+      if (geometry) geometry.dispose();
+      if (material) material.dispose();
     };
-    window.addEventListener("mousemove", onMouseMove);
 
-    let frameId: number;
-    const clock = new THREE.Clock();
+    canvas.addEventListener('webglcontextlost', handleContextLoss, false);
 
-    const animate = () => {
-      frameId = requestAnimationFrame(animate);
-      const time = clock.getElapsedTime();
-
-      // Morph terrain vertices
-      for (let i = 0; i < positions.length; i += 3) {
-        const x = originalPositions[i];
-        const y = originalPositions[i + 1];
-        const dist = Math.sqrt(x * x + y * y);
-        positions[i + 2] =
-          Math.sin(dist * 1.5 - time * 0.8) * 0.5 +
-          Math.cos(x * 0.5 + time * 0.3) * 0.3;
-      }
-      geometry.attributes.position.needsUpdate = true;
-      geometry.computeVertexNormals();
-
-      // Parallax camera movement
-      camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.05;
-      camera.position.y += (5 + mouse.y * 1 - camera.position.y) * 0.05;
+    try {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        60,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      );
+      camera.position.set(0, 5, 6);
       camera.lookAt(0, 0, 0);
 
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const onResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "low-power",
+        failIfMajorPerformanceCaveat: false,
+      });
+      
       renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener("resize", onResize);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("resize", onResize);
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-    };
+      geometry = new THREE.PlaneGeometry(25, 25, 40, 40);
+      material = new THREE.MeshBasicMaterial({
+        color: 0x0a4a74,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.25,
+      });
+      const terrain = new THREE.Mesh(geometry, material);
+      terrain.rotation.x = -Math.PI / 2.2;
+      terrain.position.y = -2;
+      scene.add(terrain);
+
+      const positions = geometry.attributes.position.array as Float32Array;
+      const originalPositions = [...positions];
+
+      const mouse = { x: 0, y: 0 };
+      const onMouseMove = (e: MouseEvent) => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      };
+      window.addEventListener("mousemove", onMouseMove);
+
+      const clock = new THREE.Clock();
+
+      const animate = () => {
+        animationFrameId = requestAnimationFrame(animate);
+        const time = clock.getElapsedTime();
+
+        for (let i = 0; i < positions.length; i += 3) {
+          const x = originalPositions[i];
+          const y = originalPositions[i + 1];
+          const dist = Math.sqrt(x * x + y * y);
+          positions[i + 2] =
+            Math.sin(dist * 1.5 - time * 0.8) * 0.5 +
+            Math.cos(x * 0.5 + time * 0.3) * 0.3;
+        }
+        geometry!.attributes.position.needsUpdate = true;
+        geometry!.computeVertexNormals();
+
+        camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.05;
+        camera.position.y += (5 + mouse.y * 1 - camera.position.y) * 0.05;
+        camera.lookAt(0, 0, 0);
+
+        if (renderer) renderer.render(scene, camera);
+      };
+      animate();
+
+      const onResize = () => {
+        if (!renderer) return;
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      };
+      window.addEventListener("resize", onResize);
+
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+        window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("resize", onResize);
+        canvas.removeEventListener('webglcontextlost', handleContextLoss);
+        if (geometry) geometry.dispose();
+        if (material) material.dispose();
+        if (renderer) renderer.dispose();
+      };
+    } catch (error) {
+      console.warn("WebGL initialization failed. Background disabled.", error);
+      canvas.style.display = 'none';
+    }
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none opacity-50" // Brightened canvas slightly
+      className="absolute inset-0 w-full h-full pointer-events-none opacity-50"
     />
   );
 }
@@ -180,7 +201,7 @@ export default function Ventures() {
     <section
       id="ventures"
       ref={containerRef}
-      className="relative w-full bg-[#080808] py-24 md:py-32 overflow-hidden" // Slightly lifted dark background for luxury vibe
+      className="relative w-full bg-[#080808] py-24 md:py-32 overflow-hidden"
     >
       {/* Three.js Ambient Background */}
       <TownshipCanvas />
@@ -195,75 +216,70 @@ export default function Ventures() {
           <span className="venture-header-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6 block">
             Our Ventures
           </span>
-          <h2 className="venture-header-anim font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.05] text-foreground max-w-4xl">
+          <h2 className="venture-header-anim text-gray-400 font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-medium leading-[1.05] text-foreground max-w-4xl">
             One Address,{" "}
             <span className="text-primary italic">A Complete</span> Highway
             Township
           </h2>
-          <p className="venture-header-anim mt-8 text-sm md:text-base font-light text-foreground/60 leading-relaxed max-w-2xl">
+          <p className="venture-header-anim mt-8 text-sm md:text-base font-light text-gray-400 leading-relaxed max-w-2xl">
             Express Highway Inn sits alongside three sister projects that make
             this stretch of highway a destination in itself.
           </p>
         </div>
 
         {/* ─── Ventures Grid ─── */}
-        <div className="venture-grid grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.05] border border-white/[0.05]">
+        <div className="venture-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {VENTURES.map((item) => (
             <div
               key={item.index}
-              className="venture-card group relative aspect-[3/4] md:aspect-auto md:min-h-[600px] overflow-hidden cursor-pointer"
+              className="venture-card relative aspect-[3/4] md:aspect-auto md:min-h-[600px] overflow-hidden cursor-pointer border border-white/10"
             >
-              {/* Image Layer - Natural bright colors, slight zoom on hover */}
+              {/* Image Layer - Fully visible, vibrant colors, no hover scaling */}
               <Image
                 src={item.img}
                 alt={item.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                className="object-cover"
                 quality={90}
               />
 
-              {/* Luxury Light Tint - Subtle dark overlay that clears on hover */}
-              <div className="absolute inset-0 bg-[#080808]/30 group-hover:bg-[#080808]/10 transition-colors duration-700" />
-
-              {/* Gradient for Text Readability - Strong only at the bottom */}
+              {/* Subtle bottom gradient for text readability over bright images */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/40 to-transparent" />
 
-              {/* Content */}
+              {/* Content - Always Visible */}
               <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-between z-10">
                 {/* Top */}
                 <div className="flex justify-between items-start">
-                  <span className="text-[10px] tracking-[0.3em] text-white/50 font-light transition-colors duration-500 group-hover:text-primary bg-black/20 backdrop-blur-sm px-2 py-1 rounded">
+                  <span className="text-[10px] tracking-[0.3em] text-white font-light bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                     {item.index}
                   </span>
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-white/80 bg-white/10 px-3 py-1 rounded-full backdrop-blur-md border border-white/10 transition-colors duration-500 group-hover:bg-primary/20 group-hover:text-white">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-white bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                     {item.tag}
                   </span>
                 </div>
 
                 {/* Bottom */}
                 <div className="relative">
-                  {/* Masked Blurb Animation */}
-                  <div className="overflow-hidden mb-5">
-                    <p className="text-sm font-light text-gray-500 translate-y-full opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
-                      {item.desc}
-                    </p>
-                  </div>
+                  {/* Always visible description */}
+                  <p className="text-sm font-light text-white/90 drop-shadow-lg mb-5">
+                    {item.desc}
+                  </p>
 
-                  <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-medium leading-tight mb-8 drop-shadow-lg">
+                  <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white font-medium leading-tight mb-8 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                     {item.title}
                   </h3>
 
-                  {/* Learn More Link */}
+                  {/* Static Learn More Link */}
                   <a
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/link inline-flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/80 hover:text-primary transition-colors duration-300"
+                    className="inline-flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/90 hover:text-primary transition-colors duration-300"
                   >
                     Learn More
-                    <span className="relative w-8 h-px bg-white/60 group-hover/link:bg-primary transition-all duration-500 group-hover/link:w-14">
-                      <ArrowUpRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary opacity-0 group-hover/link:opacity-100 transition-all duration-300 translate-x-2 group-hover/link:translate-x-0" />
+                    <span className="relative w-8 h-px bg-white/80">
+                      <ArrowUpRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary" />
                     </span>
                   </a>
                 </div>
