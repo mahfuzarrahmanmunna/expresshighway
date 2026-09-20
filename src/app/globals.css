@@ -642,3 +642,15 @@ body {
     display: none !important;
   }
 }
+
+/* Hide default cursor on Desktop */
+@media (min-width: 769px) {
+  body, a, button, input, textarea, [data-cursor] {
+    cursor: none;
+  }
+}
+
+/* Ensure inputs still show a caret for typing, even though cursor is hidden */
+input, textarea {
+  caret-color: #007DC6; 
+}

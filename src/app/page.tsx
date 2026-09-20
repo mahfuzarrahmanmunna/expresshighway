@@ -17,15 +17,15 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <HighwayHospitality/>
-      <Amenities/>
-      <AboutLocation/>
-      <Ventures/>
-      <ClubLoungeTeaser/>
-      <GalleryTeaser/>
-      <EndorsementBar/>
-      <Affiliations/>
-      <ContactTrust/>
+      <Amenities />
+      <AboutLocation />
+      <Ventures />
+      <ClubLoungeTeaser />
+      <GalleryTeaser />
+      <EndorsementBar />
+      <Affiliations />
+      <HighwayHospitality />
+      <ContactTrust />
       {/* <About /> */}
       {/* <FacilitiesExperience /> */}
       {/* <Projects /> */}

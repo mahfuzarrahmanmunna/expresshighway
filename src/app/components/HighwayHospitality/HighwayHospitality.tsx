@@ -89,7 +89,7 @@ function HighwayHospitality() {
 
           <div className="lg:col-span-4 flex flex-col items-start gap-8">
             <p className="hospitality-sub text-lg md:text-xl font-light text-[#0c0b0b]/50 max-w-md leading-relaxed tracking-[0.01em]">
-              Discover <span className="text-[#0c0b0b] font-normal">Sampan Highway Inn</span> — a 24/7 premium transit destination at KM 103, bringing together refined dining, restful suites, executive comfort, and seamless highway access.
+              Discover <span className="text-[#0c0b0b] font-normal">Sampan Highway Inn</span> - a 24/7 premium transit destination at KM 103, bringing together refined dining, restful suites, executive comfort, and seamless highway access.
             </p>
             <a
               href="https://www.sampangroup.com.bd/our-divisions/hospitality-highway-travel/sampan-highway-inn"

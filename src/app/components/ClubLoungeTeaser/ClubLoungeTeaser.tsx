@@ -101,11 +101,11 @@ export default function ClubLoungeTeaser() {
             {/* Main Background Image */}
             <div className="club-img-main absolute top-0 left-0 w-[75%] h-[80%] overflow-hidden">
               <Image
-                src="/club/room.jpg"
+                src="/images/clubandlounge.jpg"
                 alt="VVIP Lounge Interior"
                 fill
                 sizes="50vw"
-                className="object-cover"
+                className="object-scale-cover"
                 quality={90}
               />
               {/* Soft White Gradient Overlay */}
@@ -115,7 +115,7 @@ export default function ClubLoungeTeaser() {
             {/* Overlapping Sub Image (Spa/Pool) */}
             <div className="club-img-sub absolute bottom-0 right-0 w-[55%] h-[50%] overflow-hidden border border-[#0c0b0b]/10 shadow-2xl">
               <Image
-                src="/club/rooms.jpg"
+                src="/images/clubandlounge.jpg"
                 alt="Club Spa and Pool"
                 fill
                 sizes="30vw"
@@ -181,7 +181,7 @@ export default function ClubLoungeTeaser() {
             {/* Minimal CTA */}
             <div className="club-anim">
               <a
-                href="#membership"
+                href="/club-and-membership"
                 className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-[#0c0b0b]/80 hover:text-primary transition-colors duration-300"
               >
                 View Membership Benefits

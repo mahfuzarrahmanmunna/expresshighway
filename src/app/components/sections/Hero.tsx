@@ -273,7 +273,7 @@ export default function Hero() {
         <div className="max-w-4xl">
           <p
             ref={tagRef}
-            className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-primary bg-white/20  mb-8 font-medium opacity-0 translate-y-5 will-change-transform"
+            className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-primary   mb-8 font-medium opacity-0 translate-y-5 will-change-transform"
           >
             Premium Hospitality & Club
           </p>
@@ -311,7 +311,7 @@ export default function Hero() {
             </MagneticButton>
             <MagneticButton strength={0.3}>
               <a
-                href="#contact"
+                href="/contactus"
                 className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-black/20 border border-white/10 backdrop-blur-md text-[10px] uppercase tracking-[0.35em] font-medium text-white/80 overflow-hidden transition-all duration-500 hover:bg-black/40 hover:text-white hover:border-white/20"
               >
                 <span className="w-1.5 h-1.5 bg-current rounded-full transition-transform duration-500 group-hover:scale-150" />

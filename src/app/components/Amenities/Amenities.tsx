@@ -10,7 +10,7 @@ import { ArrowUpRight } from "lucide-react";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ── Data (Layout Math Perfectly Calculated for 12-Col Grid) ── */
-/* 
+/*
    Row 1: 8 cols (16/10 ratio -> height 5 units) + 4 cols (4/5 ratio -> height 5 units) = Perfect match
    Row 2: 6 cols (4/3 ratio -> height 4.5 units) + 6 cols (4/3 ratio -> height 4.5 units) = Perfect match
    Row 3: 4 cols (4/5 ratio -> height 5 units) + 8 cols (16/10 ratio -> height 5 units) = Perfect match
@@ -103,6 +103,7 @@ export default function Amenities() {
 
       /* Grid Items Cinematic Reveal */
       const items = gsap.utils.toArray<HTMLElement>(".amenity-card");
+
       items.forEach((item) => {
         gsap.fromTo(
           item,
@@ -118,21 +119,58 @@ export default function Amenities() {
           }
         );
 
-        /* Subtle Image Parallax (Counter-scroll) */
-        const img = item.querySelector(".amenity-img");
-        if (img) {
-          gsap.to(img, {
-            yPercent: -12,
-            ease: "none",
-            scrollTrigger: {
-              trigger: item,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
-          });
+        /*
+          Subtle Image Parallax (Counter-scroll) — Safe Edition
+          -------------------------------------------------------
+          The wrapper (.amenity-img-wrap) is the parallax target.
+          The <Image> inside it keeps its own transform slot free
+          so Tailwind's `group-hover:scale-105` continues to work.
+
+          Math (transform-origin: center):
+            scale 1.12  ->  6% overflow on every edge
+            yPercent ±4 ->  4% translate of element height
+
+          Worst-case edge coverage during the full scroll:
+            start (yPercent:  4) -> top 2%, bottom 10%
+            mid   (yPercent:  0) -> top 6%, bottom  6%
+            end   (yPercent: -4) -> top 10%, bottom 2%
+
+          => A guaranteed ≥2% safety buffer on every side,
+             so the card is never exposed at any scroll position.
+        */
+        const imgWrap = item.querySelector<HTMLElement>(".amenity-img-wrap");
+        if (imgWrap) {
+          // Pre-scale to create the overflow buffer that makes
+          // the parallax movement safe. Applied immediately to
+          // avoid any first-frame flash of an unscaled image.
+          gsap.set(imgWrap, { scale: 1.12 });
+
+          // Symmetric, scrubbed counter-scroll drift.
+          // Total movement is 8% (vs 12% before) — gentle and editorial.
+          gsap.fromTo(
+            imgWrap,
+            { yPercent: 4 },
+            {
+              yPercent: -4,
+              ease: "none",
+              scrollTrigger: {
+                trigger: item,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1,
+                // Smooths out the start/end of the scroll segment,
+                // preventing any perceptible jump when the trigger
+                // enters or leaves the viewport.
+                invalidateOnRefresh: true,
+              },
+            }
+          );
         }
       });
+
+      // useGSAP (via @gsap/react) automatically reverts all tweens,
+      // timelines and ScrollTriggers created inside this scope on
+      // unmount — no manual cleanup needed here.
     },
     { scope: containerRef }
   );
@@ -184,16 +222,28 @@ export default function Amenities() {
               key={item.index}
               className={`amenity-card group relative ${item.size} ${item.offset} overflow-hidden cursor-pointer`}
             >
-              {/* Parallax Image Wrapper */}
+              {/*
+                Parallax Image Stack
+                - Outer div: clips the image to the card (overflow-hidden).
+                - .amenity-img-wrap: GSAP target — receives scale buffer
+                  + counter-scroll yPercent. will-change-transform hints
+                  the browser to promote it to its own layer for smoother
+                  scrubbed animation on desktop and mobile.
+                - <Image>: keeps its own transform slot for Tailwind's
+                  `group-hover:scale-105`, so the hover effect is preserved
+                  and never overwritten by GSAP's inline styles.
+              */}
               <div className="absolute inset-0 z-0 overflow-hidden">
-                <Image
-                  src={item.img}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="amenity-img object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-                  quality={90}
-                />
+                <div className="amenity-img-wrap absolute inset-0 will-change-transform">
+                  <Image
+                    src={item.img}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="amenity-img object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    quality={90}
+                  />
+                </div>
               </div>
 
               {/* Refined Bottom Gradient for Permanent Readability */}
@@ -204,7 +254,7 @@ export default function Amenities() {
 
               {/* Content Layer (Always Visible) */}
               <div className="absolute inset-0 p-6 md:p-8 lg:p-10 flex flex-col justify-between z-10">
-                
+
                 {/* Top Row: Index & Arrow */}
                 <div className="flex justify-between items-start">
                   <span className="text-[10px] uppercase tracking-[0.3em] text-white/70 transition-colors duration-500 group-hover:text-primary drop-shadow-md">

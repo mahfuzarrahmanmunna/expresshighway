@@ -20,7 +20,7 @@ const FACILITIES_GRID = [
   {
     name: "VVIP Lounge",
     tag: "Exclusive, luxury, comfort",
-    img: "/images/lounge.jpg",
+    img: "/images/clubandlounge.jpg",
     size: "col-span-2 md:col-span-8 aspect-[4/5] md:aspect-[16/10]",
   },
   {
@@ -32,7 +32,7 @@ const FACILITIES_GRID = [
   {
     name: "Fine Dining",
     tag: "Fresh, flavorful, refreshing",
-    img: "/club/resturant.png",
+    img: "/images/dinning.jpg",
     size: "col-span-1 md:col-span-4 aspect-[4/5]",
   },
   {
@@ -50,7 +50,7 @@ const FACILITIES_GRID = [
   {
     name: "Premium Accommodation",
     tag: "Exclusive stays for members",
-    img: "/club/lounge.png",
+    img: "/images/accommodation.jpg",
     size: "col-span-1 md:col-span-3 aspect-square",
   },
   {
@@ -62,7 +62,7 @@ const FACILITIES_GRID = [
   {
     name: "Prayer Room",
     tag: "Peaceful, serene, sacred",
-    img: "/images/prayer.jpg",
+    img: "/images/prayerroom.jpg",
     size: "col-span-1 md:col-span-3 aspect-square",
   },
 ];
@@ -364,7 +364,7 @@ function ClubHero() {
       </div>
       <div className="hero-bg-sharp absolute inset-0 z-[1]">
         <Image
-          src="https://images.unsplash.com/photo-1517248135467-3909d0bcfdd7?q=80&w=1920&auto=format&fit=crop"
+          src="/hero.jpg"
           alt="VVIP Lounge"
           fill
           priority
@@ -393,7 +393,7 @@ function ClubHero() {
         </p>
 
         <a
-          href="#membership"
+          href="/club-and-membership"
           className="hero-cta group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-white text-[11px] uppercase tracking-[0.3em] font-medium overflow-hidden mt-12"
         >
           <span className="absolute inset-0 bg-gradient-to-r from-primary to-[#0096E0] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>

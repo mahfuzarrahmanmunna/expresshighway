@@ -90,7 +90,6 @@ const AFFILIATIONS = [
   { num: "15", name: "Express Highway Club And Lounge", logo: "/images/affiliation/EHCl.png" },
   { num: "16", name: "Bangladesh Archery Federation", logo: "/images/affiliation/Archery.png" },
   { num: "17", name: "Sampan Golf Academy", logo: "/images/affiliation/Sampan Golf Academy.png" },
-  // { num: "18", name: "Sampan Golf Academy", logo: "/images/affiliation/Asset 26@4x.png" },
 ];
 
 // Luxury Theme Colors
@@ -374,7 +373,7 @@ function OurStory() {
           </h2>
           <div className="story-divider w-16 h-px bg-[#C5A572] mb-12"></div>
           <p className="story-p1 text-base md:text-lg font-light text-[#141414]/70 leading-[1.9] mb-8 tracking-wide">
-            Express Highway Inn began with a simple observation: Bangladesh&apos;s highways move faster every year, but the places to rest along them hadn&apos;t kept pace. Sampan Group set out to change that by building a property where a quick stop feels like a proper retreat.
+            Express Highway Inn began with a simple observation: Bangladesh&apos;s highways move faster every year, but the places to rest along them hadn&apos;t kept pace. Sampan Group set out to change that by building a property where a quick stop feels like a proper retreat, and where a membership card opens the door to something far more exclusive. 
           </p>
           <p className="story-p2 text-base md:text-lg font-light text-[#141414]/70 leading-[1.9] tracking-wide">
             Today, Sampan Highway Inn stands as one of Sampan Group&apos;s flagship hospitality ventures, anchoring a growing highway township of hotels, residences and retail.
@@ -419,321 +418,7 @@ function OurStory() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   4. STORY STATEMENT - MORPHING TEXT + PERSPECTIVE REVEAL
-═══════════════════════════════════════════════════════════════ */
-function StoryStatement() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      let splitInstance: SplitType | null = null;
-      const text = document.querySelector<HTMLElement>(".statement-text");
-      if (text) {
-        splitInstance = new SplitType(text, { types: "chars", charClass: "inline-block" });
-        gsap.fromTo(
-          ".statement-text .char",
-          { filter: "blur(15px)", scale: 0.5, opacity: 0 },
-          {
-            filter: "blur(0px)",
-            scale: 1,
-            opacity: 1,
-            stagger: 0.05,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: ref.current,
-              start: "top 70%",
-              end: "bottom 40%",
-              scrub: 1.5,
-            },
-          }
-        );
-      }
-
-      gsap.fromTo(
-        ".statement-sub",
-        { z: -300, opacity: 0, rotateY: 20 },
-        {
-          z: 0,
-          opacity: 1,
-          rotateY: 0,
-          duration: 1.8,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".statement-sub", start: "top 80%" },
-        }
-      );
-    },
-    { scope: ref }
-  );
-
-  return (
-    <section
-      ref={ref}
-      className="bg-[#0B0B0B] text-white py-44 md:py-64 overflow-hidden"
-      style={{ perspective: "1000px" }}
-    >
-      <div className="mx-auto max-w-6xl px-8 text-center">
-        <h2 className="statement-text font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,6vw,6rem)] leading-[1.1] font-light tracking-tight">
-          A journey should never feel like a pause.
-        </h2>
-        <p className="statement-sub mt-12 text-lg md:text-xl font-light text-white/50 max-w-2xl mx-auto leading-[1.8] tracking-wide">
-          Express Highway Inn was created around a simple idea: highway travel deserves better places to stop, rest and reconnect.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   5. TOWNSHIP VISUAL + LEAFLET MAP INTEGRATION (ESRI TILES - NO API KEY)
-═══════════════════════════════════════════════════════════════ */
-function TownshipVisual() {
-  const ref = useRef<HTMLDivElement>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      let splitInstance: SplitType | null = null;
-      const heading = document.querySelector<HTMLElement>(".town-head");
-      
-      if (heading) {
-        splitInstance = new SplitType(heading, {
-          types: "lines,words",
-          lineClass: "overflow-hidden block",
-          wordClass: "inline-block will-change-transform",
-        });
-
-        gsap.from(".town-head .word", {
-          yPercent: 110,
-          opacity: 0,
-          duration: 1.6,
-          stagger: 0.1,
-          ease: "expo.out",
-          scrollTrigger: { trigger: heading, start: "top 80%" },
-        });
-      }
-
-      gsap.from(".town-stat", {
-        opacity: 0,
-        y: 40,
-        duration: 1.2,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".town-stats", start: "top 90%" },
-      });
-
-      gsap.fromTo(
-        ".town-image-wrap",
-        { clipPath: "inset(100% 0 0 0)" },
-        {
-          clipPath: "inset(0% 0 0 0)",
-          duration: 2,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".town-image-wrap", start: "top 85%" },
-          onComplete: () => {
-            if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
-              (mapContainerRef.current as any)._leaflet_map.invalidateSize();
-            }
-          }
-        }
-      );
-
-      return () => {
-        splitInstance?.revert();
-      };
-    },
-    { scope: ref }
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !mapContainerRef.current) return;
-
-    let map: any = null;
-
-    const initializeMap = () => {
-      const L = (window as any).L;
-      if (!L || !mapContainerRef.current) return;
-
-      if ((mapContainerRef.current as any)._leaflet_map) return;
-
-      const targetLat = 23.5433;
-      const targetLng = 90.4012;
-
-      map = L.map(mapContainerRef.current, {
-        center: [targetLat, targetLng], 
-        zoom: 13,
-        zoomControl: false,
-        scrollWheelZoom: false,
-        attributionControl: false
-      });
-
-      (mapContainerRef.current as any)._leaflet_map = map;
-
-      L.control.zoom({ position: "bottomright" }).addTo(map);
-      L.control.attribution({ position: 'bottomleft' }).addAttribution('Tiles &copy; Esri').addTo(map);
-
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16
-      }).addTo(map);
-      
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16
-      }).addTo(map);
-
-      const goldIcon = L.divIcon({
-        className: "custom-gold-marker",
-        html: `<div style="position: relative; width: 24px; height: 24px;">
-                 <span style="position: absolute; inset: 0; background: #C5A572; border-radius: 50%; opacity: 0.4; animation: mapPing 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
-                 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #C5A572; border-radius: 50%; border: 2px solid #0B0B0B; box-shadow: 0 0 15px rgba(197, 165, 114, 0.8);"></span>
-               </div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-      });
-
-      L.marker([targetLat, targetLng], { icon: goldIcon })
-        .addTo(map)
-        .bindPopup(
-          `<div style="background: #0B0B0B; color: #fff; padding: 8px; border: 1px solid #C5A572; border-radius: 4px;">
-             <b style="color: #C5A572; font-family: serif; font-weight: 500; font-size: 14px;">Express Highway Inn</b><br/>
-             <span style="font-size: 11px; opacity: 0.8;">Dhaka - Chittagong Highway</span>
-           </div>`
-        );
-        
-      setTimeout(() => map.invalidateSize(), 1000);
-    };
-
-    if ((window as any).L) {
-      initializeMap();
-    } else {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-      document.head.appendChild(link);
-
-      const script = document.createElement("script");
-      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-      script.async = true;
-      script.onload = initializeMap;
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (map) {
-        map.remove();
-        if (mapContainerRef.current) {
-           delete (mapContainerRef.current as any)._leaflet_map;
-        }
-      }
-    };
-  }, []);
-
-  return (
-    <section ref={ref} className="bg-[#F9F8F6] text-[#141414] py-40 md:py-56 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-end mb-20 md:mb-28">
-          
-          <div className="lg:col-span-7 relative">
-            <span className="block text-[10px] uppercase tracking-[0.4em] text-[#C5A572] font-medium mb-8">
-              Highway Township Vision
-            </span>
-            <h2
-              className="town-head font-[family-name:var(--font-playfair)] text-[clamp(3rem,8vw,7.5rem)] font-light leading-[0.95] tracking-tight"
-              style={{ perspective: "1000px" }}
-            >
-              More Than a Stop.
-              <br />
-              <span className="text-[#C5A572] italic font-light">A Growing Destination.</span>
-            </h2>
-          </div>
-
-          <div className="town-stats lg:col-span-5 flex flex-col items-start lg:items-end gap-12 pb-4">
-            <div className="max-w-sm lg:text-right">
-              <p className="text-sm md:text-base font-light text-[#141414]/60 leading-[1.8] tracking-wide">
-                What began as a single highway inn is evolving into a fully integrated township. An ecosystem of hospitality, residence, and retail, strategically positioned on the Dhaka-Chittagong corridor.
-              </p>
-            </div>
-            <div className="flex gap-12 lg:gap-16">
-              <div className="town-stat">
-                <span className="block font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-light text-[#141414]">2026</span>
-                <span className="block text-[9px] uppercase tracking-[0.3em] text-[#141414]/40 mt-2">Phase II Completion</span>
-              </div>
-              <div className="town-stat">
-                <span className="block font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-light text-[#141414]">14<span className="text-[#C5A572]">+</span></span>
-                <span className="block text-[9px] uppercase tracking-[0.3em] text-[#141414]/40 mt-2">Acres Planned</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative">
-          <div className="hidden md:block absolute -top-10 -left-10 w-[60%] h-[85%] border-l border-t border-[#141414]/10 pointer-events-none z-0" />
-          
-          <div
-            className="town-image-wrap relative w-full h-[60vh] md:h-[85vh] overflow-hidden border border-[#141414]/10 z-10"
-            data-cursor="EXPLORE"
-          >
-            <div ref={mapContainerRef} className="absolute inset-0 w-full h-full bg-[#0B0B0B]" />
-            
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0B0B0B]/60 via-transparent to-transparent z-[400]"></div>
-            
-            <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md border border-[#141414]/10 px-8 py-5 flex items-center gap-5 shadow-2xl z-[500]">
-              <div className="relative w-2.5 h-2.5">
-                <span className="absolute inset-0 rounded-full bg-[#C5A572]/40 animate-ping"></span>
-                <span className="relative inline-flex w-2.5 h-2.5 rounded-full bg-[#C5A572]"></span>
-              </div>
-              <div>
-                <span className="block text-[9px] uppercase tracking-[0.4em] text-[#141414]/40">Currently Developing</span>
-                <span className="block text-sm font-medium text-[#141414] font-[family-name:var(--font-playfair)]">Dhaka - Chittagong Highway</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <style jsx global>{`
-        .leaflet-container {
-          background: #0B0B0B !important;
-          font-family: var(--font-sans) !important;
-          outline: none;
-        }
-        .leaflet-popup-content-wrapper {
-          background: transparent;
-          box-shadow: none;
-        }
-        .leaflet-popup-content {
-          margin: 0;
-        }
-        .leaflet-popup-tip-container {
-          display: none;
-        }
-        .leaflet-control-zoom a {
-          background: #0B0B0B !important;
-          color: #C5A572 !important;
-          border: 1px solid rgba(197, 165, 114, 0.3) !important;
-          font-weight: 300;
-        }
-        .leaflet-control-zoom a:hover {
-          background: #141414 !important;
-        }
-        .leaflet-control-attribution {
-          background: rgba(11, 11, 11, 0.8) !important;
-          color: rgba(255, 255, 255, 0.4) !important;
-        }
-        .leaflet-control-attribution a {
-          color: rgba(197, 165, 114, 0.6) !important;
-        }
-        @keyframes mapPing {
-          75%, 100% {
-            transform: scale(2.5);
-            opacity: 0;
-          }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   6. TIMELINE - IMAGE STACKING + CLIP-PATH REVEAL
+   4. TIMELINE - IMAGE STACKING + CLIP-PATH REVEAL
 ═══════════════════════════════════════════════════════════════ */
 function Timeline() {
   const ref = useRef<HTMLDivElement>(null);
@@ -898,7 +583,7 @@ function Timeline() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   7. ALLIED ORGANIZATIONS - IMAGE GRID LOGOS
+   5. ALLIED ORGANIZATIONS - IMAGE GRID LOGOS
 ═══════════════════════════════════════════════════════════════ */
 function AlliedOrganizations() {
   const ref = useRef<HTMLDivElement>(null);
@@ -958,7 +643,6 @@ function AlliedOrganizations() {
           </p>
         </div>
 
-        {/* Changed to 6 columns to nicely accommodate the 18 logos */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border-t border-l border-[#141414]/10">
           {AFFILIATIONS.map((item, i) => (
             <div
@@ -991,7 +675,7 @@ function AlliedOrganizations() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   8. DIVISIONS - IMAGE + TEXT MASK (HOVER REVEAL)
+   6. DIVISIONS - IMAGE + TEXT MASK (HOVER REVEAL)
 ═══════════════════════════════════════════════════════════════ */
 function Divisions() {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -1107,82 +791,7 @@ function Divisions() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   9. ECOSYSTEM STATEMENT - 3D ROTATE + PERSPECTIVE REVEAL
-═══════════════════════════════════════════════════════════════ */
-function EcosystemStatement() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      gsap.from(".eco-line-1", {
-        rotateX: 90,
-        opacity: 0,
-        z: -100,
-        transformOrigin: "left center",
-        duration: 1.8,
-        ease: "expo.out",
-        scrollTrigger: { trigger: ref.current, start: "top 70%" },
-      });
-      gsap.from(".eco-line-2", {
-        rotateX: 90,
-        opacity: 0,
-        z: -100,
-        transformOrigin: "right center",
-        duration: 1.8,
-        ease: "expo.out",
-        scrollTrigger: { trigger: ref.current, start: "top 60%" },
-      });
-      gsap.from(".eco-line-3", {
-        rotateX: 90,
-        opacity: 0,
-        z: -100,
-        transformOrigin: "bottom center",
-        duration: 1.8,
-        ease: "expo.out",
-        scrollTrigger: { trigger: ref.current, start: "top 50%" },
-      });
-
-      gsap.fromTo(
-        ".eco-vision-mask",
-        { x: "-100%" },
-        {
-          x: "100%",
-          duration: 1.8,
-          ease: "power2.inOut",
-          delay: 1,
-          scrollTrigger: { trigger: ref.current, start: "top 50%" },
-        }
-      );
-    },
-    { scope: ref }
-  );
-
-  return (
-    <section
-      ref={ref}
-      className="bg-[#F9F8F6] text-[#141414] py-44 md:py-64 overflow-hidden"
-      style={{ perspective: "1000px" }}
-    >
-      <div className="mx-auto max-w-7xl px-8 lg:px-12 flex flex-col items-center text-center gap-8 md:gap-12">
-        <h2 className="font-[family-name:var(--font-playfair)] text-[clamp(3rem,10vw,10rem)] leading-[0.95] font-light tracking-tight">
-          <div className="overflow-hidden py-2">
-            <div className="eco-line-1 inline-block">ONE GROUP.</div>
-          </div>
-          <div className="overflow-hidden py-2">
-            <div className="eco-line-2 inline-block text-[#141414]/40">MULTIPLE INDUSTRIES.</div>
-          </div>
-          <div className="overflow-hidden py-2 relative w-fit mx-auto">
-            <div className="eco-line-3 inline-block relative z-10 text-[#C5A572] italic font-normal">ONE VISION.</div>
-            <div className="eco-vision-mask absolute inset-0 z-20 bg-gradient-to-r from-transparent via-[#C5A572]/40 to-transparent"></div>
-          </div>
-        </h2>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   10. FINAL CTA - IMAGE DISTORTION + TEXT MASK SLIDE
+   7. FINAL CTA - IMAGE DISTORTION + TEXT MASK SLIDE
 ═══════════════════════════════════════════════════════════════ */
 function FinalCTA() {
   const ref = useRef<HTMLDivElement>(null);
@@ -1310,12 +919,9 @@ export default function AboutPage() {
       <CustomCursor />
       <AboutHero />
       <OurStory />
-      <StoryStatement />
-      <TownshipVisual />
       <Timeline />
       <AlliedOrganizations />
       <Divisions />
-      <EcosystemStatement />
       <FinalCTA />
     </main>
   );

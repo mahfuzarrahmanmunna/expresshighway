@@ -14,14 +14,14 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/aboutus" },
   { label: "Club & Lounge", href: "/club-and-lounge" },
-  { label: "Membership", href: "/membership" },
+  { label: "Membership", href: "/club-and-membership" },
   { label: "Contact", href: "/contactus" },
 ];
 
 const LEGAL_LINKS = [
   { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Terms of Service", href: "/terms-of-service" },
-  { label: "Membership Terms", href: "/membership-terms" },
+  { label: "Membership Terms", href: "/club-and-membership" },
 ];
 
 const ECOSYSTEM_LINKS = [

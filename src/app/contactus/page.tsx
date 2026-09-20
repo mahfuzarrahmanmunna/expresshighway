@@ -6,67 +6,64 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
-import { 
-  ArrowRight, 
-  ArrowUpRight, 
-  Phone, 
-  Mail, 
-  MessageCircle, 
-  MapPin, 
-  Send,
+import {
+  ArrowRight,
+  ArrowUpRight,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  MessageCircle,
 } from "lucide-react";
-import { FaFacebook, FaInstagram } from "react-icons/fa";
-import { BsLinkedin, BsYoutube } from "react-icons/bs";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/* ── Data ── */
-const COLORS = {
-  bgLight: "#F9F8F6",
-  bgDark: "#0B0B0B",
-  textDark: "#141414",
-  accent: "#C5A572", // Brass/Gold
-};
-
 /* ═══════════════════════════════════════════════════════════════
-   1. CUSTOM CURSOR SYSTEM
+   1. GLOBAL CURSOR & GRAIN
 ═══════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
+function CustomCursorAndGrain() {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const ringLabelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
-    const cursor = cursorRef.current;
-    const label = labelRef.current;
-    if (!cursor || !label) return;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const ringLabel = ringLabelRef.current;
+    if (!dot || !ring || !ringLabel) return;
 
-    const xTo = gsap.quickTo(cursor, "x", { duration: 0.6, ease: "power3.out" });
-    const yTo = gsap.quickTo(cursor, "y", { duration: 0.6, ease: "power3.out" });
+    const xDot = gsap.quickTo(dot, "x", { duration: 0.3, ease: "power3.out" });
+    const yDot = gsap.quickTo(dot, "y", { duration: 0.3, ease: "power3.out" });
+    const xRing = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3.out" });
+    const yRing = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3.out" });
 
     const onMouseMove = (e: MouseEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
-      const target = e.target as HTMLElement;
-      const cursorType = target.closest("[data-cursor]")?.getAttribute("data-cursor");
+      xDot(e.clientX);
+      yDot(e.clientY);
+      xRing(e.clientX);
+      yRing(e.clientY);
 
-      if (cursorType) {
-        gsap.to(cursor, {
+      const target = e.target as HTMLElement;
+      const interactive = target.closest("a, button, [data-cursor]");
+      if (interactive) {
+        const cursorText = interactive.getAttribute("data-cursor");
+        gsap.to(ring, {
           scale: 3.5,
-          backgroundColor: "rgba(197, 165, 114, 0.1)",
-          borderColor: "rgba(197, 165, 114, 0.6)",
-          duration: 0.4,
+          borderColor: "rgba(0, 125, 198, 0.8)",
+          backgroundColor: "rgba(0, 125, 198, 0.05)",
         });
-        label.textContent = cursorType;
-        gsap.to(label, { opacity: 1, scale: 1, duration: 0.4 });
+        if (cursorText) {
+          ringLabel.textContent = cursorText;
+          gsap.to(ringLabel, { opacity: 1, duration: 0.3 });
+        }
       } else {
-        gsap.to(cursor, {
+        gsap.to(ring, {
           scale: 1,
+          borderColor: "rgba(255, 255, 255, 0.2)",
           backgroundColor: "transparent",
-          borderColor: "rgba(20, 20, 20, 0.3)",
-          duration: 0.4,
         });
-        gsap.to(label, { opacity: 0, scale: 0.8, duration: 0.4 });
+        gsap.to(ringLabel, { opacity: 0, duration: 0.3 });
       }
     };
 
@@ -75,217 +72,94 @@ function CustomCursor() {
   }, []);
 
   return (
-    <div
-      ref={cursorRef}
-      className="hidden md:flex fixed top-0 left-0 z-[9999] w-6 h-6 border border-black/30 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 items-center justify-center mix-blend-difference"
-    >
-      <span
-        ref={labelRef}
-        className="text-[8px] uppercase tracking-[0.2em] text-white opacity-0 scale-80 transition-transform"
-      ></span>
-    </div>
+    <>
+      <div
+        ref={dotRef}
+        className="hidden md:block fixed top-0 left-0 z-[9999] w-1.5 h-1.5 bg-white rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%]"
+      ></div>
+      <div
+        ref={ringRef}
+        className="hidden md:flex fixed top-0 left-0 z-[9998] w-12 h-12 border border-white/20 rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%] items-center justify-center transition-colors duration-300"
+      >
+        <span ref={ringLabelRef} className="text-[7px] uppercase tracking-[0.2em] text-white opacity-0 transition-opacity duration-300"></span>
+      </div>
+      <div
+        className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.015] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+        }}
+      />
+    </>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   2. HERO - 3D ROTATE + TEXT MASK SLIDE + SCALE REVEAL
+   2. CINEMATIC SPLIT HERO & INTERACTIVE MAP
 ═══════════════════════════════════════════════════════════════ */
 function ContactHero() {
   const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      let splitInstance: SplitType | null = null;
-      const tl = gsap.timeline({ delay: 0.3 });
-
-      gsap.set(".hero-intro-line", { transformOrigin: "bottom center", rotateX: 90, opacity: 0 });
-      tl.to(".hero-intro-line", {
-        rotateX: 0,
-        opacity: 1,
-        duration: 1.5,
-        stagger: 0.2,
-        ease: "expo.out",
-      })
-        .to(".hero-intro-screen", {
-          yPercent: -100,
-          duration: 1.5,
-          ease: "power4.inOut",
-          delay: 0.8,
-        })
-        .from(
-          ".hero-bg",
-          { scale: 1.6, opacity: 0, filter: "blur(30px)", duration: 3, ease: "expo.out" },
-          "-=1.5"
-        );
-
-      const heading = document.querySelector<HTMLElement>(".hero-headline");
-      if (heading) {
-        splitInstance = new SplitType(heading, { types: "lines,words", lineClass: "overflow-hidden block" });
-        gsap.set(".hero-headline .line > div", { yPercent: 110 });
-        tl.to(
-          ".hero-headline .line > div",
-          { yPercent: 0, duration: 1.8, stagger: 0.25, ease: "expo.out" },
-          "-=1.8"
-        );
-      }
-
-      tl.fromTo(
-        ".hero-highlight-mask",
-        { x: "-100%" },
-        { x: "100%", duration: 1.8, ease: "power2.inOut" },
-        "-=1"
-      )
-        .from(".hero-sub", { opacity: 0, y: 40, duration: 1.5, ease: "power3.out" }, "-=1")
-        .from(".hero-meta", { opacity: 0, y: 20, duration: 1.2, ease: "power3.out" }, "-=0.8");
-
-      const bgX = gsap.quickTo(".hero-bg", "x", { duration: 2, ease: "power2.out" });
-      const bgY = gsap.quickTo(".hero-bg", "y", { duration: 2, ease: "power2.out" });
-      const onMouseMove = (e: MouseEvent) => {
-        const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-        bgX(nx * -20);
-        bgY(ny * -15);
-      };
-      window.addEventListener("mousemove", onMouseMove);
-
-      return () => {
-        splitInstance?.revert();
-        window.removeEventListener("mousemove", onMouseMove);
-      };
-    },
-    { scope: ref }
-  );
-
-  return (
-    <section
-      ref={ref}
-      className="relative h-screen w-full bg-[#0B0B0B] overflow-hidden flex items-center justify-center"
-      style={{ perspective: "1000px" }}
-    >
-      <div className="hero-intro-screen fixed inset-0 z-[100] bg-[#0B0B0B] flex flex-col items-center justify-center text-center">
-        <span className="text-[10px] uppercase tracking-[0.5em] text-[#C5A572] mb-10 font-light">
-          Express Highway Inn
-        </span>
-        <div className="overflow-hidden py-2">
-          <h1 className="hero-intro-line font-[family-name:var(--font-playfair)] text-5xl md:text-7xl text-white/90 font-light tracking-tight">
-            CONNECT
-          </h1>
-        </div>
-        <div className="overflow-hidden py-2">
-          <h1 className="hero-intro-line font-[family-name:var(--font-playfair)] text-5xl md:text-7xl text-white/90 font-light tracking-tight">
-            WITH
-          </h1>
-        </div>
-        <div className="overflow-hidden py-2">
-          <h1 className="hero-intro-line font-[family-name:var(--font-playfair)] text-5xl md:text-7xl text-[#C5A572] font-light italic tracking-tight">
-            OUR JOURNEY
-          </h1>
-        </div>
-      </div>
-
-      <div className="hero-bg absolute inset-[-60px] z-0 will-change-transform">
-        <Image
-          src="/banner/banner1.jpg"
-          alt="Highway Contact"
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0B]/80 via-[#0B0B0B]/30 to-[#0B0B0B]/90" />
-      </div>
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <h2 className="hero-headline font-[family-name:var(--font-playfair)] text-white text-[clamp(2.5rem,8vw,7rem)] leading-[1.05] font-light tracking-tight">
-          <div className="block">Get in</div>
-          <div className="block relative w-fit mx-auto">
-            <span className="relative inline-block">
-              <span className="relative z-10 text-[#C5A572] italic font-normal">Touch.</span>
-              <span className="hero-highlight-mask absolute inset-0 z-20 bg-gradient-to-r from-transparent via-white/90 to-transparent"></span>
-            </span>
-          </div>
-        </h2>
-        <p className="hero-sub mt-12 text-lg md:text-xl font-light text-white/60 max-w-2xl mx-auto leading-[1.8] tracking-wide">
-          For membership enquiries, pricing, corporate events or general questions - we&apos;re here, right on the highway.
-        </p>
-      </div>
-
-      <div className="hero-meta absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-5 z-10">
-        <span className="text-[9px] uppercase tracking-[0.5em] text-white/40 font-light">
-          Enquiries • Pricing • Events • Highway
-        </span>
-        <div className="relative w-px h-16 bg-white/20 overflow-hidden">
-          <div className="absolute top-0 w-full h-1/2 bg-[#C5A572] animate-[scrollDown_2s_ease-in-out_infinite]"></div>
-        </div>
-      </div>
-      <style jsx>{`
-        @keyframes scrollDown {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(200%); }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   3. CONTACT DETAILS & MAP - SPLIT IMAGE + MAP REVEAL
-═══════════════════════════════════════════════════════════════ */
-function ContactDetails() {
-  const ref = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: ref.current, start: "top 65%" },
-      });
-
-      tl.from(".contact-eyebrow", { opacity: 0, y: 20, duration: 0.8, ease: "power3.out" })
-        .from(".contact-headline", { opacity: 0, y: 60, duration: 1.2, ease: "expo.out" }, "-=0.4")
-        .from(".contact-divider", { width: 0, duration: 1.2, ease: "power3.out" }, "-=0.8");
-
-      tl.from(
-        ".detail-card",
-        { opacity: 0, y: 40, duration: 1, stagger: 0.2, ease: "power3.out" },
-        "-=0.8"
-      );
-
-      gsap.fromTo(
-        ".map-wrap",
-        { clipPath: "inset(100% 0 0 0)" },
+  useGSAP(() => {
+    const q = gsap.utils.selector(ref);
+    
+    const heading = q(".hero-head")[0];
+    if (heading) {
+      new SplitType(heading, { types: "lines,words", lineClass: "overflow-hidden block" });
+      gsap.fromTo(q(".hero-head .word"), 
+        { yPercent: 110, opacity: 0 },
         {
-          clipPath: "inset(0% 0 0 0)",
-          duration: 2,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ".map-wrap", start: "top 85%" },
-          onComplete: () => {
-            if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
-              (mapContainerRef.current as any)._leaflet_map.invalidateSize();
-            }
-          }
+          yPercent: 0,
+          opacity: 1,
+          duration: 1.4,
+          stagger: 0.1,
+          ease: "power4.out",
+          scrollTrigger: { trigger: ref.current, start: "top 70%" },
         }
       );
-    },
-    { scope: ref }
-  );
+    }
+
+    gsap.fromTo(q(".hero-anim"),
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ref.current, start: "top 70%" },
+      }
+    );
+
+    gsap.fromTo(q(".map-container"),
+      { clipPath: "inset(0 100% 0 0)" }, // Reveal from left to right
+      {
+        clipPath: "inset(0 0% 0 0)",
+        duration: 2,
+        ease: "expo.out",
+        scrollTrigger: { trigger: q(".map-container")[0], start: "top 80%" },
+        onComplete: () => {
+          if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
+            (mapContainerRef.current as any)._leaflet_map.invalidateSize();
+          }
+        }
+      }
+    );
+  }, { scope: ref });
 
   useEffect(() => {
     if (typeof window === "undefined" || !mapContainerRef.current) return;
-
     let map: any = null;
 
     const initializeMap = () => {
       const L = (window as any).L;
       if (!L || !mapContainerRef.current) return;
-
       if ((mapContainerRef.current as any)._leaflet_map) return;
 
-      const targetLat = 23.5433;
-      const targetLng = 90.4012;
-
       map = L.map(mapContainerRef.current, {
-        center: [targetLat, targetLng], 
-        zoom: 13,
+        center: [23.8132, 90.4254], // Bashundhara, Dhaka
+        zoom: 14,
         zoomControl: false,
         scrollWheelZoom: false,
         attributionControl: false
@@ -296,33 +170,28 @@ function ContactDetails() {
       L.control.zoom({ position: "bottomright" }).addTo(map);
       L.control.attribution({ position: 'bottomleft' }).addAttribution('Tiles &copy; Esri').addTo(map);
 
+      // Esri Dark Gray Base Map (No API Key Required)
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 16
       }).addTo(map);
       
+      // Esri Dark Gray Reference (Labels & Roads)
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 16
       }).addTo(map);
 
-      const goldIcon = L.divIcon({
-        className: "custom-gold-marker",
+      const blueIcon = L.divIcon({
+        className: "custom-blue-marker",
         html: `<div style="position: relative; width: 24px; height: 24px;">
-                 <span style="position: absolute; inset: 0; background: #C5A572; border-radius: 50%; opacity: 0.4; animation: mapPing 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
-                 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #C5A572; border-radius: 50%; border: 2px solid #0B0B0B; box-shadow: 0 0 15px rgba(197, 165, 114, 0.8);"></span>
+                 <span style="position: absolute; inset: 0; background: #007DC6; border-radius: 50%; opacity: 0.4; animation: mapPing 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
+                 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #007DC6; border-radius: 50%; border: 2px solid #0c0b0b; box-shadow: 0 0 15px rgba(0, 125, 198, 0.8);"></span>
                </div>`,
         iconSize: [24, 24],
         iconAnchor: [12, 12],
       });
 
-      L.marker([targetLat, targetLng], { icon: goldIcon })
-        .addTo(map)
-        .bindPopup(
-          `<div style="background: #0B0B0B; color: #fff; padding: 8px; border: 1px solid #C5A572; border-radius: 4px;">
-             <b style="color: #C5A572; font-family: serif; font-weight: 500; font-size: 14px;">Express Highway Inn</b><br/>
-             <span style="font-size: 11px; opacity: 0.8;">Dhaka - Chittagong Highway</span>
-           </div>`
-        );
-        
+      L.marker([23.8132, 90.4254], { icon: blueIcon }).addTo(map);
+
       setTimeout(() => map.invalidateSize(), 1000);
     };
 
@@ -352,130 +221,72 @@ function ContactDetails() {
   }, []);
 
   return (
-    <section ref={ref} className="bg-[#F9F8F6] text-[#141414] py-40 md:py-56 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
-          
-          {/* Left Column: Details */}
-          <div className="w-full lg:w-1/2 flex flex-col">
-            <span className="contact-eyebrow text-[10px] uppercase tracking-[0.4em] text-[#C5A572] font-medium mb-8 block">
-              01 - Contact Details
-            </span>
-            <h2 className="contact-headline font-[family-name:var(--font-playfair)] text-5xl md:text-6xl font-light leading-[1.05] mb-10 tracking-tight">
-              Find Us <br/> On the Highway.
-            </h2>
-            <div className="contact-divider w-16 h-px bg-[#C5A572] mb-12"></div>
+    <section ref={ref} className="relative w-full min-h-screen flex flex-col lg:flex-row bg-[#0c0b0b] overflow-hidden">
+      
+      {/* Left Content Panel */}
+      <div className="lg:w-[45%] flex flex-col justify-center p-8 md:p-16 lg:p-20 relative z-10 border-r border-white/10">
+        <span className="hero-anim block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-bold mb-8">
+          Express Highway Inn
+        </span>
+        <h1 className="hero-head font-[family-name:var(--font-playfair)] text-[clamp(3rem,8vw,6rem)] font-light leading-[1.05] tracking-[-0.02em] text-white mb-10">
+          Get in <span className="italic text-[#007DC6]">Touch.</span>
+        </h1>
+        <p className="hero-anim text-base md:text-lg font-light text-white/60 max-w-md leading-[1.8] mb-12">
+          For membership enquiries, pricing, corporate events or general questions - we&apos;re here, right on the highway.
+        </p>
 
-            <div className="space-y-16">
-              {/* EHI Card */}
-              <div className="detail-card border-l border-[#141414]/10 pl-8 group hover:border-[#C5A572] transition-colors duration-500">
-                <h3 className="text-[10px] uppercase tracking-[0.4em] text-[#141414]/40 mb-6 font-medium">
-                  Express Highway Inn
-                </h3>
-                <div className="space-y-4 text-base md:text-lg font-light text-[#141414]/80 tracking-wide">
-                  <div className="flex items-start gap-4">
-                    <MapPin className="h-5 w-5 text-[#C5A572] mt-1 flex-shrink-0" />
-                    <span>Highway Landmark Directions, Dhaka - Chittagong Highway</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Phone className="h-5 w-5 text-[#C5A572] flex-shrink-0" />
-                    <span>+880 1XXX-XXXXXX</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <MessageCircle className="h-5 w-5 text-[#C5A572] flex-shrink-0" />
-                    <span>+880 1XXX-XXXXXX (WhatsApp)</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Mail className="h-5 w-5 text-[#C5A572] flex-shrink-0" />
-                    <a href="mailto:[email protected]" className="hover:text-[#C5A572] transition-colors">[email protected]</a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sampan Group Card */}
-              <div className="detail-card border-l border-[#141414]/10 pl-8 group hover:border-[#C5A572] transition-colors duration-500">
-                <h3 className="text-[10px] uppercase tracking-[0.4em] text-[#141414]/40 mb-6 font-medium">
-                  Sampan Group Head Office
-                </h3>
-                <div className="space-y-4 text-base md:text-lg font-light text-[#141414]/80 tracking-wide">
-                  <div className="flex items-start gap-4">
-                    <MapPin className="h-5 w-5 text-[#C5A572] mt-1 flex-shrink-0" />
-                    <span>Sampan Group Corporate Office, Dhaka</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Phone className="h-5 w-5 text-[#C5A572] flex-shrink-0" />
-                    <span>+880 1XXX-XXXXXX</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <MessageCircle className="h-5 w-5 text-[#C5A572] flex-shrink-0" />
-                    <span>+880 1XXX-XXXXXX (WhatsApp)</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Mail className="h-5 w-5 text-[#C5A572] flex-shrink-0" />
-                    <a href="mailto:[email protected]" className="hover:text-[#C5A572] transition-colors">[email protected]</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Contact details grid */}
+        <div className="hero-anim grid grid-cols-2 gap-px bg-white/10 border border-white/10 max-w-md">
+          <div className="bg-[#0c0b0b] p-6 flex flex-col gap-3">
+            <MapPin className="h-5 w-5 text-[#007DC6]" strokeWidth={1} />
+            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Head Office</span>
+            <p className="text-sm text-white/80 font-light leading-relaxed">Sampan 21st Century, House-284, Block-B Road-1/A, Dhaka-1229.</p>
           </div>
-
-          {/* Right Column: Map */}
-          <div className="w-full lg:w-1/2 sticky top-32">
-            <div
-              className="map-wrap relative w-full h-[60vh] md:h-[80vh] overflow-hidden border border-[#141414]/10 z-10"
-              data-cursor="EXPLORE"
-            >
-              <div ref={mapContainerRef} className="absolute inset-0 w-full h-full bg-[#0B0B0B]" />
-              
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0B0B0B]/60 via-transparent to-transparent z-[400]"></div>
-              
-              <div className="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md border border-[#141414]/10 px-8 py-5 flex items-center gap-5 shadow-2xl z-[500]">
-                <div className="relative w-2.5 h-2.5">
-                  <span className="absolute inset-0 rounded-full bg-[#C5A572]/40 animate-ping"></span>
-                  <span className="relative inline-flex w-2.5 h-2.5 rounded-full bg-[#C5A572]"></span>
-                </div>
-                <div>
-                  <span className="block text-[9px] uppercase tracking-[0.4em] text-[#141414]/40">Highway Routing</span>
-                  <span className="block text-sm font-medium text-[#141414] font-[family-name:var(--font-playfair)]">Dhaka - Chittagong Corridor</span>
-                </div>
-              </div>
-            </div>
+          <div className="bg-[#0c0b0b] p-6 flex flex-col gap-3">
+            <Clock className="h-5 w-5 text-[#007DC6]" strokeWidth={1} />
+            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Availability</span>
+            <p className="text-sm text-white/80 font-light leading-relaxed">24/7 Assistance Available</p>
           </div>
-
         </div>
+      </div>
+
+      {/* Right Map Panel */}
+      <div className="lg:w-[55%] h-[50vh] lg:h-auto relative map-container overflow-hidden">
+        <div ref={mapContainerRef} className="absolute inset-0 w-full h-full bg-[#111]"></div>
+        
+        {/* Floating Glassmorphism Address Card on Map */}
+        <div className="absolute bottom-8 left-8 right-8 lg:right-auto lg:w-[340px] bg-[#0c0b0b]/80 backdrop-blur-xl border border-white/10 p-6 z-[500] pointer-events-none">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#007DC6] block mb-3">Corporate Landmark</span>
+          <p className="text-xl font-[family-name:var(--font-playfair)] mb-1 text-white">Bashundhara, Dhaka</p>
+          <p className="text-sm text-white/60 font-light">Bangladesh</p>
+        </div>
+
+        {/* Architectural Corners on Map */}
+        <div className="absolute top-6 right-6 w-6 h-6 border-t border-r border-[#007DC6]/60 z-[500] pointer-events-none"></div>
+        <div className="absolute bottom-6 right-6 w-6 h-6 border-b border-r border-[#007DC6]/60 z-[500] pointer-events-none"></div>
       </div>
 
       <style jsx global>{`
         .leaflet-container {
-          background: #0B0B0B !important;
+          background: #111 !important;
           font-family: var(--font-sans) !important;
           outline: none;
         }
-        .leaflet-popup-content-wrapper {
-          background: transparent;
-          box-shadow: none;
-        }
-        .leaflet-popup-content {
-          margin: 0;
-        }
-        .leaflet-popup-tip-container {
-          display: none;
-        }
         .leaflet-control-zoom a {
-          background: #0B0B0B !important;
-          color: #C5A572 !important;
-          border: 1px solid rgba(197, 165, 114, 0.3) !important;
+          background: #0c0b0b !important;
+          color: #007DC6 !important;
+          border: 1px solid rgba(0, 125, 198, 0.3) !important;
           font-weight: 300;
         }
         .leaflet-control-zoom a:hover {
-          background: #141414 !important;
+          background: #1a1a1a !important;
         }
         .leaflet-control-attribution {
-          background: rgba(11, 11, 11, 0.8) !important;
+          background: rgba(12, 11, 11, 0.8) !important;
           color: rgba(255, 255, 255, 0.4) !important;
         }
         .leaflet-control-attribution a {
-          color: rgba(197, 165, 114, 0.6) !important;
+          color: rgba(0, 125, 198, 0.6) !important;
         }
         @keyframes mapPing {
           75%, 100% {
@@ -489,157 +300,268 @@ function ContactDetails() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   4. ENQUIRY FORM - MINIMALIST LUXURY INPUTS
+   3. CONTACT GRID (Minimalist Architectural)
 ═══════════════════════════════════════════════════════════════ */
-function EnquiryForm() {
+function ContactGrid() {
   const ref = useRef<HTMLDivElement>(null);
+  
+  const contacts = [
+    { num: "01", label: "Call Us", value: "+880 1906-896326", href: "tel:+8801906896326", Icon: Phone },
+    { num: "02", label: "WhatsApp", value: "+880 1906-896326", href: "https://wa.me/8801906896326", Icon: MessageCircle },
+    { num: "03", label: "Email Us", value: "info@expresshighwayinn.com", href: "mailto:info@expresshighwayinn.com", Icon: Mail },
+    { num: "04", label: "Office Hours", value: "10:00 AM - 06:00 PM", href: "#", Icon: Clock },
+  ];
 
-  useGSAP(
-    () => {
-      let splitInstance: SplitType | null = null;
-      const text = document.querySelector<HTMLElement>(".form-head");
-      if (text) {
-        splitInstance = new SplitType(text, {
-          types: "lines",
-          lineClass: "overflow-hidden block",
-        });
-        gsap.from(".form-head .line", {
-          yPercent: 110,
-          duration: 1.5,
-          stagger: 0.1,
-          ease: "expo.out",
-          scrollTrigger: { trigger: text, start: "top 80%" },
-        });
-      }
-
-      gsap.from(".form-group", {
-        opacity: 0,
-        y: 40,
+  useGSAP(() => {
+    const q = gsap.utils.selector(ref);
+    gsap.fromTo(q(".cg-card"),
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
         duration: 1,
-        stagger: 0.15,
+        stagger: 0.1,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".form-container", start: "top 70%" },
-      });
-    },
-    { scope: ref }
-  );
+        scrollTrigger: { trigger: ref.current, start: "top 85%" },
+      }
+    );
+  }, { scope: ref });
 
   return (
-    <section ref={ref} className="bg-[#0B0B0B] text-white py-40 md:py-56 overflow-hidden">
-      <div className="mx-auto max-w-3xl px-8 lg:px-12 text-center">
-        <span className="block text-[10px] uppercase tracking-[0.4em] text-[#C5A572] font-medium mb-8">
-          02 - Enquiries
-        </span>
-        <h2 className="form-head font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-light leading-[1.05] tracking-tight mb-20">
-          Send Us a Message
-        </h2>
-
-        <form className="form-container flex flex-col gap-16 text-left">
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div className="form-group relative border-b border-white/20 pb-4">
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Name</label>
-              <input 
-                type="text" 
-                placeholder="Your Full Name" 
-                className="w-full bg-transparent text-white text-lg font-light outline-none placeholder:text-white/30"
-              />
-            </div>
-            <div className="form-group relative border-b border-white/20 pb-4">
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Phone</label>
-              <input 
-                type="text" 
-                placeholder="+880 1XXX XXX XXX" 
-                className="w-full bg-transparent text-white text-lg font-light outline-none placeholder:text-white/30"
-              />
-            </div>
-          </div>
-
-          <div className="form-group relative border-b border-white/20 pb-4">
-            <label className="block text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Email</label>
-            <input 
-              type="email" 
-              placeholder="[email protected]" 
-              className="w-full bg-transparent text-white text-lg font-light outline-none placeholder:text-white/30"
-            />
-          </div>
-
-          <div className="form-group relative border-b border-white/20 pb-4">
-            <label className="block text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Enquiry Type</label>
-            <select className="w-full bg-transparent text-white text-lg font-light outline-none appearance-none cursor-pointer">
-              <option value="" disabled selected className="bg-[#0B0B0B]">Select Enquiry Type</option>
-              <option value="general" className="bg-[#0B0B0B]">General</option>
-              <option value="membership" className="bg-[#0B0B0B]">Membership</option>
-              <option value="inquiries" className="bg-[#0B0B0B]">Inquiries</option>
-            </select>
-          </div>
-
-          <div className="form-group relative border-b border-white/20 pb-4">
-            <label className="block text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Message</label>
-            <textarea 
-              rows={3} 
-              placeholder="Write your message here..." 
-              className="w-full bg-transparent text-white text-lg font-light outline-none placeholder:text-white/30 resize-none"
-            ></textarea>
-          </div>
-
-          <div className="form-group flex justify-center mt-8">
-            <button
-              type="button"
-              className="group relative inline-flex items-center justify-center gap-4 px-12 py-6 bg-[#C5A572] text-[#0B0B0B] text-[11px] uppercase tracking-[0.4em] font-medium overflow-hidden cursor-pointer"
-              data-cursor="SEND"
+    <section ref={ref} className="bg-[#F7F6F2] text-[#0c0b0b] py-24 md:py-32 overflow-hidden border-t border-[#0c0b0b]/10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-l border-t border-[#0c0b0b]/10">
+          {contacts.map((c, i) => (
+            <a
+              key={i}
+              href={c.href}
+              target={c.href.startsWith("http") ? "_blank" : undefined}
+              rel="noopener noreferrer"
+              className="cg-card group relative p-8 md:p-10 border-r border-b border-[#0c0b0b]/10 hover:bg-white transition-colors duration-500 overflow-hidden h-full flex flex-col justify-between min-h-[200px]"
+              data-cursor={c.label.toUpperCase()}
             >
-              <span className="absolute inset-0 bg-white opacity-0 transition-opacity duration-500 group-hover:opacity-20"></span>
-              <span className="relative z-10">Send Message</span>
-              <Send className="relative z-10 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </button>
-          </div>
-
-        </form>
+              {/* Hover Accent Line (Top) */}
+              <span className="absolute top-0 left-0 right-0 h-[2px] bg-[#007DC6] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"></span>
+              
+              <div className="flex items-start justify-between mb-8">
+                <span className="text-[10px] tracking-[0.3em] text-[#0c0b0b]/30 transition-colors duration-500 group-hover:text-[#007DC6]">{c.num}</span>
+                <c.Icon className="h-6 w-6 text-[#0c0b0b]/30 group-hover:text-[#007DC6] transition-colors duration-500" strokeWidth={1} />
+              </div>
+              
+              <div>
+                <span className="block text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 mb-3">{c.label}</span>
+                <h3 className="font-[family-name:var(--font-playfair)] text-lg md:text-xl font-light text-[#0c0b0b] transition-colors duration-500">
+                  {c.value}
+                </h3>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   5. SOCIAL ROW - CONNECTED GRID
+   4. SAMPAN OFFICE & ENQUIRY FORM (Dark Premium Panel)
 ═══════════════════════════════════════════════════════════════ */
-function SocialRow() {
-  return (
-    <section className="bg-[#F9F8F6] text-[#141414] py-32 md:py-40 overflow-hidden border-t border-[#141414]/10">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-16">
-        
-        <div className="flex flex-col items-center md:items-start text-center md:text-left gap-8 pb-16 md:pb-0 border-b md:border-b-0 md:border-r border-[#141414]/10">
-          <h3 className="font-[family-name:var(--font-playfair)] text-3xl font-light tracking-tight">Express Highway Inn</h3>
-          <a href="#" className="group inline-flex items-center gap-4 text-sm uppercase tracking-[0.3em] text-[#141414]/60 hover:text-[#C5A572] transition-colors" data-cursor="VISIT">
-            <span>Facebook</span>
-            <span className="relative w-8 h-px bg-[#141414]/40 group-hover:bg-[#C5A572] group-hover:w-12 transition-all duration-500"></span>
-            <FaFacebook className="h-4 w-4" />
-          </a>
-        </div>
+function EnquiryForm() {
+  const ref = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [type, setType] = useState("General");
 
-        <div className="flex flex-col items-center md:items-end text-center md:text-right gap-8">
-          <h3 className="font-[family-name:var(--font-playfair)] text-3xl font-light tracking-tight">Sampan Group</h3>
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-8">
-            <a href="#" className="group inline-flex items-center gap-3 text-sm uppercase tracking-[0.3em] text-[#141414]/60 hover:text-[#C5A572] transition-colors" data-cursor="VISIT">
-              <span>Facebook</span>
-              <FaFacebook className="h-4 w-4" />
-            </a>
-            <a href="#" className="group inline-flex items-center gap-3 text-sm uppercase tracking-[0.3em] text-[#141414]/60 hover:text-[#C5A572] transition-colors" data-cursor="VISIT">
-              <span>Instagram</span>
-              <FaInstagram className="h-4 w-4" />
-            </a>
-            <a href="#" className="group inline-flex items-center gap-3 text-sm uppercase tracking-[0.3em] text-[#141414]/60 hover:text-[#C5A572] transition-colors" data-cursor="VISIT">
-              <span>LinkedIn</span>
-              <BsLinkedin className="h-4 w-4" />
-            </a>
-            <a href="#" className="group inline-flex items-center gap-3 text-sm uppercase tracking-[0.3em] text-[#141414]/60 hover:text-[#C5A572] transition-colors" data-cursor="VISIT">
-              <span>YouTube</span>
-              <BsYoutube className="h-4 w-4" />
-            </a>
+  useGSAP(() => {
+    const q = gsap.utils.selector(ref);
+    const tl = gsap.timeline({ scrollTrigger: { trigger: ref.current, start: "top 70%" } });
+    
+    const heading = q(".form-head")[0];
+    if (heading) {
+      new SplitType(heading, { types: "lines,words", lineClass: "overflow-hidden block" });
+      gsap.set(q(".form-head .word"), { yPercent: 110 });
+      tl.to(q(".form-head .word"), { yPercent: 0, duration: 1.4, stagger: 0.08, ease: "power4.out" });
+    }
+
+    tl.fromTo(q(".form-anim"),
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" },
+      "-=0.8"
+    );
+
+    const btn = btnRef.current;
+    if (btn) {
+      const xTo = gsap.quickTo(btn, "x", { duration: 0.4, ease: "power3.out" });
+      const yTo = gsap.quickTo(btn, "y", { duration: 0.4, ease: "power3.out" });
+      const onMouseMove = (e: MouseEvent) => {
+        const rect = btn.getBoundingClientRect();
+        xTo(e.clientX - rect.left - rect.width / 2 * 0.4);
+        yTo(e.clientY - rect.top - rect.height / 2 * 0.4);
+      };
+      const onMouseLeave = () => { xTo(0); yTo(0); };
+      btn.addEventListener("mousemove", onMouseMove);
+      btn.addEventListener("mouseleave", onMouseLeave);
+      return () => { btn.removeEventListener("mousemove", onMouseMove); btn.removeEventListener("mouseleave", onMouseLeave); };
+    }
+  }, { scope: ref });
+
+  return (
+    <section id="enquiry" ref={ref} className="relative bg-[#0c0b0b] text-white py-24 md:py-32 overflow-hidden">
+      {/* Architectural Background Grid Lines */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "60px 60px" }}></div>
+      
+      {/* Luxury Background Glow */}
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#007DC6]/[0.08] blur-[150px] rounded-full"></div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
+        
+        {/* Left Column: Sampan Office Info */}
+        <div className="lg:col-span-5 flex flex-col justify-center">
+          <span className="form-anim block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-bold mb-8">Corporate Connection</span>
+          <h3 className="form-head font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,5vw,4rem)] font-light leading-[1.05] mb-10 tracking-[-0.02em]">
+            The Sampan Group<br /><span className="italic text-[#007DC6]/80">Head Office.</span>
+          </h3>
+          <p className="form-anim text-base font-light text-white/50 max-w-md leading-relaxed mb-12">
+            For corporate enquiries, partnerships and wider Sampan Group matters, connect directly with our head office.
+          </p>
+
+          <div className="flex flex-col gap-8">
+            <div className="form-anim">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Phone</p>
+              <a href="tel:+8801906896326" className="text-lg font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">+880 1906-896326</a>
+            </div>
+            <div className="form-anim">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Email</p>
+              <a href="mailto:info@sampangroup.com.bd" className="text-lg font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">info@sampangroup.com.bd</a>
+            </div>
+            <div className="form-anim">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Address</p>
+              <p className="text-lg font-[family-name:var(--font-playfair)] text-white/80">Sampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229.</p>
+            </div>
           </div>
         </div>
 
+        {/* Right Column: Form Panel */}
+        <div className="lg:col-span-7 flex flex-col">
+          <div className="form-anim relative bg-white/[0.02] border border-white/10 p-8 md:p-12 lg:p-16 flex-1 overflow-hidden">
+            
+            {/* Panel Architectural Corners */}
+            <div className="absolute top-6 left-6 w-6 h-6 border-t border-l border-[#007DC6]/50 z-10"></div>
+            <div className="absolute top-6 right-6 w-6 h-6 border-t border-r border-[#007DC6]/50 z-10"></div>
+            <div className="absolute bottom-6 left-6 w-6 h-6 border-b border-l border-[#007DC6]/50 z-10"></div>
+            <div className="absolute bottom-6 right-6 w-6 h-6 border-b border-r border-[#007DC6]/50 z-10"></div>
+
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="mb-12">
+                <span className="text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-bold mb-6 block">Enquiry Form</span>
+                <h4 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl font-light leading-[1.1] tracking-tight text-white">
+                  Start a <span className="italic text-[#007DC6]">Conversation.</span>
+                </h4>
+              </div>
+
+              <form className="flex flex-col gap-8 flex-1">
+                <div className="relative">
+                  <input type="text" id="name" required placeholder=" " className="peer w-full bg-white/[0.03] border border-white/15 px-4 pt-6 pb-2 text-base focus:outline-none focus:border-[#007DC6] focus:bg-white/[0.05] transition-all duration-500 text-white font-medium" />
+                  <label htmlFor="name" className="absolute left-4 top-1/2 -translate-y-1/2 text-base text-white/60 transition-all duration-300 peer-focus:top-3 peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6] pointer-events-none">Full Name</label>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="relative">
+                    <input type="tel" id="phone" required placeholder=" " className="peer w-full bg-white/[0.03] border border-white/15 px-4 pt-6 pb-2 text-base focus:outline-none focus:border-[#007DC6] focus:bg-white/[0.05] transition-all duration-500 text-white font-medium" />
+                    <label htmlFor="phone" className="absolute left-4 top-1/2 -translate-y-1/2 text-base text-white/60 transition-all duration-300 peer-focus:top-3 peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6] pointer-events-none">Phone</label>
+                  </div>
+                  <div className="relative">
+                    <input type="email" id="email" required placeholder=" " className="peer w-full bg-white/[0.03] border border-white/15 px-4 pt-6 pb-2 text-base focus:outline-none focus:border-[#007DC6] focus:bg-white/[0.05] transition-all duration-500 text-white font-medium" />
+                    <label htmlFor="email" className="absolute left-4 top-1/2 -translate-y-1/2 text-base text-white/60 transition-all duration-300 peer-focus:top-3 peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6] pointer-events-none">Email</label>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/60">Enquiry Type</span>
+                  <div className="relative flex flex-wrap gap-3">
+                    {["General", "Membership", "Inquiries"].map((t) => (
+                      <button key={t} type="button" onClick={() => setType(t)} className={`relative px-6 py-3 text-[10px] uppercase tracking-[0.25em] border transition-colors duration-500 ${type === t ? "bg-[#007DC6] text-white border-[#007DC6]" : "border-white/15 text-white/60 hover:border-white/40"}`}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="relative flex-1">
+                  <textarea id="message" rows={4} required placeholder=" " className="peer w-full h-full bg-white/[0.03] border border-white/15 px-4 pt-6 pb-2 text-base focus:outline-none focus:border-[#007DC6] focus:bg-white/[0.05] transition-all duration-500 resize-none text-white font-medium" />
+                  <label htmlFor="message" className="absolute left-4 top-6 text-base text-white/60 transition-all duration-300 peer-focus:top-3 peer-focus:text-[10px] peer-focus:text-[#007DC6] peer-focus:tracking-[0.2em] peer-focus:uppercase peer-[:not(:placeholder-shown)]:top-3 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:text-[#007DC6] pointer-events-none">Message</label>
+                </div>
+
+                <button ref={btnRef} type="submit" className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#007DC6] text-white text-[11px] uppercase tracking-[0.35em] font-bold overflow-hidden cursor-pointer mt-4 self-start hover:bg-white hover:text-[#0c0b0b] transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" data-cursor="SEND">
+                  <span className="relative z-10">Send Message</span>
+                  <ArrowRight className="relative z-10 h-4 w-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:rotate-45" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. SOCIAL ROW
+═══════════════════════════════════════════════════════════════ */
+function SocialRow() {
+  const ref = useRef<HTMLDivElement>(null);
+  const socials = [
+    { name: "Facebook", group: "Express Highway Inn", href: "https://www.facebook.com/expresshighwayinn/" },
+    { name: "Facebook", group: "Sampan Group", href: "https://www.facebook.com/sampangroup/" },
+    { name: "Instagram", group: "Sampan Group", href: "#" },
+    { name: "LinkedIn", group: "Sampan Group", href: "https://www.linkedin.com/company/sampangroup/" },
+    { name: "YouTube", group: "Sampan Group", href: "#" },
+  ];
+
+  useGSAP(() => {
+    const q = gsap.utils.selector(ref);
+    gsap.fromTo(q(".social-row"),
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: ref.current, start: "top 85%" },
+      }
+    );
+  }, { scope: ref });
+
+  return (
+    <section ref={ref} className="bg-[#F7F6F2] text-[#0c0b0b] py-24 md:py-32 overflow-hidden border-t border-[#0c0b0b]/10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <span className="block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-bold mb-4">Stay Connected</span>
+          <h3 className="font-[family-name:var(--font-playfair)] text-3xl md:text-4xl font-light tracking-tight">Follow our journey.</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 border-t border-l border-[#0c0b0b]/10">
+          {socials.map((s, i) => (
+            <a 
+              key={i} 
+              href={s.href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-row group relative p-8 border-r border-b border-[#0c0b0b]/10 hover:bg-white transition-colors duration-500 overflow-hidden flex flex-col justify-between min-h-[160px]"
+              data-cursor="OPEN"
+            >
+              {/* Hover Accent Line (Top) */}
+              <span className="absolute top-0 left-0 right-0 h-[2px] bg-[#007DC6] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"></span>
+              
+              <div className="flex items-start justify-between">
+                <span className="text-[9px] tracking-[0.3em] text-[#0c0b0b]/30 uppercase">{s.group}</span>
+                <ArrowUpRight className="h-4 w-4 text-[#0c0b0b]/30 group-hover:text-[#007DC6] group-hover:rotate-45 transition-all duration-500" />
+              </div>
+              
+              <h4 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl font-light text-[#0c0b0b]/80 group-hover:text-[#0c0b0b] transition-colors duration-500">
+                {s.name}
+              </h4>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -648,12 +570,12 @@ function SocialRow() {
 /* ═══════════════════════════════════════════════════════════════
    MAIN PAGE EXPORT
 ═══════════════════════════════════════════════════════════════ */
-export default function ContactPage() {
+export default function ContactSection() {
   return (
-    <main className="bg-[#F9F8F6] font-[family-name:var(--font-sans)]">
-      <CustomCursor />
+    <main className="bg-[#F7F6F2]">
+      <CustomCursorAndGrain />
       <ContactHero />
-      <ContactDetails />
+      <ContactGrid />
       <EnquiryForm />
       <SocialRow />
     </main>

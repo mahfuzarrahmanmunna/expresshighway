@@ -229,7 +229,7 @@ export default function GlassNavbar() {
               </div>
 
               <MotionLink
-                href="#membership"
+                href="/club-and-membership"
                 initial={false}
                 className="hidden md:flex items-center gap-3 rounded-full border border-primary/40 bg-primary/10 px-4 py-2.5 text-[9px] uppercase tracking-[0.18em] text-primary hover:text-white overflow-hidden relative group"
                 whileHover={{ y: -2 }}
