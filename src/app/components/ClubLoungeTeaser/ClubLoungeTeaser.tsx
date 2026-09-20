@@ -174,7 +174,7 @@ export default function ClubLoungeTeaser() {
 
             <p className="club-anim text-sm md:text-base font-light text-[#0c0b0b]/60 leading-relaxed max-w-xl mb-12">
               A members-only retreat inside Sampan Highway Inn. The VVIP Lounge,
-              billiards and card rooms, spa, gym, pool, and more — reserved for
+              billiards and card rooms, spa, gym, pool, and more - reserved for
               those who hold the card.
             </p>
 

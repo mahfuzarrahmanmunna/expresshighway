@@ -163,7 +163,7 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/25" />
               <span className="text-[11px] font-mono tracking-[0.3em] uppercase text-white/40">
-                Expressway — KM 42
+                Expressway - KM 42
               </span>
             </div>
 
@@ -179,7 +179,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-4">
               <span className="text-[11px] font-mono tracking-[0.2em] text-white/40">
-                Dhaka — Ctg
+                Dhaka - Ctg
               </span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/25" />
             </div>

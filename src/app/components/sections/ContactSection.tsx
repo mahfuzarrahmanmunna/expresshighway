@@ -35,7 +35,7 @@ export default function ContactSection() {
         />
 
         <div className="grid gap-16 lg:grid-cols-5">
-          {/* Left — info */}
+          {/* Left - info */}
           <div
             ref={leftRef}
             className={cn("lg:col-span-2", !isReducedMotion && "opacity-0")}
@@ -65,7 +65,7 @@ export default function ContactSection() {
             </p>
           </div>
 
-          {/* Right — form */}
+          {/* Right - form */}
           <div
             ref={rightRef}
             className={cn("lg:col-span-3", !isReducedMotion && "opacity-0")}
@@ -98,7 +98,7 @@ export default function ContactSection() {
                     name: "budget",
                     label: "Budget Range",
                     type: "text",
-                    placeholder: "$2M — $5M",
+                    placeholder: "$2M - $5M",
                   },
                 ].map((field) => (
                   <div key={field.name} className="relative">

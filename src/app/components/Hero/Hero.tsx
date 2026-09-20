@@ -363,7 +363,7 @@ export default function Hero() {
   const mouseRef = useRef<MousePos>({ x: 0.5, y: 0.5, active: false });
 
   // ══════════════════════════════════════
-  // SPLIT TEXT — gated by splash + reduced-motion
+  // SPLIT TEXT - gated by splash + reduced-motion
   // Parent has opacity-0 so text is invisible until GSAP takes over.
   // ══════════════════════════════════════
   useSplitText(titleLine1Ref, {
@@ -385,7 +385,7 @@ export default function Hero() {
   });
 
   // ══════════════════════════════════════
-  // TITLE LINE 2 — 3D FLIP (direct GSAP, no SplitType)
+  // TITLE LINE 2 - 3D FLIP (direct GSAP, no SplitType)
   // ══════════════════════════════════════
   useEffect(() => {
     const el = titleLine2Ref.current;
@@ -414,7 +414,7 @@ export default function Hero() {
   }, [canAnimate]);
 
   // ══════════════════════════════════════
-  // BACKGROUND SCROLL PARALLAX (always active — scroll-based)
+  // BACKGROUND SCROLL PARALLAX (always active - scroll-based)
   // ══════════════════════════════════════
   useImageParallax(bgRef, { scale: 1.3 });
   useImageParallax(bgLayer2Ref, { scale: 1.15 });
@@ -752,7 +752,7 @@ export default function Hero() {
             Where The
           </h1>
 
-          {/* ── Title Line 2 (GSAP 3D flip — gradient) ── */}
+          {/* ── Title Line 2 (GSAP 3D flip - gradient) ── */}
           <h1
             ref={titleLine2Ref}
             className={cn(
@@ -802,7 +802,7 @@ export default function Hero() {
             style={{ perspective: "600px" }}
           >
             An unparalleled resort experience nestled along the most scenic
-            highway — where every mile brings you closer to extraordinary
+            highway - where every mile brings you closer to extraordinary
           </p>
 
           {/* ── CTAs ── */}

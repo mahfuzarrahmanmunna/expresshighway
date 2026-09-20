@@ -45,7 +45,7 @@ interface NavbarProps {
   splashVisible: boolean;
 }
 
-/* ── Framer variants — ease typed as tuple to satisfy TS ── */
+/* ── Framer variants - ease typed as tuple to satisfy TS ── */
 const easeOut: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const easeIn: [number, number, number, number] = [0.7, 0, 0.84, 0];
 

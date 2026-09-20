@@ -67,7 +67,7 @@ export function useCounter(
 }
 
 /**
- * Bulk counter — animates multiple elements from a single useEffect.
+ * Bulk counter - animates multiple elements from a single useEffect.
  * Accepts the ref object itself (not .current) to avoid reading
  * refs during render.
  *

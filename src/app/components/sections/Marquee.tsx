@@ -24,7 +24,7 @@ export default function Marquee() {
           </span>
         ))}
       </div>
-      {/* Dots between items — done via CSS gap trick; simpler to just use the items */}
+      {/* Dots between items - done via CSS gap trick; simpler to just use the items */}
     </section>
   );
 }

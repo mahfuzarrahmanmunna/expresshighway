@@ -161,7 +161,7 @@ export default function FacilitiesExperience() {
           </h1>
           <div className="mt-12 max-w-xl">
             <p className="text-sm md:text-base text-white/40 leading-relaxed tracking-wide">
-              Designed around comfort, leisure, wellness and everyday convenience — every facility is thoughtfully curated to elevate your stay.
+              Designed around comfort, leisure, wellness and everyday convenience - every facility is thoughtfully curated to elevate your stay.
             </p>
           </div>
         </div>

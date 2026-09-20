@@ -14,17 +14,17 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 ═══════════════════════════════════════════════════════════════ */
 const PANELS = [
   {
-    tag: "01 — Our Origin",
+    tag: "01 - Our Origin",
     title: "Our Story",
     content:
-      "Express Highway Inn was born with a vision to redefine travel and hospitality along the busy highways of Bangladesh. Strategically located on the Dhaka–Chittagong Highway, it was designed to be more than just a resting place — it is a destination where relaxation meets luxury.",
+      "Express Highway Inn was born with a vision to redefine travel and hospitality along the busy highways of Bangladesh. Strategically located on the Dhaka–Chittagong Highway, it was designed to be more than just a resting place - it is a destination where relaxation meets luxury.",
     shimmer: "story",
     /* Luxury building facade at golden hour */
     image:
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&h=1080&fit=crop&q=85",
   },
   {
-    tag: "02 — Our Purpose",
+    tag: "02 - Our Purpose",
     title: "Our Mission",
     content:
       "At Express Highway Inn, our mission is to redefine highway hospitality by offering a perfect balance of comfort, luxury, and convenience. We are committed to providing world-class service, modern amenities, and a welcoming atmosphere that caters to the diverse needs of travelers, families, and business professionals.",
@@ -34,17 +34,17 @@ const PANELS = [
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&h=1080&fit=crop&q=85",
   },
   {
-    tag: "03 — Our Principles",
+    tag: "03 - Our Principles",
     title: "Our Values",
     content:
       "At Express Highway Inn, our values guide everything we do. We believe in hospitality first, welcoming every guest with warmth, care, and respect. Our commitment to excellence ensures the highest standards in service, comfort, and luxury. With integrity and transparency, we build trust while embracing innovation to enhance every experience.",
     shimmer: "values",
-    /* Luxury interior detail — marble & light */
+    /* Luxury interior detail - marble & light */
     image:
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop&q=85",
   },
   {
-    tag: "04 — Our Network",
+    tag: "04 - Our Network",
     title: "Allied Organizations",
     content:
       "United in vision, strength, and shared success. Our partnerships reflect our commitment to a broader ecosystem of excellence, connecting trusted entities to build a future of unparalleled service and reliability.",
@@ -290,7 +290,7 @@ export default function About() {
           } as any);
         }
 
-        /* ── 5. CANVAS — Floating Architectural Dust ── */
+        /* ── 5. CANVAS - Floating Architectural Dust ── */
         const canvas = canvasRef.current;
         if (canvas) {
           const c = canvas.getContext("2d");
@@ -614,7 +614,7 @@ export default function About() {
             );
           }
 
-          // Colour evolution — cross-fade ambient orbs
+          // Colour evolution - cross-fade ambient orbs
           const prevOrbA = orbARef.current[i];
           const nextOrbA = orbARef.current[i + 1];
           const prevOrbB = orbBRef.current[i];
@@ -1013,7 +1013,7 @@ export default function About() {
             className="text-[7px] tracking-[0.5em] uppercase text-white/20 font-light"
             style={{ writingMode: "vertical-rl" }}
           >
-            About Us — Our Legacy
+            About Us - Our Legacy
           </span>
         </div>
       </div>

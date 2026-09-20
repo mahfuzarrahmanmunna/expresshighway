@@ -33,7 +33,7 @@ const DEFAULTS = {
  * The single canonical headline-split-reveal used across Hero, About,
  * and SisterConcerns. Previously each section hand-rolled this with
  * drifting eases (power4.out / expo.out / power3.out) and staggers
- * (0.12 / 0.15). One implementation now — visual variation should be
+ * (0.12 / 0.15). One implementation now - visual variation should be
  * a deliberate choice, not accidental copy-paste drift.
  */
 export function useHeadlineReveal(
@@ -110,7 +110,7 @@ interface BlurRevealOptions {
 
 /**
  * Canonical "blur + fade + rise" reveal for body copy, tags, meta grids
- * — the `.reveal` pattern used in Hero's tagline, About's panel-body,
+ * - the `.reveal` pattern used in Hero's tagline, About's panel-body,
  * SisterConcerns' `.reveal-ui`, and LivingPortfolio's `.reveal`.
  */
 export function useBlurReveal(

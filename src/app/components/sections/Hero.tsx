@@ -303,7 +303,7 @@ export default function Hero() {
           >
             <MagneticButton strength={0.4}>
               <a 
-                href="#club-lounge" 
+                href="/club-and-lounge" 
                 className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 bg-white/10 border border-white/20 backdrop-blur-md text-[10px] uppercase tracking-[0.35em] font-medium text-white overflow-hidden transition-all duration-500 hover:bg-white/20 hover:border-white/40"
               >
                 <span className="relative z-10">Explore Club & Lounge</span>
@@ -342,7 +342,7 @@ export default function Hero() {
           className="text-[7px] tracking-[0.5em] uppercase text-white/50"
           style={{ writingMode: "vertical-rl" }}
         >
-          Est. 2025 — Premium Hospitality
+          Est. 2025 - Premium Hospitality
         </span>
       </div>
       <div
@@ -353,7 +353,7 @@ export default function Hero() {
           className="text-[7px] tracking-[0.5em] uppercase text-white/50"
           style={{ writingMode: "vertical-rl" }}
         >
-          Expressway — KM 42
+          Expressway - KM 42
         </span>
       </div>
     </div>

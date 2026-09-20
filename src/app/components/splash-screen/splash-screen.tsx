@@ -97,7 +97,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
      * ═══════════════════════════════════════════════════ */
     const ctx = gsap.context(() => {
       /* ─────────────────────────────────────────────────
-       *  CONTINUOUS ANIMATIONS — Start immediately
+       *  CONTINUOUS ANIMATIONS - Start immediately
        *  These run in parallel with the main timeline
        * ───────────────────────────────────────────────── */
 
@@ -110,7 +110,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         yoyo: true,
       });
 
-      // 2. Secondary gradient — slower, different phase (Layer 2)
+      // 2. Secondary gradient - slower, different phase (Layer 2)
       gsap.to(bgGradient2Ref.current, {
         scale: 1.18,
         duration: 18,
@@ -119,7 +119,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         yoyo: true,
       });
 
-      // 3. Animated grid — slow vertical drift + opacity breathing
+      // 3. Animated grid - slow vertical drift + opacity breathing
       gsap.to(gridRef.current, {
         backgroundPositionY: "80px",
         duration: 22,
@@ -134,7 +134,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         yoyo: true,
       });
 
-      // 4. Animated grain — very slow continuous shift
+      // 4. Animated grain - very slow continuous shift
       gsap.to(grainRef.current, {
         backgroundPositionX: "128px",
         backgroundPositionY: "128px",
@@ -143,7 +143,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         repeat: -1,
       });
 
-      // 5. Ambient volumetric light — slow L→R sweep (showroom lighting)
+      // 5. Ambient volumetric light - slow L→R sweep (showroom lighting)
       gsap.fromTo(
         ambientLightRef.current,
         { xPercent: -40 },
@@ -163,7 +163,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         yoyo: true,
       });
 
-      // 6. Floating particles — barely perceptible
+      // 6. Floating particles - barely perceptible
       particles.forEach((p, i) => {
         gsap.to(p, {
           opacity: 0.015 + Math.random() * 0.025,
@@ -188,7 +188,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         });
       });
 
-      // 7. Breathing counter glow — continuous 0.8 → 1.0 → 0.8
+      // 7. Breathing counter glow - continuous 0.8 → 1.0 → 0.8
       gsap.to(counterGlowRef.current, {
         scale: 1.0,
         opacity: 0.07,
@@ -301,7 +301,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             0.1,
           );
 
-          // 3. Sweep line + glow — final pass
+          // 3. Sweep line + glow - final pass
           exitTl.set(sweepLineRef.current, { left: "-4px", opacity: 1 }, 0.35);
           exitTl.set(
             sweepGlowRef.current,
@@ -376,7 +376,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         0,
       );
 
-      // 2. SVG Border Drawing — Top → Right → Bottom → Left
+      // 2. SVG Border Drawing - Top → Right → Bottom → Left
       if (borderPathRef.current) {
         const path = borderPathRef.current;
         const length = path.getTotalLength();
@@ -396,7 +396,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         );
       }
 
-      // 3. Corner Accents — draw + glow + elastic settle
+      // 3. Corner Accents - draw + glow + elastic settle
       const corners = [
         cornerTLRef.current,
         cornerTRRef.current,
@@ -449,7 +449,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         0.4,
       );
 
-      // 5. Typography Reveal — blur + opacity + Y + rotation + settle
+      // 5. Typography Reveal - blur + opacity + Y + rotation + settle
       tl.to(
         topChars,
         {
@@ -478,7 +478,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         0.9,
       );
 
-      // 6. Content fade in — blur + opacity + Y
+      // 6. Content fade in - blur + opacity + Y
       const fadeEls = [
         counterRef.current,
         counterGlowRef.current,
@@ -687,7 +687,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     );
 
     /* ═══════════════════════════════════════════════════ *
-     *  CURSOR LIGHT — Smooth lerp follow                   *
+     *  CURSOR LIGHT - Smooth lerp follow                   *
      * ═══════════════════════════════════════════════════ */
     const cursorX = gsap.quickTo(cursorGlowRef.current, "x", {
       duration: 1.2,
@@ -965,7 +965,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           ref={contentStackRef}
           className="relative z-10 flex flex-col items-center px-6 will-change-transform"
         >
-          {/* Top label — Split Text */}
+          {/* Top label - Split Text */}
           <div
             ref={topLabelRef}
             className="mb-10 overflow-hidden text-[8px] font-medium uppercase tracking-[0.35em] text-muted-foreground/30 sm:mb-14 sm:text-[9px] sm:tracking-[0.45em]"
@@ -989,7 +989,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             ))}
           </div>
 
-          {/* Sub label — Split Text */}
+          {/* Sub label - Split Text */}
           <div
             ref={subLabelRef}
             className="mb-8 overflow-hidden text-[7px] font-light uppercase tracking-[0.5em] text-muted-foreground/15 sm:mb-10 sm:text-[8px]"
@@ -1090,7 +1090,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
                 willChange: "opacity, transform, filter",
               }}
             >
-              {/* Fill — animated moving gradient */}
+              {/* Fill - animated moving gradient */}
               <div
                 ref={progressFillRef}
                 className="absolute inset-y-0 left-0"

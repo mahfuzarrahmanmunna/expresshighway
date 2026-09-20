@@ -11,11 +11,13 @@ import GalleryTeaser from "./components/GalleryTeaser/GalleryTeaser";
 import EndorsementBar from "./components/EndorsementBar/EndorsementBar";
 import Affiliations from "./components/Affiliations/Affiliations";
 import ContactTrust from "./components/ContactTrust/ContactTrust";
+import HighwayHospitality from "./components/HighwayHospitality/HighwayHospitality";
 
 export default function Home() {
   return (
     <>
       <Hero />
+      <HighwayHospitality/>
       <Amenities/>
       <AboutLocation/>
       <Ventures/>

@@ -121,7 +121,7 @@ export default function PropertyCollection() {
           });
 
           /* ═══════════════════════════════════════════════
-             21. SECTION TRANSITION — Camera Approach
+             21. SECTION TRANSITION - Camera Approach
              Slow zoom-in as section enters viewport
           ═══════════════════════════════════════════════ */
           gsap.fromTo(
@@ -142,7 +142,7 @@ export default function PropertyCollection() {
 
           /* ═══════════════════════════════════════════════
              5. CINEMATIC CARD ENTRANCE
-             Clip-path reveal — movie-scene style
+             Clip-path reveal - movie-scene style
           ═══════════════════════════════════════════════ */
           cards.forEach((card, i) => {
             gsap.fromTo(
@@ -211,15 +211,15 @@ export default function PropertyCollection() {
                 const absDist = Math.abs(dist);
                 const clamp = Math.min(absDist, 1.5);
 
-                /* Rule 7 — Depth of field blur */
+                /* Rule 7 - Depth of field blur */
                 const dofBlur = clamp > 0.6 ? (clamp - 0.6) * 5.5 : 0;
 
-                /* Rule 6 — Focus: scale, lift */
+                /* Rule 6 - Focus: scale, lift */
                 const focus = 1 - Math.min(clamp, 1);
                 const focusScale = 1 + focus * 0.05;
                 const focusY = focus * -14;
 
-                /* Rule 20 — Dynamic shadow */
+                /* Rule 20 - Dynamic shadow */
                 const shY = focus * 45;
                 const shBlur = focus * 70;
                 const shSpread = focus * -8;
@@ -232,7 +232,7 @@ export default function PropertyCollection() {
                   boxShadow: `0 ${shY}px ${shBlur}px ${shSpread}px rgba(0,0,0,${shAlpha})`,
                 });
 
-                /* Rule 4 — Image layer independent parallax */
+                /* Rule 4 - Image layer independent parallax */
                 if (imageLayers[i]) {
                   gsap.set(imageLayers[i], {
                     y: dist * -28,
@@ -242,14 +242,14 @@ export default function PropertyCollection() {
                   });
                 }
 
-                /* Rule 12 — Dynamic gradient (sunlight shift) */
+                /* Rule 12 - Dynamic gradient (sunlight shift) */
                 if (gradientOverlays[i]) {
                   gsap.set(gradientOverlays[i], {
                     opacity: 0.55 + clamp * 0.45,
                   });
                 }
 
-                /* Rule 13 — Caption independent proximity */
+                /* Rule 13 - Caption independent proximity */
                 if (captionLayers[i]) {
                   const capAlpha = Math.max(0, 1 - clamp * 1.6);
                   gsap.set(captionLayers[i], {
@@ -264,7 +264,7 @@ export default function PropertyCollection() {
 
           /* ═══════════════════════════════════════════════
              8. INFINITE AMBIENT MOTION
-             Breathing scale + translateY — image feels alive
+             Breathing scale + translateY - image feels alive
           ═══════════════════════════════════════════════ */
           imageLayers.forEach((layer, i) => {
             if (!layer) return;
@@ -299,7 +299,7 @@ export default function PropertyCollection() {
 
           /* ═══════════════════════════════════════════════
              11. MOVING LIGHT SWEEP
-             Slow horizontal light — showroom feel
+             Slow horizontal light - showroom feel
           ═══════════════════════════════════════════════ */
           lightSweeps.forEach((sweep, i) => {
             if (!sweep) return;
@@ -318,7 +318,7 @@ export default function PropertyCollection() {
 
           /* ═══════════════════════════════════════════════
              9. MOUSE PERSPECTIVE (Desktop)
-             Smooth rotateX/Y via quickTo — no snapping
+             Smooth rotateX/Y via quickTo - no snapping
           ═══════════════════════════════════════════════ */
           const quickSetters = innerLayers.map((inner) => {
             if (!inner) return null;
@@ -349,7 +349,7 @@ export default function PropertyCollection() {
                 quickSetters[i]!.rotY(nx * 4);
                 quickSetters[i]!.rotX(-ny * 3);
 
-                /* Rule 14 — Mouse light via CSS variable */
+                /* Rule 14 - Mouse light via CSS variable */
                 card.style.setProperty(
                   "--mouse-x",
                   `${e.clientX - rect.left}px`,
@@ -449,7 +449,7 @@ export default function PropertyCollection() {
 
           /* ═══════════════════════════════════════════════
              19. FLOATING BACKGROUND ELEMENTS
-             Grid · Lines · Ambient orb — independent speeds
+             Grid · Lines · Ambient orb - independent speeds
           ═══════════════════════════════════════════════ */
           if (bgGridRef.current) {
             gsap.to(bgGridRef.current, {

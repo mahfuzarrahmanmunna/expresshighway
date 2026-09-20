@@ -6,96 +6,64 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/* ── Facilities Data (with masonry sizing) ── */
+/* ── Facilities Data (Perfectly Calculated for 12-Col Grid) ── */
+/* 
+   Row 1: 8 cols (16/10 ratio) + 4 cols (4/5 ratio) = Perfect height match
+   Row 2: 4 cols (4/5 ratio) + 8 cols (16/10 ratio) = Perfect height match
+   Row 3: 4 x 3 cols (1/1 ratio) = Perfect height match
+*/
 const FACILITIES_GRID = [
   {
     name: "VVIP Lounge",
     tag: "Exclusive, luxury, comfort",
-    img: "https://images.unsplash.com/photo-1584132967334-10e02831ac14?q=80&w=1200&auto=format&fit=crop",
-    size: "md:col-span-2 md:row-span-2 aspect-square md:aspect-auto",
-    stack: true,
-  },
-  {
-    name: "Billiard Room",
-    tag: "Fun, skill, competition",
-    img: "/club/game.jpg",
-    size: "aspect-[3/4]",
-  },
-  {
-    name: "Card Room",
-    tag: "Play, strategy, enjoyment",
-    img: "/club/rooms.jpg",
-    size: "aspect-[3/4]",
+    img: "/images/lounge.jpg",
+    size: "col-span-2 md:col-span-8 aspect-[4/5] md:aspect-[16/10]",
   },
   {
     name: "Salon & Spa",
     tag: "Pamper yourself daily",
     img: "/club/salon.jpg",
-    size: "md:col-span-2 aspect-[16/9]",
+    size: "col-span-1 md:col-span-4 aspect-[4/5]",
   },
   {
-    name: "Gym",
-    tag: "Strength, fitness, wellness",
-    img: "/club/gym.jpg",
-    size: "aspect-[3/4]",
+    name: "Fine Dining",
+    tag: "Fresh, flavorful, refreshing",
+    img: "/club/resturant.png",
+    size: "col-span-1 md:col-span-4 aspect-[4/5]",
+  },
+  {
+    name: "Billiard Room",
+    tag: "Fun, skill, competition",
+    img: "/club/game.jpg",
+    size: "col-span-2 md:col-span-8 aspect-[4/5] md:aspect-[16/10]",
   },
   {
     name: "Swimming Pool",
     tag: "Relax, refresh, rejuvenate",
     img: "/club/pool.webp",
-    size: "aspect-[3/4]",
+    size: "col-span-1 md:col-span-3 aspect-square",
   },
   {
     name: "Premium Accommodation",
     tag: "Exclusive stays for members",
     img: "/club/lounge.png",
-    size: "md:col-span-2 aspect-[16/9]",
+    size: "col-span-1 md:col-span-3 aspect-square",
   },
   {
     name: "Juice & Drinks Bar",
     tag: "Fresh, flavorful, refreshing",
     img: "/club/bar.jpg",
-    size: "aspect-[3/4]",
+    size: "col-span-1 md:col-span-3 aspect-square",
   },
   {
     name: "Prayer Room",
     tag: "Peaceful, serene, sacred",
     img: "/images/prayer.jpg",
-    size: "aspect-[3/4]",
-  },
-  {
-    name: "CRM Banking Booth",
-    tag: "Convenient, accessible, 24/7",
-    img: "/club/crm.webp",
-    size: "md:col-span-2 aspect-[16/9]",
-  },
-  {
-    name: "EV Car Charging",
-    tag: "Fast, convenient",
-    img: "/images/evcharging.avif",
-    size: "aspect-[3/4]",
-  },
-  {
-    name: "Automatic Car Wash",
-    tag: "Quick, efficient",
-    img: "/images/carwash.avif",
-    size: "aspect-[3/4]",
-  },
-  {
-    name: "Towing Service",
-    tag: "Reliable, fast, safe",
-    img: "/club/twine.webp",
-    size: "aspect-[3/4]",
-  },
-  {
-    name: "Sampan Mart",
-    tag: "Fulfil your daily needs, 24/7",
-    img: "/club/mart.jpg",
-    size: "aspect-[3/4]",
+    size: "col-span-1 md:col-span-3 aspect-square",
   },
 ];
 
@@ -179,8 +147,8 @@ function CustomCursorAndGrain() {
         const cursorText = interactive.getAttribute("data-cursor");
         gsap.to(ring, {
           scale: 3,
-          borderColor: "rgba(0, 125, 197, 0.5)",
-          backgroundColor: "rgba(0, 125, 197, 0.05)",
+          borderColor: "rgba(0, 125, 198, 0.5)",
+          backgroundColor: "rgba(0, 125, 198, 0.05)",
         });
         if (cursorText) {
           ringLabel.textContent = cursorText;
@@ -458,7 +426,7 @@ function ClubHero() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. EDITORIAL FACILITIES (Masonry + Varied Clip-Paths + Stacking)
+   3. EDITORIAL FACILITIES (Architectural 12-Col Grid)
 ═══════════════════════════════════════════════════════════════ */
 function FacilitiesGrid() {
   const ref = useRef<HTMLDivElement>(null);
@@ -481,37 +449,28 @@ function FacilitiesGrid() {
       }
 
       const cards = gsap.utils.toArray<HTMLElement>(".fac-card");
-      const clipPaths = [
-        "inset(0 100% 0 0)", // Left to Right
-        "inset(100% 0 0 0)", // Top to Bottom
-        "inset(0 0 0 100%)", // Right to Left
-        "inset(0 0 100% 0)", // Bottom to Top
-      ];
-
-      cards.forEach((card, i) => {
+      cards.forEach((card) => {
         gsap.fromTo(
           card,
-          { clipPath: clipPaths[i % 4], opacity: 0 },
+          { clipPath: "inset(100% 0% 0% 0%)" },
           {
             clipPath: "inset(0% 0% 0% 0%)",
-            opacity: 1,
             duration: 1.5,
             ease: "power4.out",
-            scrollTrigger: { trigger: card, start: "top 85%" },
-          },
+            scrollTrigger: { trigger: card, start: "top 90%" },
+          }
         );
 
-        // Image Parallax inside container
-        const img = card.querySelector(".fac-img");
-        if (img) {
-          gsap.to(img, {
+        const imgWrap = card.querySelector(".fac-img-wrap");
+        if (imgWrap) {
+          gsap.to(imgWrap, {
             yPercent: -15,
             ease: "none",
             scrollTrigger: {
               trigger: card,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1,
+              scrub: 1.5,
             },
           });
         }
@@ -523,13 +482,13 @@ function FacilitiesGrid() {
   return (
     <section
       ref={ref}
-      className="bg-[#F7F6F2] text-black py-32 md:py-48 overflow-hidden"
+      className="bg-[#F7F6F2] text-[#0c0b0b] py-32 md:py-48 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-20">
           <div>
             <span className="block text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6">
-              01 — Premium Amenities
+              01 - Premium Amenities
             </span>
             <h2 className="fac-head font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-medium leading-[1.05]">
               The Members&apos;
@@ -544,53 +503,49 @@ function FacilitiesGrid() {
           </p>
         </div>
 
-        {/* Masonry Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[150px] md:auto-rows-[200px] gap-4">
+        {/* Perfect 12-Col Architectural Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-6 md:gap-8">
           {FACILITIES_GRID.map((item, i) => (
             <div
               key={i}
-              className={`fac-card group relative ${item.size} bg-black overflow-hidden cursor-pointer`}
-              data-cursor="VIEW"
+              className={`fac-card group relative ${item.size} overflow-hidden cursor-pointer border border-[#0c0b0b]/10 hover:border-[#0c0b0b]/30 transition-colors duration-700`}
             >
-              {/* Image Stacking for VVIP */}
-              {item.stack && (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] z-20 border border-white/20 pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[30px] group-hover:rotate-3">
-                  <Image
-                    src={item.img}
-                    alt="Secondary"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-
-              <div className="fac-img absolute inset-0 w-full h-[120%]">
+              {/* Parallax Image Wrapper */}
+              <div className="fac-img-wrap absolute inset-0 top-[-10%] h-[120%] w-full z-0 overflow-hidden">
                 <Image
                   src={item.img}
                   alt={item.name}
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  quality={80}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                  quality={90}
                 />
               </div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/50"></div>
+              {/* Refined Bottom Gradient for Permanent Readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-[1] pointer-events-none" />
 
-              {/* Editorial Number */}
-              <span className="absolute top-4 left-4 font-[family-name:var(--font-playfair)] text-[100px] leading-none text-white/[0.08] pointer-events-none transition-all duration-500 group-hover:text-white/20 group-hover:-translate-y-2">
-                0{i + 1}
-              </span>
-
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-white">
-                <div className="overflow-hidden mb-2">
-                  <span className="block text-[9px] uppercase tracking-[0.3em] text-primary translate-y-full opacity-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100">
-                    {item.tag}
+              {/* Content Layer (Always Visible) */}
+              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">
+                
+                {/* Top Row: Index & Arrow */}
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-white/70 transition-colors duration-500 group-hover:text-primary drop-shadow-md">
+                    0{i + 1}
                   </span>
+                  <ArrowUpRight className="h-5 w-5 text-white/60 transition-all duration-500 group-hover:text-primary group-hover:rotate-45" />
                 </div>
-                <h3 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl font-medium translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  {item.name}
-                </h3>
-                <div className="h-[1px] w-0 bg-primary mt-3 transition-all duration-700 group-hover:w-12"></div>
+
+                {/* Bottom Content */}
+                <div className="relative transform translate-y-2 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                  <p className="text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-white/80 mb-3 font-medium drop-shadow-md">
+                    {item.tag}
+                  </p>
+                  <h3 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl lg:text-3xl text-white font-medium leading-tight tracking-tight drop-shadow-[0_2px_15px_rgba(0,0,0,0.7)]">
+                    {item.name}
+                  </h3>
+                  <div className="h-[1px] w-12 bg-primary/80 mt-4 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-20" />
+                </div>
               </div>
             </div>
           ))}
@@ -781,7 +736,7 @@ function LoungeJourney() {
         <div className="mb-16 flex items-end justify-between px-16">
           <div>
             <span className="block text-[10px] uppercase tracking-[0.4em] text-primary/80 font-medium mb-6">
-              02 — The Experience
+              02 - The Experience
             </span>
             <h2 className="font-[family-name:var(--font-playfair)] text-5xl font-medium">
               A Standing Reservation.

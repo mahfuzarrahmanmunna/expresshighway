@@ -396,7 +396,7 @@ function Hero() {
           </h2>
           <p className="hero-sub mt-10 text-lg font-light text-white/60 max-w-xl leading-relaxed">
             Membership to Express Highway Inn Club & Lounge unlocks every
-            facility at Sampan Highway Inn — for you, your family and your
+            facility at Sampan Highway Inn - for you, your family and your
             business travel, every time you&apos;re on the road.
           </p>
 
@@ -660,7 +660,7 @@ function MemberTimeline() {
         <div className="mb-16 flex items-end justify-between px-16">
           <div>
             <span className="block text-[10px] uppercase tracking-[0.4em] text-primary/80 font-medium mb-6">
-              05 — Member Experience
+              05 - Member Experience
             </span>
             <h2 className="font-[family-name:var(--font-playfair)] text-5xl font-medium">
               Your Day. Your Way.
@@ -843,7 +843,7 @@ function HowItWorks() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mb-20 text-center">
           <span className="block text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6">
-            06 — The Process
+            06 - The Process
           </span>
           <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-medium leading-[1.05]">
             Membership, Made Simple.
@@ -915,7 +915,7 @@ function TrustSection() {
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
         <span className="block text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6">
-          07 — Trust & Ecosystem
+          07 - Trust & Ecosystem
         </span>
         <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-medium leading-[1.05] mb-12">
           Backed by <span className="text-primary italic">Sampan Group.</span>
@@ -975,7 +975,7 @@ function FAQ() {
       <div className="mx-auto max-w-4xl px-6 lg:px-8">
         <div className="mb-20 text-center">
           <span className="block text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6">
-            08 — Information
+            08 - Information
           </span>
           <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-medium leading-[1.05]">
             Everything you need to know.
@@ -1154,7 +1154,7 @@ function EnquiryForm() {
         {/* Left Side */}
         <div className="flex flex-col justify-center">
           <span className="form-anim block text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-8">
-            09 — Start Your Membership
+            09 - Start Your Membership
           </span>
           <h2 className="form-head font-[family-name:var(--font-playfair)] text-[clamp(2.5rem,6vw,5rem)] font-medium leading-[1.05] mb-10">
             <div>Begin the</div>
