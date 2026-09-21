@@ -125,7 +125,7 @@ const jsonLd = {
   url: baseUrl,
   logo: `${baseUrl}/expresslogo.jpg`,
   image: `${baseUrl}/expresslogo.jpg`,
-  telephone: "+8801906896326",
+  telephone: "+8801906896327",
   email: "info@sampangroup.com.bd",
   priceRange: "$$$",
   address: {

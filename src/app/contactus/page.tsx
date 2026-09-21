@@ -15,6 +15,7 @@ import {
   Clock,
   MessageCircle,
 } from "lucide-react";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -230,8 +231,8 @@ function ContactGrid() {
   const ref = useRef<HTMLDivElement>(null);
   
   const contacts = [
-    { num: "01", label: "Call Us", value: "+880 1906-896326", href: "tel:+8801906896326", Icon: Phone },
-    { num: "02", label: "WhatsApp", value: "+880 1906-896326", href: "https://wa.me/8801906896326", Icon: MessageCircle },
+    { num: "01", label: "Call Us", value: "+880 1906-896327", href: "tel:+8801906896327", Icon: Phone },
+    { num: "02", label: "WhatsApp", value: "+880 1906-896327", href: "https://wa.me/8801906896327", Icon: MessageCircle },
     { num: "03", label: "Email Us", value: "info@expresshighwayinn.com", href: "mailto:info@expresshighwayinn.com", Icon: Mail },
     { num: "04", label: "Office Hours", value: "10:00 AM - 06:00 PM", href: "#", Icon: Clock },
   ];
@@ -350,7 +351,7 @@ function EnquiryForm() {
           <div className="flex flex-col gap-8">
             <div className="form-anim">
               <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Phone</p>
-              <a href="tel:+8801906896326" className="text-lg font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">+880 1906-896326</a>
+              <a href="tel:+8801906896327" className="text-lg font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">+880 1906-896327</a>
             </div>
             <div className="form-anim">
               <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-2">Email</p>
@@ -427,16 +428,17 @@ function EnquiryForm() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   5. SOCIAL ROW
+   5. SOCIAL ROW (Brand Colors & Icons)
 ═══════════════════════════════════════════════════════════════ */
 function SocialRow() {
   const ref = useRef<HTMLDivElement>(null);
+  
   const socials = [
-    { name: "Facebook", group: "Express Highway Inn", href: "https://www.facebook.com/expresshighwayinn/" },
-    { name: "Facebook", group: "Sampan Group", href: "https://www.facebook.com/sampangroup/" },
-    { name: "Instagram", group: "Sampan Group", href: "#" },
-    { name: "LinkedIn", group: "Sampan Group", href: "https://www.linkedin.com/company/sampangroup/" },
-    { name: "YouTube", group: "Sampan Group", href: "#" },
+    { name: "Facebook", group: "Express Highway Inn", href: "https://www.facebook.com/expresshighwayinn/", Icon: FaFacebook, color: "#1877F2" },
+    { name: "Facebook", group: "Sampan Group", href: "https://www.facebook.com/sampangroup/", Icon: FaFacebook, color: "#1877F2" },
+    { name: "Instagram", group: "Sampan Group", href: "#", Icon: FaInstagram, color: "#E4405F" }, // Instagram pink/red representative color
+    { name: "LinkedIn", group: "Sampan Group", href: "https://www.linkedin.com/company/sampangroup/", Icon: FaLinkedin, color: "#0A66C2" },
+    { name: "YouTube", group: "Sampan Group", href: "#", Icon: FaYoutube, color: "#FF0000" },
   ];
 
   useGSAP(() => {
@@ -472,16 +474,25 @@ function SocialRow() {
               className="social-row group relative p-8 border-r border-b border-[#0c0b0b]/10 hover:bg-white transition-colors duration-500 overflow-hidden flex flex-col justify-between min-h-[160px]"
               data-cursor="OPEN"
             >
-              {/* Hover Accent Line (Top) */}
-              <span className="absolute top-0 left-0 right-0 h-[2px] bg-[#007DC6] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"></span>
+              {/* Hover Accent Line (Top) - Now uses Brand Color */}
+              <span 
+                className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{ backgroundColor: s.color }}
+              ></span>
               
               <div className="flex items-start justify-between">
                 <span className="text-[9px] tracking-[0.3em] text-[#0c0b0b]/30 uppercase">{s.group}</span>
-                <ArrowUpRight className="h-4 w-4 text-[#0c0b0b]/30 group-hover:text-[#007DC6] group-hover:rotate-45 transition-all duration-500" />
+                {/* Social Icon with Brand Color */}
+                <s.Icon 
+                  className="h-5 w-5 transition-all duration-500 group-hover:scale-110 opacity-50 group-hover:opacity-100" 
+                  style={{ color: s.color }} 
+                  strokeWidth={1.5}
+                />
               </div>
               
-              <h4 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl font-light text-[#0c0b0b]/80 group-hover:text-[#0c0b0b] transition-colors duration-500">
+              <h4 className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl font-light text-[#0c0b0b]/80 group-hover:text-[#0c0b0b] transition-colors duration-500 flex items-center gap-2">
                 {s.name}
+                <ArrowUpRight className="h-4 w-4 text-[#0c0b0b]/30 group-hover:rotate-45 transition-all duration-500" style={{ color: s.color }} />
               </h4>
             </a>
           ))}

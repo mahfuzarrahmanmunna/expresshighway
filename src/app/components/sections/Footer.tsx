@@ -25,14 +25,14 @@ const LEGAL_LINKS = [
 ];
 
 const ECOSYSTEM_LINKS = [
-  { label: "Sampan Group", href: "https://sampangroup.com" },
+  { label: "Sampan Group", href: "https://sampangroup.com.bd" },
   { label: "London School Of Higher Studies", href: "https://cips.lshs.co.uk/" },
   { label: "Sampan Agro & Golf", href: "https://www.sampangroup.com.bd/our-divisions/hospitality-highway-travel/sampan-agro-golf-club-lounge" },
   { label: "Sampan Highway Inn", href: "https://www.sampangroup.com.bd/our-divisions/hospitality-highway-travel/sampan-highway-inn" },
 ];
 
 const CONTACT_ICONS = [
-  { Icon: Phone, label: "Phone", href: "tel:+8801906896326" },
+  { Icon: Phone, label: "Phone", href: "tel:+8801906896327" },
   { Icon: Mail, label: "Email", href: "mailto:info@sampangroup.com.bd" },
   { Icon: BsLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/sampangroup/" },
   { Icon: BsFacebook, label: "Facebook", href: "https://www.facebook.com/expresshighwayinn/" },
@@ -44,7 +44,7 @@ const CONTACT_ICONS = [
 function SectionHeading({ num, title }: { num: string; title: string }) {
   return (
     <h4 className="text-[11px] sm:text-[12px] font-medium tracking-[0.28em] uppercase text-white/50 pb-4 border-b border-white/10 mb-6 flex items-center gap-2">
-      <span className="text-primary/70">{num}</span>
+      {/* <span className="text-primary/70">{num}</span> */}
       {title}
     </h4>
   );
@@ -244,10 +244,10 @@ export default function Footer() {
                   Phone
                 </p>
                 <a 
-                  href="tel:+8801906896326" 
+                  href="tel:+8801906896327" 
                   className="text-[14px] text-white/60 hover:text-white transition-colors duration-300 font-light block"
                 >
-                  +880 1906-896326
+                  +880 1906-896327
                 </a>
               </div>
               <div>

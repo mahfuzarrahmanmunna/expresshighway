@@ -40,7 +40,7 @@ const TIMELINE_MILESTONES = [
     year: "2022",
     title: "Sampan White House",
     desc: "Broadening our hospitality portfolio with premium accommodations.",
-    img: "/about/Sampan Highway Motel.jpg",
+    img: "/images/highwayinn.jpg",
   },
   {
     year: "2026",

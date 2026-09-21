@@ -1,200 +1,113 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
-
 export default function ClubLoungeTeaser() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement | null>(null);
 
-  useGSAP(
-    () => {
-      /* Content Stagger Reveal */
-      gsap.from(".club-anim", {
-        opacity: 0,
-        y: 40,
-        duration: 1.2,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".club-content",
-          start: "top 80%",
-        },
-      });
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
 
-      /* Image Collage Reveal & Parallax */
-      gsap.from(".club-img-main", {
-        opacity: 0,
-        scale: 1.15,
-        duration: 1.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".club-visuals",
-          start: "top 85%",
-        },
-      });
+    const elements = node.querySelectorAll(".reveal-up, .reveal-scale, .reveal-right");
+    if (!elements.length) return;
 
-      gsap.from(".club-img-sub", {
-        opacity: 0,
-        y: 60,
-        duration: 1.5,
-        ease: "power3.out",
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: ".club-visuals",
-          start: "top 85%",
-        },
-      });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
 
-      /* Subtle Parallax on Scroll */
-      gsap.to(".club-img-main", {
-        yPercent: -10,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-
-      gsap.to(".club-img-sub", {
-        yPercent: 15,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-
-      /* Rotating Seal */
-      gsap.to(".club-seal", {
-        rotation: 360,
-        duration: 20,
-        ease: "none",
-        repeat: -1,
-      });
-    },
-    { scope: containerRef },
-  );
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
       id="club-lounge"
       ref={containerRef}
-      className="relative w-full bg-white py-24 md:py-32 overflow-hidden"
+      className="relative w-full overflow-hidden bg-white py-24 md:py-32"
     >
-      {/* Ambient Background Glow */}
-      <div className="pointer-events-none absolute bottom-0 left-0 w-[800px] h-[800px] bg-primary/[0.04] blur-[150px] rounded-full" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-[800px] w-[800px] rounded-full bg-primary/[0.04] blur-[150px]" />
 
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* ─── Visuals Collage (Left) ─── */}
-          <div className="club-visuals relative w-full h-[600px] md:h-[700px] hidden md:block">
-            {/* Main Background Image */}
-            <div className="club-img-main absolute top-0 left-0 w-[75%] h-[80%] overflow-hidden">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+          <div className="relative hidden h-[600px] w-full md:block md:h-[700px]">
+            <div className="reveal-scale absolute left-0 top-0 h-[80%] w-[75%] overflow-hidden ">
               <Image
-                src="/images/clubandlounge.jpg"
+                src="/images/elegant-dining-room-interior-with-rich-decor.jpg"
                 alt="VVIP Lounge Interior"
                 fill
                 sizes="50vw"
-                className="object-scale-cover"
-                quality={90}
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                quality={85}
               />
-              {/* Soft White Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent" />
             </div>
 
-            {/* Overlapping Sub Image (Spa/Pool) */}
-            <div className="club-img-sub absolute bottom-0 right-0 w-[55%] h-[50%] overflow-hidden border border-[#0c0b0b]/10 shadow-2xl">
+            <div className="reveal-right absolute bottom-0 right-0 h-[50%] w-[55%] overflow-hidden border border-[#0c0b0b]/10 shadow-2xl">
               <Image
-                src="/images/clubandlounge.jpg"
+                src="/images/dining-table-with-chairs-tableware.jpg"
                 alt="Club Spa and Pool"
                 fill
                 sizes="30vw"
-                className="object-cover"
-                quality={90}
+                className="object-cover transition-transform duration-700 ease-out hover:scale-[1.04]"
+                quality={80}
               />
-              {/* Subtle White Gradient for Depth */}
               <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
             </div>
 
-            {/* Architectural Lines */}
-            <div className="absolute top-[5%] right-[20%] w-px h-[90%] bg-[#0c0b0b]/10 pointer-events-none" />
-            <div className="absolute top-[80%] left-0 w-[75%] h-px bg-[#0c0b0b]/10 pointer-events-none" />
+            <div className="pointer-events-none absolute right-[20%] top-[5%] h-[90%] w-px bg-[#0c0b0b]/10" />
+            <div className="pointer-events-none absolute left-0 top-[80%] h-px w-[75%] bg-[#0c0b0b]/10" />
 
-            {/* Floating Rotating Seal */}
-            <div className="absolute top-[5%] right-[15%] w-24 h-24 md:w-28 md:h-28 z-10">
-              <div className="club-seal relative w-full h-full flex items-center justify-center">
-                {/* Circular Text SVG */}
-                <svg
-                  viewBox="0 0 100 100"
-                  className="absolute inset-0 w-full h-full text-primary"
-                >
-                  <defs>
-                    <path
-                      id="circle"
-                      d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
-                    />
-                  </defs>
-                  <text className="text-[8px] uppercase tracking-[0.2em] fill-current">
-                    <textPath href="#circle">
-                      Members Only · Exclusive Access ·{" "}
-                    </textPath>
-                  </text>
-                </svg>
-                {/* Center Icon */}
-                <div className="w-10 h-10 rounded-full border border-[#0c0b0b]/10 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                  <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_2px_rgba(0,125,197,0.6)]" />
-                </div>
+            <div className="absolute right-[15%] top-[5%] z-10 h-24 w-24 md:h-28 md:w-28">
+              <div className="flex h-full w-full items-center justify-center rounded-full border border-[#0c0b0b]/10 bg-white/60 backdrop-blur-sm">
+                <span className="h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_10px_2px_rgba(0,125,197,0.6)]" />
               </div>
             </div>
           </div>
 
-          {/* ─── Content (Right) ─── */}
           <div className="club-content flex flex-col">
-            <span className="club-anim text-[10px] uppercase tracking-[0.4em] text-primary font-medium mb-6 block">
+            <span className="reveal-up mb-6 block text-[10px] font-medium uppercase tracking-[0.4em] text-primary">
               The Club & Lounge
             </span>
 
-            <h2 className="club-anim font-[family-name:var(--font-playfair)] text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.05] text-[#0c0b0b] mb-10">
+            <h2 className="reveal-up mb-10 font-[family-name:var(--font-playfair)] text-4xl font-medium leading-[1.05] text-[#0c0b0b] md:text-5xl lg:text-6xl">
               Express Highway Inn
               <br />
               Club & Lounge
             </h2>
 
-            <div className="club-anim w-16 h-px bg-primary/40 mb-10" />
+            <div className="reveal-up mb-10 h-px w-16 bg-primary/40" />
 
-            <p className="club-anim text-sm md:text-base font-light text-[#0c0b0b]/60 leading-relaxed max-w-xl mb-12">
+            <p className="reveal-up max-w-xl text-sm font-light leading-relaxed text-[#0c0b0b]/60 md:text-base">
               A members-only retreat inside Sampan Highway Inn. The VVIP Lounge,
-              billiards and card rooms, spa, gym, pool, and more - reserved for
+              billiards and card rooms, spa, gym, pool, and more — reserved for
               those who hold the card.
             </p>
 
-            {/* Minimal CTA */}
-            <div className="club-anim">
+            <div className="reveal-up mt-12">
               <a
                 href="/club-and-membership"
-                className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-[#0c0b0b]/80 hover:text-primary transition-colors duration-300"
+                className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-[#0c0b0b]/80 transition-colors duration-300 hover:text-primary"
               >
                 View Membership Benefits
-                <span className="relative w-12 h-px bg-[#0c0b0b]/40 group-hover:bg-primary transition-all duration-500 group-hover:w-20">
-                  <ArrowRight className="absolute right-0 -top-[5px] h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0" />
+                <span className="relative h-px w-12 bg-[#0c0b0b]/40 transition-all duration-500 group-hover:w-20 group-hover:bg-primary">
+                  <ArrowRight className="absolute -top-[5px] right-0 h-3 w-3 translate-x-2 text-primary opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
                 </span>
               </a>
             </div>
           </div>
         </div>
 
-        {/* Mobile Visual (hidden on desktop) */}
-        <div className="md:hidden mt-12 relative w-full h-[400px] overflow-hidden border border-[#0c0b0b]/10">
+        <div className="relative mt-12 h-[400px] overflow-hidden border border-[#0c0b0b]/10 md:hidden">
           <Image
             src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=800&auto=format&fit=crop"
             alt="VVIP Lounge"
@@ -203,7 +116,6 @@ export default function ClubLoungeTeaser() {
             className="object-cover"
             quality={80}
           />
-          {/* Light gradient overlay for mobile */}
           <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent" />
         </div>
       </div>

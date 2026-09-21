@@ -11,10 +11,10 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ── Gallery Data ── */
 const GALLERY_IMAGES = [
+  { src: "/images/highwayinn.jpg", title: "Sampan Highway Inn", desc: "Whether you need a quick refreshing bite, authentic Bengali sweets, artisanal pickles, or a quiet restful suite, our transit hub provides complete comfort and hospitality under one roof." },
   { src: "/club/room.jpg", title: "VVIP Rest Suites", desc: "Acoustically engineered suites offering plush king-size beds, private en-suite rain showers, smart IPTV, and climate control for quiet respite from highway rumble." },
-  { src: "/highwayinn/fast-food.jpeg", title: "Sampan Fast Food", desc: "Serving up delicious, piping-hot burgers, crispy fried chicken, wraps, and quick savory bites prepared freshly to keep you energized on your journey." },
   { src: "/highwayinn/vvip-lounge.jpeg", title: "Executive Lounge", desc: "Lavish seating with quiet ambiance, complimentary refreshments, and premium amenities for executives and families seeking an upscale rest stop." },
-  { src: "/highwayinn/IMG_20250916_065448 (1).jpg", title: "Sampan Juice Bar", desc: "Quench your thirst with freshly pressed, handcrafted juices, energizing seasonal fruit blends, smoothies, and detox drinks with zero artificial additives." },
+  { src: "/highwayinn/fast-food.jpeg", title: "Sampan Fast Food", desc: "Serving up delicious, piping-hot burgers, crispy fried chicken, wraps, and quick savory bites prepared freshly to keep you energized on your journey." },
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -63,7 +63,7 @@ function HighwayHospitality() {
         duration: 1.5,
         stagger: 0.2,
         ease: "expo.out",
-        scrollTrigger: { trigger: ".gallery-wrap", start: "top 80%" },
+        scrollTrigger: { trigger: ".gallery-wrap", start: "top 85%" },
       }
     );
 
@@ -73,28 +73,28 @@ function HighwayHospitality() {
   }, { scope: ref });
 
   return (
-    <section ref={ref} className="relative bg-[#F7F6F2] text-[#0c0b0b] py-40 md:py-56 overflow-hidden border-t border-[#0c0b0b]/10">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section ref={ref} className="relative bg-[#F7F6F2] text-[#0c0b0b] py-24 md:py-40 lg:py-56 overflow-hidden border-t border-[#0c0b0b]/10">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         
         {/* Top Editorial Layout: Text Left, CTA Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20 md:mb-28 items-end">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 mb-16 md:mb-20 lg:mb-28 items-end">
           <div className="lg:col-span-8 flex flex-col">
-            <span className="hospitality-eyebrow block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-8">
+            <span className="hospitality-eyebrow block text-[10px] uppercase tracking-[0.4em] text-[#007DC6] font-medium mb-6 md:mb-8">
               Highway Hospitality
             </span>
-            <h2 className="hospitality-head font-[family-name:var(--font-playfair)] text-4xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-[-0.02em] text-[#0c0b0b]">
+            <h2 className="hospitality-head font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-light leading-[1.1] md:leading-[1.05] tracking-[-0.02em] text-[#0c0b0b]">
               Where Every Journey Deserves a Better Stop.
             </h2>
           </div>
 
-          <div className="lg:col-span-4 flex flex-col items-start gap-8">
-            <p className="hospitality-sub text-lg md:text-xl font-light text-[#0c0b0b]/50 max-w-md leading-relaxed tracking-[0.01em]">
+          <div className="lg:col-span-4 flex flex-col items-start gap-6 md:gap-8">
+            <p className="hospitality-sub text-base md:text-lg lg:text-xl font-light text-[#0c0b0b]/50 max-w-md leading-relaxed tracking-[0.01em]">
               Discover <span className="text-[#0c0b0b] font-normal">Sampan Highway Inn</span> - a 24/7 premium transit destination at KM 103, bringing together refined dining, restful suites, executive comfort, and seamless highway access.
             </p>
             <a
               href="https://www.sampangroup.com.bd/our-divisions/hospitality-highway-travel/sampan-highway-inn"
               target="_blank"
-              className="hospitality-cta group relative inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#0c0b0b] text-white text-[10px] uppercase tracking-[0.35em] font-medium overflow-hidden hover:bg-[#007DC6] transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="hospitality-cta group relative inline-flex items-center justify-center gap-3 px-8 py-4 md:px-10 md:py-5 bg-[#0c0b0b] text-white text-[10px] uppercase tracking-[0.35em] font-medium overflow-hidden hover:bg-[#007DC6] transition-colors duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
               data-cursor="DISCOVER"
             >
               <span className="relative z-10">Discover Highway Inn</span>
@@ -103,12 +103,13 @@ function HighwayHospitality() {
           </div>
         </div>
 
-        {/* Interactive Image Gallery */}
-        <div className="gallery-wrap relative w-full h-[60vh] md:h-[80vh] flex gap-2 md:gap-4">
+        {/* Interactive Image Gallery (Responsive) */}
+        {/* Mobile: Vertical Stack | Desktop: Horizontal Accordion */}
+        <div className="gallery-wrap relative w-full flex flex-col md:flex-row gap-4 md:gap-2 h-auto md:h-[60vh] lg:h-[80vh]">
           {GALLERY_IMAGES.map((img, i) => (
             <div
               key={i}
-              className="gallery-item group relative flex-1 overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:flex-[4] border border-[#0c0b0b]/10"
+              className="gallery-item group relative w-full h-[420px] md:h-full md:flex-1 overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:md:flex-[4] border border-[#0c0b0b]/10"
               data-cursor="VIEW"
             >
               <div className="relative w-full h-full">
@@ -128,11 +129,12 @@ function HighwayHospitality() {
               </div>
 
               {/* Content Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10 text-white transform transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-y-6 group-hover:translate-y-0">
+              {/* On mobile: always visible. On desktop: hidden by default, slides up on hover */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10 text-white transform transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-y-0 md:translate-y-6 md:group-hover:translate-y-0">
                 <h3 className="font-[family-name:var(--font-playfair)] text-2xl md:text-4xl font-light mb-2 leading-tight">
                   {img.title}
                 </h3>
-                <p className="text-sm text-white/0 group-hover:text-white/70 transition-all duration-500 max-h-0 group-hover:max-h-32 overflow-hidden">
+                <p className="text-sm text-white/70 md:text-white/0 md:max-h-0 md:group-hover:max-h-32 md:group-hover:text-white/70 max-h-32 overflow-hidden transition-all duration-500">
                   {img.desc}
                 </p>
               </div>
@@ -141,13 +143,13 @@ function HighwayHospitality() {
         </div>
 
         {/* KM 103 Marker Overlay Below Gallery */}
-        <div className="mt-12 flex items-center gap-6">
-          <div className="w-32 h-px bg-[#007DC6]/30"></div>
+        <div className="mt-10 md:mt-12 flex items-center gap-4 md:gap-6">
+          <div className="w-16 md:w-32 h-px bg-[#007DC6]/30"></div>
           <div>
             <span className="block text-[10px] uppercase tracking-[0.4em] text-[#0c0b0b]/40">Location Marker</span>
-            <span className="block text-2xl font-[family-name:var(--font-playfair)] text-[#007DC6] mt-1">KM 103</span>
+            <span className="block text-xl md:text-2xl font-[family-name:var(--font-playfair)] text-[#007DC6] mt-1">KM 103</span>
           </div>
-          <div className="flex-1 h-px bg-[#0c0b0b]/10 ml-6"></div>
+          <div className="flex-1 h-px bg-[#0c0b0b]/10 ml-4 md:ml-6"></div>
         </div>
 
       </div>

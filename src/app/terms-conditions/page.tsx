@@ -74,7 +74,7 @@ const TERMS_SECTIONS = [
     content: [
       "These Terms shall be governed by and construed in accordance with the laws of the People's Republic of Bangladesh. Any disputes arising out of or relating to these Terms shall be subject to the exclusive jurisdiction of the courts in Dhaka, Bangladesh.",
       "If you have any questions or concerns regarding these Terms & Conditions, please contact our legal department.",
-      "Express Highway Inn (Sampan Group)\nSampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229.\nEmail: legal@sampangroup.com.bd\nPhone: +880 1906-896326",
+      "Express Highway Inn (Sampan Group)\nSampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229.\nEmail: legal@sampangroup.com.bd\nPhone: +880 1906-896327",
     ],
   },
 ];

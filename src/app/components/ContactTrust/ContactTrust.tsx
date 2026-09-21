@@ -14,15 +14,15 @@ const CONTACT_METHODS = [
   {
     Icon: Phone,
     label: "Call Us",
-    value: "+880 1906-896326",
-    href: "tel:+8801906896326",
+    value: "+880 1906-896327",
+    href: "tel:+8801906896327",
     sub: "Mon-Sun: 10AM - 6PM",
   },
   {
     Icon: BsWhatsapp,
     label: "WhatsApp",
-    value: "+880 1906-896326",
-    href: "https://wa.me/8801906896326",
+    value: "+880 1906-896327",
+    href: "https://wa.me/8801906896327",
     sub: "Response within 5 mins",
   },
   {

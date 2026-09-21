@@ -18,8 +18,8 @@ const NAV_ITEMS = [
   { label: "Home", number: "01", href: "/" },
   { label: "About", number: "02", href: "/aboutus" },
   { label: "Club & Lounge", number: "03", href: "/club-and-lounge" },
+    { label: "Sampan Group", number: "05", href: "https://sampangroup.com.bd" },
   { label: "Contact", number: "04", href: "/contactus" },
-  { label: "Sampan Group", number: "05", href: "https://sampangroup.com.bd" },
 ];
 
 export default function GlassNavbar() {
@@ -196,9 +196,9 @@ export default function GlassNavbar() {
                   transition={{ duration: 0.3 }}
                 >
                   {/* Changed to light by default, darker on hover */}
-                  <span className="text-[10px] tracking-[0.15em] text-white/50 group-hover:text-white/20 transition-colors duration-300">
+                  {/* <span className="text-[10px] tracking-[0.15em] text-white/50 group-hover:text-white/20 transition-colors duration-300">
                     {item.number}
-                  </span>
+                  </span> */}
                   <span className="relative z-10 text-[13px] uppercase tracking-[0.18em] text-white group-hover:text-white/40 transition-all duration-300">
                     {item.label}
                   </span>
@@ -214,7 +214,7 @@ export default function GlassNavbar() {
 
             <div className="flex items-center gap-3">
               <div className="hidden lg:flex items-center gap-2 mr-2">
-                <motion.a href="tel:+8801906896326" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="tel:+8801906896327" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Phone size={13} strokeWidth={1.5} />
                 </motion.a>
                 <motion.a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
@@ -311,8 +311,8 @@ export default function GlassNavbar() {
                 <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
                   <Phone size={10} strokeWidth={1.5} /> Call us
                 </p>
-                <a href="tel:+8801906896326" className="text-[13px] text-white/60 hover:text-white transition-colors block">
-                  +880 1906-896326
+                <a href="tel:+8801906896327" className="text-[13px] text-white/60 hover:text-white transition-colors block">
+                  +880 1906-896327
                 </a>
               </div>
               <div>
@@ -335,7 +335,7 @@ export default function GlassNavbar() {
             </div>
 
             <div className="flex justify-center gap-6 mt-10 pt-8 border-t border-white/[0.04]">
-              <a href="tel:+8801906896326" className="text-white/50 hover:text-primary transition-colors"><Phone size={16} /></a>
+              <a href="tel:+8801906896327" className="text-white/50 hover:text-primary transition-colors"><Phone size={16} /></a>
               <a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-primary transition-colors"><FaLinkedinIn size={16} /></a>
               <a href="mailto:info@sampangroup.com.bd" className="text-white/50 hover:text-primary transition-colors"><Mail size={16} /></a>
               <a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-primary transition-colors"><FaFacebookF size={16} /></a>

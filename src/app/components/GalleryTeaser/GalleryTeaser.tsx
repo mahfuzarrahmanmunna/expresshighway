@@ -5,15 +5,26 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const GALLERY_IMAGES = [
-  { src: "/banner/banner1.jpg", size: "col-span-2 md:col-span-12 aspect-[16/9] md:aspect-[21/9]" },
-  { src: "/images/lounge.jpg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
+  { src: "/images/Rectangle-2.jpg", size: "col-span-2 md:col-span-12 aspect-[16/9] md:aspect-[21/9]" },
+  { src: "/images/clubandlounge.jpg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
   { src: "/club/salon.jpg", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
   { src: "/club/bar.jpg", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
-  { src: "/club/lounge.png", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
+  { src: "/images/condomenium.jpeg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
   { src: "/images/swimmingpool.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/club/gym.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/club/room.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/club/rooms.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
+  { src: "/images/WhatsApp Image 2025-11-02 at 5.51.44 PM.jpeg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
+  { src: "/images/WhatsApp_Image_2026-08-30_at_2.27.22_PM.jpg", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
+  { src: "/images/freepik__enhance__34463.png", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
+  { src: "/images/WhatsApp_Image_2026-08-30_at_2.27.22_PM.jpg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
+  { src: "/images/WhatsApp-Image-2025-06-25-at-6.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
+  { src: "/images/Express-Highway-Inn-New-Model-Design-4.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
+  { src: "/images/restaurant-hall-with-round-square-tables-some-chairs-plants (2).jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
+  { src: "/images/lighting.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
+
+
+
 ];
 
 export default function GalleryTeaser() {

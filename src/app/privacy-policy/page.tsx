@@ -73,7 +73,7 @@ const POLICY_SECTIONS = [
     title: "08. Contact Us",
     content: [
       "If you have any questions, concerns, or requests regarding this Privacy Policy or the handling of your personal data, please reach out to our Privacy Team.",
-      "Express Highway Inn (Sampan Group)\nSampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229.\nEmail: privacy@sampangroup.com.bd\nPhone: +880 1906-896326",
+      "Express Highway Inn (Sampan Group)\nSampan 21st Century, House-284, Block-B Road-1/A, Bashundhara, Dhaka-1229.\nEmail: privacy@sampangroup.com.bd\nPhone: +880 1906-896327",
     ],
   },
 ];

@@ -370,7 +370,7 @@ function LocationSection() {
 ═══════════════════════════════════════════════════════════════ */
 function ContactList() {
   const contacts = [
-    { num: "01", label: "Call Us", value: "+880 1906-896326", href: "tel:+8801906896326", Icon: Phone },
+    { num: "01", label: "Call Us", value: "+880 1906-896327", href: "tel:+8801906896327", Icon: Phone },
     { num: "02", label: "Email Us", value: "info@sampangroup.com.bd", href: "mailto:info@sampangroup.com.bd", Icon: Mail },
     { num: "03", label: "Visit Us", value: "Bashundhara, Dhaka", href: "#location", Icon: MapPin },
     { num: "04", label: "Office Hours", value: "10:00 AM - 06:00 PM", href: "#", Icon: Clock },
@@ -431,7 +431,7 @@ function SampanOffice() {
         <div className="border border-[#0c0b0b]/10 divide-y divide-[#0c0b0b]/10 bg-[#F7F6F2]">
           <div className="p-10 hover:bg-white transition-colors duration-500" data-cursor="CALL">
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 block mb-4">Phone</span>
-            <a href="tel:+8801906896326" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">+880 1906-896326</a>
+            <a href="tel:+8801906896327" className="text-xl font-[family-name:var(--font-playfair)] hover:text-[#007DC6] transition-colors duration-300">+880 1906-896327</a>
           </div>
           <div className="p-10 hover:bg-white transition-colors duration-500" data-cursor="MAIL">
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#0c0b0b]/40 block mb-4">Email</span>
