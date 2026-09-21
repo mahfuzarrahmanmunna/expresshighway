@@ -179,7 +179,7 @@ export default function GlassNavbar() {
                   whileHover={{ scale: 1 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 />
-                <img src="/logo/Logo1.png" alt="Logo" className="w-5 h-5 md:w-32 md:h-12 relative z-10" />
+                <img src="/logo/Logo1.png" alt="Logo" className=" h-12 md:h-16 relative z-10" />
               </div>
             </MotionLink>
 

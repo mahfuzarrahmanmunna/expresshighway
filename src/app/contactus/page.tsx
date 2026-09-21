@@ -19,82 +19,6 @@ import {
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /* ═══════════════════════════════════════════════════════════════
-   1. GLOBAL CURSOR & GRAIN
-═══════════════════════════════════════════════════════════════ */
-function CustomCursorAndGrain() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const ringLabelRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    const ringLabel = ringLabelRef.current;
-    if (!dot || !ring || !ringLabel) return;
-
-    const xDot = gsap.quickTo(dot, "x", { duration: 0.3, ease: "power3.out" });
-    const yDot = gsap.quickTo(dot, "y", { duration: 0.3, ease: "power3.out" });
-    const xRing = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3.out" });
-    const yRing = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3.out" });
-
-    const onMouseMove = (e: MouseEvent) => {
-      xDot(e.clientX);
-      yDot(e.clientY);
-      xRing(e.clientX);
-      yRing(e.clientY);
-
-      const target = e.target as HTMLElement;
-      const interactive = target.closest("a, button, [data-cursor]");
-      if (interactive) {
-        const cursorText = interactive.getAttribute("data-cursor");
-        gsap.to(ring, {
-          scale: 3.5,
-          borderColor: "rgba(0, 125, 198, 0.8)",
-          backgroundColor: "rgba(0, 125, 198, 0.05)",
-        });
-        if (cursorText) {
-          ringLabel.textContent = cursorText;
-          gsap.to(ringLabel, { opacity: 1, duration: 0.3 });
-        }
-      } else {
-        gsap.to(ring, {
-          scale: 1,
-          borderColor: "rgba(255, 255, 255, 0.2)",
-          backgroundColor: "transparent",
-        });
-        gsap.to(ringLabel, { opacity: 0, duration: 0.3 });
-      }
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    return () => window.removeEventListener("mousemove", onMouseMove);
-  }, []);
-
-  return (
-    <>
-      <div
-        ref={dotRef}
-        className="hidden md:block fixed top-0 left-0 z-[9999] w-1.5 h-1.5 bg-white rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%]"
-      ></div>
-      <div
-        ref={ringRef}
-        className="hidden md:flex fixed top-0 left-0 z-[9998] w-12 h-12 border border-white/20 rounded-full pointer-events-none mix-blend-difference translate-x-[-50%] translate-y-[-50%] items-center justify-center transition-colors duration-300"
-      >
-        <span ref={ringLabelRef} className="text-[7px] uppercase tracking-[0.2em] text-white opacity-0 transition-opacity duration-300"></span>
-      </div>
-      <div
-        className="fixed inset-0 z-[9997] pointer-events-none opacity-[0.015] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
-        }}
-      />
-    </>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
    2. CINEMATIC SPLIT HERO & INTERACTIVE MAP
 ═══════════════════════════════════════════════════════════════ */
 function ContactHero() {
@@ -573,7 +497,6 @@ function SocialRow() {
 export default function ContactSection() {
   return (
     <main className="bg-[#F7F6F2]">
-      <CustomCursorAndGrain />
       <ContactHero />
       <ContactGrid />
       <EnquiryForm />

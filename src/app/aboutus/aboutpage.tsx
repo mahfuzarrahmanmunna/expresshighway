@@ -102,65 +102,6 @@ const COLORS = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   1. CUSTOM CURSOR SYSTEM
-═══════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    const cursor = cursorRef.current;
-    const label = labelRef.current;
-    if (!cursor || !label) return;
-
-    const xTo = gsap.quickTo(cursor, "x", { duration: 0.6, ease: "power3.out" });
-    const yTo = gsap.quickTo(cursor, "y", { duration: 0.6, ease: "power3.out" });
-
-    const onMouseMove = (e: MouseEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
-      const target = e.target as HTMLElement;
-      const cursorType = target.closest("[data-cursor]")?.getAttribute("data-cursor");
-
-      if (cursorType) {
-        gsap.to(cursor, {
-          scale: 3.5,
-          backgroundColor: "rgba(197, 165, 114, 0.1)",
-          borderColor: "rgba(197, 165, 114, 0.6)",
-          duration: 0.4,
-        });
-        label.textContent = cursorType;
-        gsap.to(label, { opacity: 1, scale: 1, duration: 0.4 });
-      } else {
-        gsap.to(cursor, {
-          scale: 1,
-          backgroundColor: "transparent",
-          borderColor: "rgba(20, 20, 20, 0.3)",
-          duration: 0.4,
-        });
-        gsap.to(label, { opacity: 0, scale: 0.8, duration: 0.4 });
-      }
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    return () => window.removeEventListener("mousemove", onMouseMove);
-  }, []);
-
-  return (
-    <div
-      ref={cursorRef}
-      className="hidden md:flex fixed top-0 left-0 z-[9999] w-6 h-6 border border-black/30 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 items-center justify-center mix-blend-difference"
-    >
-      <span
-        ref={labelRef}
-        className="text-[8px] uppercase tracking-[0.2em] text-white opacity-0 scale-80 transition-transform"
-      ></span>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════
    2. HERO - 3D ROTATE + TEXT MASK SLIDE + SCALE REVEAL
 ═══════════════════════════════════════════════════════════════ */
 function AboutHero() {
@@ -1307,7 +1248,6 @@ function FinalCTA() {
 export default function AboutPage() {
   return (
     <main className="bg-[#F9F8F6] font-[family-name:var(--font-sans)]">
-      <CustomCursor />
       <AboutHero />
       <OurStory />
       <StoryStatement />

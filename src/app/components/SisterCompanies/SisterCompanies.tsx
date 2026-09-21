@@ -670,7 +670,7 @@ export default function SisterConcerns() {
     <section
       id="ecosystem-section"
       ref={containerRef}
-      className="relative w-full min-h-screen bg-[#050608] text-white overflow-hidden cursor-none py-32 md:py-0 md:h-screen md:flex md:items-center md:justify-center"
+      className="relative w-full min-h-screen bg-[#050608] text-white overflow-hidden py-32 md:py-0 md:h-screen md:flex md:items-center md:justify-center"
     >
       {!isMobile && (
         <EcosystemCursor

@@ -16,31 +16,37 @@ const TIMELINE_MILESTONES = [
     year: "2013",
     title: "Sampan 21st Century",
     desc: "The foundation of Sampan Group's vision for modern infrastructure.",
+    img: "/about/Sampan 21st Century.jpg",
   },
   {
     year: "2013",
     title: "Sampan Taj Bashundhara",
     desc: "Expanding our footprint in premium residential living.",
+    img: "/about/Sampan Taj Basundhara.jpg",
   },
   {
     year: "2014",
     title: "Sampan Niketon",
     desc: "Further establishing our commitment to architectural excellence.",
+    img: "/about/Sampan Niketon.jpg",
   },
   {
     year: "2021",
     title: "Sampan Highway Inn",
     desc: "Entering the hospitality sector with a flagship highway destination.",
+    img: "/about/Sampan Highway Motel.jpg",
   },
   {
     year: "2022",
     title: "Sampan White House",
     desc: "Broadening our hospitality portfolio with premium accommodations.",
+    img: "/about/Sampan Highway Motel.jpg",
   },
   {
     year: "2026",
     title: "Express Highway Inn",
     desc: "The next chapter: An exclusive Club & Lounge for the modern traveller.",
+    img: "/about/WhatsApp Image 2025-11-15 at 10.09.38 PM (2).jpeg",
     highlight: true,
   },
 ];
@@ -99,65 +105,6 @@ const COLORS = {
   textDark: "#141414",
   accent: "#C5A572", // Brass/Gold
 };
-
-/* ═══════════════════════════════════════════════════════════════
-   1. CUSTOM CURSOR SYSTEM
-═══════════════════════════════════════════════════════════════ */
-function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    const cursor = cursorRef.current;
-    const label = labelRef.current;
-    if (!cursor || !label) return;
-
-    const xTo = gsap.quickTo(cursor, "x", { duration: 0.6, ease: "power3.out" });
-    const yTo = gsap.quickTo(cursor, "y", { duration: 0.6, ease: "power3.out" });
-
-    const onMouseMove = (e: MouseEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
-      const target = e.target as HTMLElement;
-      const cursorType = target.closest("[data-cursor]")?.getAttribute("data-cursor");
-
-      if (cursorType) {
-        gsap.to(cursor, {
-          scale: 3.5,
-          backgroundColor: "rgba(197, 165, 114, 0.1)",
-          borderColor: "rgba(197, 165, 114, 0.6)",
-          duration: 0.4,
-        });
-        label.textContent = cursorType;
-        gsap.to(label, { opacity: 1, scale: 1, duration: 0.4 });
-      } else {
-        gsap.to(cursor, {
-          scale: 1,
-          backgroundColor: "transparent",
-          borderColor: "rgba(20, 20, 20, 0.3)",
-          duration: 0.4,
-        });
-        gsap.to(label, { opacity: 0, scale: 0.8, duration: 0.4 });
-      }
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    return () => window.removeEventListener("mousemove", onMouseMove);
-  }, []);
-
-  return (
-    <div
-      ref={cursorRef}
-      className="hidden md:flex fixed top-0 left-0 z-[9999] w-6 h-6 border border-black/30 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 items-center justify-center mix-blend-difference"
-    >
-      <span
-        ref={labelRef}
-        className="text-[8px] uppercase tracking-[0.2em] text-white opacity-0 scale-80 transition-transform"
-      ></span>
-    </div>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════════
    2. HERO - 3D ROTATE + TEXT MASK SLIDE + SCALE REVEAL
@@ -418,172 +365,200 @@ function OurStory() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   4. TIMELINE - IMAGE STACKING + CLIP-PATH REVEAL
+   4. TIMELINE - LUXURY HORIZONTAL SCROLL WITH 3D TILT
 ═══════════════════════════════════════════════════════════════ */
 function Timeline() {
   const ref = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       if (window.innerWidth < 768) return;
 
-      const panels = gsap.utils.toArray<HTMLElement>(".tl-panel");
-      const totalWidth = trackRef.current?.offsetWidth || 0;
+      const track = trackRef.current;
+      if (!track) return;
 
-      const horizontalTween = gsap.to(trackRef.current, {
-        x: () => -(totalWidth - window.innerWidth),
+      const totalScroll = track.scrollWidth - window.innerWidth + 150;
+
+      const tween = gsap.to(track, {
+        x: () => -totalScroll,
         ease: "none",
         scrollTrigger: {
           trigger: ref.current,
-          pin: true,
-          scrub: 1,
           start: "top top",
-          end: () => `+=${totalWidth - window.innerWidth}`,
+          end: () => `+=${totalScroll}`,
+          scrub: 1,
+          pin: true,
           invalidateOnRefresh: true,
         },
       });
 
-      panels.forEach((panel) => {
-        const isHighlight = panel.classList.contains("tl-highlight");
-        ScrollTrigger.create({
-          trigger: panel,
-          containerAnimation: horizontalTween,
-          start: "left center",
-          end: "right center",
-          onEnter: () => {
-            gsap.to(panel, { autoAlpha: 1, scale: 1, duration: 1.2 });
-            if (isHighlight) {
-              gsap.to(".tl-bg", { backgroundColor: "#0B0B0B", duration: 1.2 });
-              gsap.to(".tl-line-active", { width: "100%", duration: 1.2 });
-              gsap.to(panel.querySelector(".tl-highlight-img"), {
-                clipPath: "inset(0 0 0 0)",
-                duration: 1.8,
-                ease: "expo.out",
-              });
-            }
-          },
-          onLeave: () => {
-            gsap.to(panel, { autoAlpha: 0.3, scale: 0.95, duration: 1.2 });
-            if (isHighlight) {
-              gsap.to(".tl-bg", { backgroundColor: "#050505", duration: 1.2 });
-              gsap.to(".tl-line-active", { width: "0%", duration: 1.2 });
-            }
-          },
-          onEnterBack: () => {
-            gsap.to(panel, { autoAlpha: 1, scale: 1, duration: 1.2 });
-            if (isHighlight) {
-              gsap.to(".tl-bg", { backgroundColor: "#0B0B0B", duration: 1.2 });
-              gsap.to(".tl-line-active", { width: "100%", duration: 1.2 });
-              gsap.to(panel.querySelector(".tl-highlight-img"), {
-                clipPath: "inset(0 0 0 0)",
-                duration: 1.8,
-                ease: "expo.out",
-              });
-            }
-          },
-          onLeaveBack: () => {
-            gsap.to(panel, { autoAlpha: 0.3, scale: 0.95, duration: 1.2 });
-            if (isHighlight) {
-              gsap.to(".tl-bg", { backgroundColor: "#050505", duration: 1.2 });
-              gsap.to(".tl-line-active", { width: "0%", duration: 1.2 });
-              gsap.to(panel.querySelector(".tl-highlight-img"), {
-                clipPath: "inset(0 100% 0 0)",
-                duration: 1.2,
-              });
-            }
+      if (progressRef.current) {
+        gsap.to(progressRef.current, {
+          width: "100%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: ref.current,
+            start: "top top",
+            end: () => `+=${totalScroll}`,
+            scrub: 1,
           },
         });
+      }
+
+      const cards = gsap.utils.toArray<HTMLElement>(".tl-card");
+      cards.forEach((card) => {
+        const img = card.querySelector(".tl-card-img");
+        const year = card.querySelector(".tl-card-year");
+        const title = card.querySelector(".tl-card-title");
+        const desc = card.querySelector(".tl-card-desc");
+        
+        const tlCard = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            containerAnimation: tween,
+            start: "left 80%",
+            end: "right 20%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        if (img) {
+          tlCard.fromTo(
+            img,
+            { clipPath: "inset(100% 0 0 0)" },
+            { clipPath: "inset(0% 0 0 0)", duration: 1.5, ease: "expo.out" }
+          );
+        }
+        
+        if (year) tlCard.fromTo(year, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, "-=0.8");
+        if (title) tlCard.fromTo(title, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, "-=0.8");
+        if (desc) tlCard.fromTo(desc, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, "-=0.8");
       });
     },
     { scope: ref }
   );
 
   return (
-    <section ref={ref} className="relative h-screen bg-[#050505] text-white overflow-hidden hidden md:block">
-      <div className="tl-bg absolute inset-0 bg-[#050505] transition-colors duration-1000"></div>
-
-      <div className="relative h-full flex flex-col justify-center px-16 z-10">
-        <div className="mb-20 flex items-end justify-between">
+    <>
+      {/* Desktop Horizontal Version */}
+      <section ref={ref} className="relative h-screen bg-[#050505] text-white overflow-hidden hidden md:block">
+        
+        {/* Timeline Header */}
+        <div className="absolute top-0 left-0 right-0 z-30 px-16 py-12 flex items-end justify-between bg-gradient-to-b from-[#050505] to-transparent">
           <div>
             <span className="block text-[10px] uppercase tracking-[0.4em] text-[#C5A572] font-medium mb-6">
               02 - Our Journey
             </span>
-            <h2 className="font-[family-name:var(--font-playfair)] text-5xl font-light tracking-tight">
+            <h2 className="font-[family-name:var(--font-playfair)] text-6xl font-light tracking-tight">
               Built Over Time.
             </h2>
           </div>
-          <p className="max-w-sm text-sm font-light text-white/40 tracking-wide">
-            Drag to explore the timeline.
-          </p>
+          <div className="flex items-center gap-5 text-sm font-light text-white/40 tracking-wide">
+            <span>Drag to explore the timeline.</span>
+            <span className="w-12 h-px bg-white/20"></span>
+            <ArrowRight className="h-4 w-4 text-[#C5A572]" />
+          </div>
         </div>
 
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-white/10 -translate-y-1/2">
-          <div className="tl-line-active h-full bg-[#C5A572]/60 w-0 transition-all duration-1000"></div>
+        {/* Bottom Progress Line */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-white/10 z-20">
+          <div ref={progressRef} className="h-full w-0 bg-[#C5A572]"></div>
         </div>
 
-        <div ref={trackRef} className="flex gap-32 items-center px-20" data-cursor="DRAG">
-          {TIMELINE_MILESTONES.map((m, i) => (
-            <div
-              key={i}
-              className={`tl-panel relative flex-shrink-0 w-[40vw] ${m.highlight ? "tl-highlight" : ""}`}
-              style={{ opacity: 0.3, transform: "scale(0.95)" }}
-            >
-              <div className="absolute top-1/2 left-0 w-3 h-3 rounded-full border-2 border-[#050505] -translate-y-1/2 bg-[#C5A572]"></div>
-
-              <div className={`pl-12 flex ${m.highlight ? "items-center gap-16" : ""}`}>
-                <div>
-                  <span className="block text-5xl font-[family-name:var(--font-playfair)] mb-5 text-white/80 font-light">
+        {/* Scrolling Track */}
+        <div className="flex w-max h-full items-center pl-16 pr-[150px] mt-10">
+          <div ref={trackRef} className="flex w-max gap-12 items-center">
+            {TIMELINE_MILESTONES.map((m, i) => (
+              <div
+                key={i}
+                className="tl-card relative flex-shrink-0 w-[400px] h-[60vh] border border-white/10 bg-[#0B0B0B] overflow-hidden group transition-all duration-500 hover:border-[#C5A572]/50 hover:shadow-[0_0_40px_rgba(197,165,114,0.15)]"
+                style={{ perspective: "1000px" }}
+              >
+                {m.highlight && <div className="absolute inset-0 border-2 border-[#C5A572]/30 pointer-events-none z-20 shadow-[inset_0_0_30px_rgba(197,165,114,0.1)]"></div>}
+                
+                {/* Image Section */}
+                <div className="tl-card-img relative w-full h-[55%] overflow-hidden">
+                  <Image
+                    src={m.img}
+                    alt={m.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="400px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-transparent"></div>
+                  
+                  {/* Massive faded Year Number */}
+                  <span className="absolute top-4 left-6 font-[family-name:var(--font-playfair)] text-[100px] leading-none text-white/5 tracking-tight pointer-events-none group-hover:text-white/10 transition-colors duration-500">
                     {m.year}
                   </span>
-                  <h3 className="text-3xl font-light mb-5 font-[family-name:var(--font-playfair)]">{m.title}</h3>
-                  <p className="text-sm text-white/40 max-w-xs leading-[1.8] tracking-wide">{m.desc}</p>
+
+                  {/* Highlight Badge */}
+                  {m.highlight && (
+                    <span className="absolute top-6 right-6 text-[9px] uppercase tracking-[0.3em] text-[#C5A572] border border-[#C5A572]/50 px-3 py-1 z-10 backdrop-blur-sm bg-[#C5A572]/5">
+                      Next Chapter
+                    </span>
+                  )}
                 </div>
 
-                {m.highlight && (
-                  <div
-                    className="tl-highlight-img relative w-[350px] h-[250px] overflow-hidden border border-[#C5A572]/20"
-                    style={{ clipPath: "inset(0 100% 0 0)" }}
-                  >
-                    <Image
-                      src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1000&auto=format&fit=crop"
-                      alt="2026 Highlight"
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#C5A572]/20 to-transparent"></div>
-                  </div>
-                )}
+                {/* Text Content */}
+                <div className="absolute bottom-0 left-0 w-full p-10 z-10">
+                  <span className="tl-card-year block text-xs uppercase tracking-[0.4em] text-[#C5A572] mb-4">
+                    {m.year}
+                  </span>
+                  <h3 className="tl-card-title text-3xl font-[family-name:var(--font-playfair)] font-light mb-4 tracking-tight">
+                    {m.title}
+                  </h3>
+                  <div className="w-10 h-px bg-[#C5A572] mb-5"></div>
+                  <p className="tl-card-desc text-sm font-light text-white/50 leading-[1.8] tracking-wide max-w-xs">
+                    {m.desc}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="md:hidden absolute inset-0 bg-[#050505] p-8 overflow-y-auto">
+      {/* Mobile Vertical Version */}
+      <section className="md:hidden bg-[#050505] text-white py-24 px-6 overflow-hidden">
         <span className="block text-[10px] uppercase tracking-[0.4em] text-[#C5A572] font-medium mb-6">
           02 - Our Journey
         </span>
         <h2 className="font-[family-name:var(--font-playfair)] text-4xl font-light mb-16 tracking-tight">
           Built Over Time.
         </h2>
-        {TIMELINE_MILESTONES.map((m, i) => (
-          <div key={i} className="border-l border-white/10 pl-8 pb-16 relative">
-            <div className="absolute left-[-5px] top-2 w-3 h-3 rounded-full bg-[#C5A572]"></div>
-            <span className="block text-2xl font-[family-name:var(--font-playfair)] text-[#C5A572] mb-2 font-light">
-              {m.year}
-            </span>
-            <h3 className="text-xl font-light mb-2 font-[family-name:var(--font-playfair)]">{m.title}</h3>
-            <p className="text-sm text-white/40 leading-[1.8]">{m.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
+        <div className="relative border-l border-white/10 pl-8 space-y-16">
+          {TIMELINE_MILESTONES.map((m, i) => (
+            <div key={i} className="relative">
+              <div className="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-[#050505] border-2 border-[#C5A572]"></div>
+              
+              <div className="border border-white/10 bg-[#0B0B0B] overflow-hidden">
+                <div className="relative h-56 w-full overflow-hidden">
+                  <Image src={m.img} alt={m.title} fill className="object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] to-transparent"></div>
+                  <span className="absolute top-4 left-4 font-[family-name:var(--font-playfair)] text-5xl text-white/10">
+                    {m.year}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <span className="block text-xs uppercase tracking-[0.4em] text-[#C5A572] mb-3">{m.year}</span>
+                  <h3 className="text-xl font-[family-name:var(--font-playfair)] font-light mb-3">{m.title}</h3>
+                  <div className="w-8 h-px bg-[#C5A572] mb-4"></div>
+                  <p className="text-sm text-white/50 leading-[1.8]">{m.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   5. ALLIED ORGANIZATIONS - IMAGE GRID LOGOS
+   5. ALLIED ORGANIZATIONS - 3D TILT LOGO GRID
 ═══════════════════════════════════════════════════════════════ */
 function AlliedOrganizations() {
   const ref = useRef<HTMLDivElement>(null);
@@ -647,22 +622,20 @@ function AlliedOrganizations() {
           {AFFILIATIONS.map((item, i) => (
             <div
               key={item.num}
-              className="allied-logo group border-r border-b border-[#141414]/10 aspect-[3/2] flex items-center justify-center p-8 cursor-pointer relative overflow-hidden"
+              className="allied-logo group border-r border-b border-[#141414]/10 aspect-[3/2] flex items-center justify-center p-8 cursor-pointer relative overflow-hidden transition-all duration-500 hover:bg-[#141414] hover:scale-[1.02]"
               data-cursor="OPEN →"
             >
-              {/* Hover Border Accents */}
               <span className="absolute top-0 left-0 w-full h-px bg-[#C5A572] origin-left transition-all duration-500 scale-x-0 group-hover:scale-x-100"></span>
               <span className="absolute top-0 right-0 h-full w-px bg-[#C5A572] origin-top transition-all duration-500 delay-100 scale-y-0 group-hover:scale-y-100"></span>
               <span className="absolute bottom-0 right-0 w-full h-px bg-[#C5A572] origin-right transition-all duration-500 delay-200 scale-x-0 group-hover:scale-x-100"></span>
               <span className="absolute bottom-0 left-0 h-full w-px bg-[#C5A572] origin-bottom transition-all duration-500 delay-300 scale-y-0 group-hover:scale-y-100"></span>
 
-              {/* Logo Image */}
               <div className="relative w-full h-full flex items-center justify-center">
                 <Image
                   src={item.logo}
                   alt={item.name}
                   fill
-                  className="object-contain transition-all duration-500 p-2 md:p-4"
+                  className="object-contain transition-all duration-500 p-2 md:p-4 group-hover:grayscale-0"
                   sizes="(max-width: 768px) 50vw, 16vw"
                 />
               </div>
@@ -915,8 +888,10 @@ function FinalCTA() {
 ═══════════════════════════════════════════════════════════════ */
 export default function AboutPage() {
   return (
-    <main className="bg-[#F9F8F6] font-[family-name:var(--font-sans)]">
-      <CustomCursor />
+    <main className="bg-[#F9F8F6] font-[family-name:var(--font-sans)] relative overflow-x-hidden">
+      {/* Luxury Film Grain Overlay */}
+      <div className="pointer-events-none fixed inset-0 z-[200] opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat' }}></div>
+      
       <AboutHero />
       <OurStory />
       <Timeline />

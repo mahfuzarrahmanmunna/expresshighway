@@ -29,7 +29,7 @@ const AMENITIES = [
     index: "02",
     title: "VVIP Lounge",
     desc: "Premium comfort, exclusively for members",
-    img: "/images/lounge.jpg",
+    img: "/images/clubandlounge.jpg",
     size: "aspect-[4/5] sm:col-span-1 sm:aspect-[4/5] lg:col-span-4 lg:aspect-[4/5]",
     offset: "lg:mt-24",
   },

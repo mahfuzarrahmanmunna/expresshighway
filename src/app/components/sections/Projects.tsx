@@ -521,7 +521,7 @@ export default function LivingPortfolio() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[900vh] bg-black cursor-none"
+      className="relative w-full h-[900vh] bg-black"
     >
       <DroneCursor />
 
