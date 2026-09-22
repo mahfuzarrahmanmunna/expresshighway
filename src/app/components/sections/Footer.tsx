@@ -35,6 +35,7 @@ const CONTACT_ICONS = [
   { Icon: Phone, label: "Phone", href: "tel:+8801906896327" },
   { Icon: Mail, label: "Email", href: "mailto:info@sampangroup.com.bd" },
   { Icon: BsLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/sampangroup/" },
+  { Icon: BsFacebook, label: "Facebook", href: "https://www.facebook.com/sampangroup/" },
   { Icon: BsFacebook, label: "Facebook", href: "https://www.facebook.com/expresshighwayinn/" },
 ];
 
@@ -53,7 +54,7 @@ function SectionHeading({ num, title }: { num: string; title: string }) {
 function FooterLink({ href, label }: { href: string; label: string }) {
   const isExternal = href.startsWith("http");
   return (
-    <li>
+    <li className="mb-3 md:mb-0">
       <a
         href={href}
         target={isExternal ? "_blank" : undefined}
@@ -201,18 +202,21 @@ export default function Footer() {
       {/* MAIN 12-COLUMN GRID                   */}
       {/* ════════════════════════════════════════ */}
       <div ref={mainRef} className={cn("relative z-10", containerClasses, !isReducedMotion && "opacity-0", "pb-20")}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-x-8 xl:gap-x-12">
+        {/* Changed base to grid-cols-2 so Navigation and Ecosystem sit side-by-side on mobile */}
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-y-12 gap-x-8 lg:gap-x-8 xl:gap-x-12">
           
           {/* ── 01. Brand & Newsletter (4 Cols) ── */}
-          <div className="sm:col-span-2 lg:col-span-4">
+          {/* Takes full width on mobile */}
+          <div className="col-span-2 lg:col-span-4">
             <p className="text-[14px] leading-[1.8] text-white/40 max-w-[340px] font-light">
               Where the highway leads to luxury. A private retreat for travellers, members, and corporate journeys, anchored by Sampan Group.
             </p>
             <NewsletterInput />
           </div>
 
-          {/* ── 02. Navigation & Legal (2 Cols) ── */}
-          <div className="sm:col-span-1 lg:col-span-2 flex flex-col gap-12">
+          {/* ── 02. Navigation (2 Cols) ── */}
+          {/* Takes half width on mobile */}
+          <div className="col-span-1 lg:col-span-2 flex flex-col gap-12">
             <div>
               <SectionHeading num="01" title="Navigation" />
               <ul className="space-y-4">
@@ -221,12 +225,11 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-            
-            
           </div>
 
           {/* ── 03. Ecosystem (3 Cols) ── */}
-          <div className="sm:col-span-1 lg:col-span-3">
+          {/* Takes half width on mobile */}
+          <div className="col-span-1 lg:col-span-3">
             <SectionHeading num="02" title="Ecosystem" />
             <ul className="space-y-4">
               {ECOSYSTEM_LINKS.map((link) => (
@@ -236,7 +239,8 @@ export default function Footer() {
           </div>
 
           {/* ── 04. Connect (3 Cols) ── */}
-          <div className="sm:col-span-2 lg:col-span-3">
+          {/* Takes full width on mobile */}
+          <div className="col-span-2 lg:col-span-3">
             <SectionHeading num="04" title="Connect" />
             <div className="space-y-6">
               <div>

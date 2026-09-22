@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { label: "Home", number: "01", href: "/" },
   { label: "About", number: "02", href: "/aboutus" },
   { label: "Club & Lounge", number: "03", href: "/club-and-lounge" },
-    { label: "Sampan Group", number: "05", href: "https://sampangroup.com.bd" },
+  { label: "Sampan Group", number: "05", href: "https://sampangroup.com.bd" },
   { label: "Contact", number: "04", href: "/contactus" },
 ];
 
@@ -90,12 +90,14 @@ export default function GlassNavbar() {
             ease: "power3.out",
           });
 
+          // Updated to use a dark gray base (rgba(18, 18, 18)) instead of pure black
+          // This allows the backdrop-blur to be visible and frosted
           gsap.to(inner, {
-            backgroundColor: `rgba(8,8,8,${0.38 + p * 0.48})`,
-            borderColor: `rgba(255,255,255,${0.08 + p * 0.1})`,
+            backgroundColor: `rgba(18, 18, 18, ${0.35 + p * 0.45})`,
+            borderColor: `rgba(255, 255, 255, ${0.12 + p * 0.15})`,
             boxShadow: `
-              0 ${10 + p * 12}px ${35 + p * 20}px rgba(0,0,0,${0.15 + p * 0.2}),
-              inset 0 1px 0 rgba(255,255,255,${0.06 + p * 0.05})
+              0 ${10 + p * 12}px ${35 + p * 20}px rgba(0,0,0,${0.15 + p * 0.25}),
+              inset 0 1px 0 rgba(255,255,255,${0.1 + p * 0.1})
             `,
             duration: 0.35,
             overwrite: true,
@@ -148,21 +150,21 @@ export default function GlassNavbar() {
         }
         className="fixed top-4 left-4 right-4 md:top-6 md:left-6 md:right-6 z-[9000] will-change-transform"
       >
-        {/* Outer Glow */}
-        <div className="absolute -inset-[1px] rounded-[28px] bg-gradient-to-r from-white/[0.08] via-transparent to-white/[0.08] pointer-events-none" />
+        {/* Outer Glow - Enhanced White Border */}
+        <div className="absolute -inset-[1px] rounded-[28px] bg-gradient-to-r from-white/15 via-white/5 to-white/15 pointer-events-none" />
 
-        {/* Main Glass */}
+        {/* Main Glass - Updated to dark gray frosted glass */}
         <div
           ref={innerRef}
-          className="relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-black/40 backdrop-blur-2xl backdrop-saturate-150"
+          className="relative overflow-hidden rounded-[28px] border border-white/[0.12] bg-[#121212]/40 backdrop-blur-2xl backdrop-saturate-150"
         >
           <motion.div
-            className="absolute top-0 -left-[30%] w-[35%] h-full pointer-events-none bg-gradient-to-r from-transparent via-white/[0.06] to-transparent skew-x-[-20deg]"
+            className="absolute top-0 -left-[30%] w-[35%] h-full pointer-events-none bg-gradient-to-r from-transparent via-white/[0.1] to-transparent skew-x-[-20deg]"
             animate={isMounted ? { x: ["0%", "380%"] } : { x: "0%" }}
             transition={{ duration: isMounted ? 9 : 0, repeat: Infinity, ease: "linear" }}
           />
 
-          <div className="absolute top-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="absolute top-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
           <div className="relative z-10 flex items-center justify-between px-5 md:px-7 py-4 md:py-5">
             <MotionLink
@@ -192,14 +194,10 @@ export default function GlassNavbar() {
                   target={item.label === "Sampan Group" ? "_blank" : undefined}
                   rel={item.label === "Sampan Group" ? "noopener noreferrer" : undefined}
                   className="group relative flex items-center gap-3 px-4 py-3 rounded-xl overflow-hidden"
-                  whileHover={{ backgroundColor: "rgba(255,255,255,0.045)" }}
+                  whileHover={{ backgroundColor: "rgba(255,255,255,0.06)" }}
                   transition={{ duration: 0.3 }}
                 >
-                  {/* Changed to light by default, darker on hover */}
-                  {/* <span className="text-[10px] tracking-[0.15em] text-white/50 group-hover:text-white/20 transition-colors duration-300">
-                    {item.number}
-                  </span> */}
-                  <span className="relative z-10 text-[13px] uppercase tracking-[0.18em] text-white group-hover:text-white/40 transition-all duration-300">
+                  <span className="relative z-10 text-[13px] uppercase tracking-[0.18em] text-white group-hover:text-white/50 transition-all duration-300">
                     {item.label}
                   </span>
                   <motion.span
@@ -214,16 +212,16 @@ export default function GlassNavbar() {
 
             <div className="flex items-center gap-3">
               <div className="hidden lg:flex items-center gap-2 mr-2">
-                <motion.a href="tel:+8801906896327" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="tel:+8801906896327" data-cursor="CALL" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Phone size={13} strokeWidth={1.5} />
                 </motion.a>
-                <motion.a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <FaLinkedinIn size={13} />
                 </motion.a>
-                <motion.a href="mailto:info@sampangroup.com.bd" data-cursor="MAIL" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="mailto:info@sampangroup.com.bd" data-cursor="MAIL" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <Mail size={13} strokeWidth={1.5} />
                 </motion.a>
-                <motion.a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
+                <motion.a href="https://www.facebook.com/expresshighwayinn/" target="_blank" rel="noopener noreferrer" data-cursor="VISIT" className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-primary hover:bg-white/5 transition-colors" whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
                   <FaFacebookF size={13} />
                 </motion.a>
               </div>
@@ -243,7 +241,7 @@ export default function GlassNavbar() {
               <motion.button
                 onClick={() => setMenuOpen(true)}
                 whileTap={{ scale: 0.9 }}
-                className="xl:hidden w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white"
+                className="xl:hidden w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white"
               >
                 <Menu size={17} strokeWidth={1.5} />
               </motion.button>
@@ -252,11 +250,11 @@ export default function GlassNavbar() {
         </div>
       </motion.nav>
 
-      {/* MOBILE FULLSCREEN MENU */}
+      {/* MOBILE FULLSCREEN MENU - Updated with dark frosted blur */}
       <motion.div
         initial={false}
         animate={{ opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
-        className="fixed inset-0 z-[9500] bg-[#080808] backdrop-blur-3xl"
+        className="fixed inset-0 z-[9500] bg-[#0a0a0a]/80 backdrop-blur-3xl"
       >
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[linear-gradient(rgba(255,255,255,1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,1)_1px,transparent_1px)] bg-[length:70px_70px]" />
 
@@ -265,7 +263,7 @@ export default function GlassNavbar() {
             <div className="text-lg tracking-[0.35em] text-white">EXPRESS</div>
             <div className="text-[7px] tracking-[0.3em] text-white/30 uppercase">Highway Inn</div>
           </div>
-          <button onClick={() => setMenuOpen(false)} className="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center text-white">
+          <button onClick={() => setMenuOpen(false)} className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white">
             <X size={18} strokeWidth={1.5} />
           </button>
         </div>
@@ -280,12 +278,12 @@ export default function GlassNavbar() {
                 target={item.label === "Sampan Group" ? "_blank" : undefined}
                 rel={item.label === "Sampan Group" ? "noopener noreferrer" : undefined}
                 onClick={() => setMenuOpen(false)}
-                className="group flex items-center justify-between py-5 border-b border-white/[0.08]"
+                className="group flex items-center justify-between py-5 border-b border-white/[0.1]"
               >
                 <div className="flex items-center gap-5">
                   {/* Changed to light by default, darker on hover */}
                   <span className="text-[9px] text-white/50 group-hover:text-white/20 transition-colors">{item.number}</span>
-                  <span className="text-2xl font-light tracking-tight text-white group-hover:text-white/40 transition-colors duration-300">
+                  <span className="text-2xl font-light tracking-tight text-white group-hover:text-white/50 transition-colors duration-300">
                     {item.label}
                   </span>
                 </div>
@@ -308,7 +306,7 @@ export default function GlassNavbar() {
             {/* Detailed Contact Info Grid */}
             <div className="mt-10 grid grid-cols-2 gap-8 text-left">
               <div>
-                <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
+                <p className="text-[8px] tracking-[0.2em] uppercase text-white/30 mb-2 flex items-center gap-1.5">
                   <Phone size={10} strokeWidth={1.5} /> Call us
                 </p>
                 <a href="tel:+8801906896327" className="text-[13px] text-white/60 hover:text-white transition-colors block">
@@ -316,7 +314,7 @@ export default function GlassNavbar() {
                 </a>
               </div>
               <div>
-                <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
+                <p className="text-[8px] tracking-[0.2em] uppercase text-white/30 mb-2 flex items-center gap-1.5">
                   <Mail size={10} strokeWidth={1.5} /> Email us
                 </p>
                 <a href="mailto:info@sampangroup.com.bd" className="text-[13px] text-white/60 hover:text-white transition-colors block break-all">
@@ -326,7 +324,7 @@ export default function GlassNavbar() {
             </div>
 
             <div className="mt-6 text-left">
-              <p className="text-[8px] tracking-[0.2em] uppercase text-white/20 mb-2 flex items-center gap-1.5">
+              <p className="text-[8px] tracking-[0.2em] uppercase text-white/30 mb-2 flex items-center gap-1.5">
                 <MapPin size={10} strokeWidth={1.5} /> Visit us
               </p>
               <p className="text-[13px] text-white/60 leading-relaxed">
@@ -334,7 +332,7 @@ export default function GlassNavbar() {
               </p>
             </div>
 
-            <div className="flex justify-center gap-6 mt-10 pt-8 border-t border-white/[0.04]">
+            <div className="flex justify-center gap-6 mt-10 pt-8 border-t border-white/[0.06]">
               <a href="tel:+8801906896327" className="text-white/50 hover:text-primary transition-colors"><Phone size={16} /></a>
               <a href="https://www.linkedin.com/company/sampangroup/" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-primary transition-colors"><FaLinkedinIn size={16} /></a>
               <a href="mailto:info@sampangroup.com.bd" className="text-white/50 hover:text-primary transition-colors"><Mail size={16} /></a>

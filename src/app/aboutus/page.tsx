@@ -204,7 +204,7 @@ function AboutHero() {
 
       <div className="hero-bg absolute inset-[-60px] z-0 will-change-transform">
         <Image
-          src="/banner/banner1.jpg"
+          src="/club.png"
           alt="Highway"
           fill
           priority
@@ -248,7 +248,7 @@ function AboutHero() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. OUR STORY - CHARACTER REVEAL + WORD REVEAL + SPLIT IMAGE
+   3. OUR STORY - CHARACTER REVEAL + WORD REVEAL + EDITORIAL IMAGES
 ═══════════════════════════════════════════════════════════════ */
 function OurStory() {
   const ref = useRef<HTMLDivElement>(null);
@@ -287,14 +287,16 @@ function OurStory() {
         .from(".story-p1", { opacity: 0, y: 30, duration: 1.2, ease: "power3.out" }, "-=0.6")
         .from(".story-p2", { opacity: 0, y: 30, duration: 1.2, ease: "power3.out" }, "-=0.8");
 
-      tl.from(
+      // Premium Cinematic Image Entry Animations
+      tl.fromTo(
         ".story-img-left",
-        { xPercent: -100, duration: 1.8, ease: "expo.out" },
+        { clipPath: "inset(100% 0% 0% 0%)", opacity: 0 },
+        { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, duration: 1.8, ease: "expo.out" },
         "-=1.2"
       ).from(
         ".story-img-right",
-        { xPercent: 100, duration: 1.8, ease: "expo.out" },
-        "<"
+        { y: 80, opacity: 0, scale: 0.8, duration: 1.8, ease: "expo.out" },
+        "-=1.0" 
       );
 
       return () => {
@@ -306,20 +308,22 @@ function OurStory() {
   );
 
   return (
-    <section ref={ref} className="bg-[#F9F8F6] text-[#141414] py-40 md:py-56 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+    <section ref={ref} className="bg-[#F9F8F6] text-[#141414] py-32 md:py-48 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
+        
+        {/* Left Content */}
         <div className="lg:col-span-5 flex flex-col">
           <span className="story-eyebrow text-[10px] uppercase tracking-[0.4em] text-[#C5A572] font-medium mb-8 block">
             01 - Our Story
           </span>
           <h2
-            className="story-headline font-[family-name:var(--font-playfair)] text-5xl md:text-6xl font-light leading-[1.05] mb-10 tracking-tight"
+            className="story-headline font-[family-name:var(--font-playfair)] text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] mb-10 tracking-tight"
             style={{ perspective: "500px" }}
           >
             Our Story
           </h2>
           <div className="story-divider w-16 h-px bg-[#C5A572] mb-12"></div>
-          <p className="story-p1 text-base md:text-lg font-light text-[#141414]/70 leading-[1.9] mb-8 tracking-wide">
+          <p className="story-p1 text-base md:text-lg font-light text-[#141414]/70 leading-[1.9] mb-6 tracking-wide">
             Express Highway Inn began with a simple observation: Bangladesh&apos;s highways move faster every year, but the places to rest along them hadn&apos;t kept pace. Sampan Group set out to change that by building a property where a quick stop feels like a proper retreat, and where a membership card opens the door to something far more exclusive. 
           </p>
           <p className="story-p2 text-base md:text-lg font-light text-[#141414]/70 leading-[1.9] tracking-wide">
@@ -327,38 +331,94 @@ function OurStory() {
           </p>
         </div>
 
-        <div className="lg:col-span-7 relative w-full aspect-[4/5] overflow-hidden group" data-cursor="VIEW">
-          <div className="absolute top-0 left-0 w-1/2 h-full overflow-hidden">
-            <div className="story-img-left w-[200%] h-full">
+        {/* Right Image Layout - High-End Diagonal Overlap */}
+        <div className="lg:col-span-7 relative w-full" data-cursor="VIEW">
+          
+          {/* Desktop & Tablet Layout (Absolute Editorial Overlap) */}
+          <div className="hidden md:block relative w-full h-[650px] lg:h-[720px]">
+            
+            {/* Ghost Architectural Number */}
+            <span className="absolute -top-16 right-0 font-[family-name:var(--font-playfair)] text-[220px] leading-none text-[#141414]/[0.04] select-none pointer-events-none">
+              01
+            </span>
+            
+            {/* Large Primary Landscape Image - Top Right */}
+            <div className="story-img-left absolute top-0 right-0 w-[72%] h-[72%] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] group border border-[#141414]/10">
+              <Image
+                src="/images/cta.jpeg"
+                alt="Express Highway Inn Architecture"
+                fill
+                className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                quality={90}
+              />
+              {/* Dark gradient for hover caption */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* Architectural Corners */}
+              <div className="absolute top-4 left-4 w-6 h-6 border-t border-l border-white/40 z-10 pointer-events-none transition-all duration-500 group-hover:border-[#C5A572]"></div>
+              <div className="absolute top-4 right-4 w-6 h-6 border-t border-r border-white/40 z-10 pointer-events-none transition-all duration-500 group-hover:border-[#C5A572]"></div>
+              
+              {/* Hover Caption */}
+              <div className="absolute bottom-0 left-0 p-8 z-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+                <span className="text-[10px] uppercase tracking-[0.4em] text-white/90 block font-medium">
+                  Express Highway Inn
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.3em] text-[#C5A572] block mt-2">
+                  01 / Architecture
+                </span>
+              </div>
+            </div>
+
+            {/* Small Secondary Landscape Image - Bottom Left (Matted Frame) */}
+            <div className="story-img-right absolute bottom-0 left-0 w-[50%] h-[50%] overflow-hidden border-[8px] border-[#F9F8F6] shadow-[0_20px_50px_rgba(0,0,0,0.12)] group">
+              <Image
+                src="/images/cta.jpeg"
+                alt="Highway Inn Detail"
+                fill
+                className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                quality={90}
+              />
+              {/* Subtle gold border accent on hover */}
+              <div className="absolute inset-0 border border-[#C5A572]/0 group-hover:border-[#C5A572]/30 transition-colors duration-700 pointer-events-none"></div>
+            </div>
+            
+            {/* Gold Accent Line Intersection */}
+            <div className="absolute bottom-[25%] left-[50%] w-16 h-px bg-[#C5A572]"></div>
+          </div>
+
+          {/* Mobile Layout (Clean Stacked Grid) */}
+          <div className="md:hidden flex flex-col gap-4">
+            <div className="story-img-left relative w-full aspect-[16/10] overflow-hidden shadow-xl group">
               <Image
                 src="/images/condomenium.jpg"
-                alt="Architecture Left"
+                alt="Express Highway Inn Architecture"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                quality={90}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 p-6 z-10">
+                <span className="text-[10px] uppercase tracking-[0.4em] text-white/90 block font-medium">
+                  Express Highway Inn
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.3em] text-[#C5A572] block mt-2">
+                  01 / Architecture
+                </span>
+              </div>
+            </div>
+            <div className="story-img-right relative w-[80%] ml-auto aspect-[4/3] overflow-hidden border-4 border-[#F9F8F6] shadow-xl group">
+              <Image
+                src="/images/highwayinn.jpeg"
+                alt="Highway Inn Detail"
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
                 quality={90}
               />
             </div>
           </div>
-          <div className="absolute top-0 right-0 w-1/2 h-full overflow-hidden">
-            <div className="story-img-right w-[200%] h-full -translate-x-1/2">
-              <Image
-                src="/images/condomenium.jpg"
-                alt="Architecture Right"
-                fill
-                className="object-cover"
-                quality={90}
-              />
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 p-10 z-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-            <span className="text-[10px] uppercase tracking-[0.4em] text-white/90 block font-medium">
-              Express Highway Inn
-            </span>
-            <span className="text-[9px] uppercase tracking-[0.3em] text-[#C5A572] block mt-2">
-              01 / Architecture
-            </span>
-          </div>
+          
         </div>
+
       </div>
     </section>
   );

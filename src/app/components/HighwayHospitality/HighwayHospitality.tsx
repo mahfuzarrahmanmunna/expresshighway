@@ -141,17 +141,6 @@ function HighwayHospitality() {
             </div>
           ))}
         </div>
-
-        {/* KM 103 Marker Overlay Below Gallery */}
-        <div className="mt-10 md:mt-12 flex items-center gap-4 md:gap-6">
-          <div className="w-16 md:w-32 h-px bg-[#007DC6]/30"></div>
-          <div>
-            <span className="block text-[10px] uppercase tracking-[0.4em] text-[#0c0b0b]/40">Location Marker</span>
-            <span className="block text-xl md:text-2xl font-[family-name:var(--font-playfair)] text-[#007DC6] mt-1">KM 103</span>
-          </div>
-          <div className="flex-1 h-px bg-[#0c0b0b]/10 ml-4 md:ml-6"></div>
-        </div>
-
       </div>
     </section>
   );

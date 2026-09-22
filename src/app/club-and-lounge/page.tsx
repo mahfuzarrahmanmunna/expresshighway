@@ -956,7 +956,7 @@ export default function ClubLoungePage() {
       <ClubHero />
       <FacilitiesGrid />
       <DayAtLounge />
-      <LoungeJourney />
+      {/* <LoungeJourney /> */}
       <PhotoMosaic />
       <FinalCTA />
     </main>

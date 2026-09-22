@@ -1,17 +1,24 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
-import { ArrowUpRight, MapPin, Navigation } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
+/* ── Map Configuration ── */
+/* 
+  Coordinates for Express Highway Inn (Daudkandi) extracted from your link.
+  Used for the "Get Directions" button.
+*/
+const MAP_LAT = 23.696839590829157;
+const MAP_LNG = 90.53096697602183;
+
 export default function AboutLocation() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -62,11 +69,6 @@ export default function AboutLocation() {
           scale: 1,
           duration: 2,
           ease: "expo.out",
-          onComplete: () => {
-            if (mapContainerRef.current && (mapContainerRef.current as any)._leaflet_map) {
-              (mapContainerRef.current as any)._leaflet_map.invalidateSize();
-            }
-          },
           scrollTrigger: {
             trigger: ".map-wrapper",
             start: "top 85%",
@@ -80,82 +82,6 @@ export default function AboutLocation() {
     },
     { scope: containerRef }
   );
-
-  /* ── Leaflet Map Initialization ── */
-  useEffect(() => {
-    if (typeof window === "undefined" || !mapContainerRef.current) return;
-    let map: any = null;
-
-    const initializeMap = () => {
-      const L = (window as any).L;
-      if (!L || !mapContainerRef.current) return;
-      if ((mapContainerRef.current as any)._leaflet_map) return;
-
-      const targetLat = 23.5433;
-      const targetLng = 90.4012;
-
-      map = L.map(mapContainerRef.current, {
-        center: [targetLat, targetLng],
-        zoom: 13,
-        zoomControl: false,
-        scrollWheelZoom: false,
-        attributionControl: false,
-      });
-
-      (mapContainerRef.current as any)._leaflet_map = map;
-
-      L.control.zoom({ position: "bottomright" }).addTo(map);
-      L.control.attribution({ position: 'bottomleft' }).addAttribution('Tiles &copy; Esri').addTo(map);
-
-      // Esri Light Gray Canvas (Luxury Minimalist Map)
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16
-      }).addTo(map);
-      
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16
-      }).addTo(map);
-
-      // Custom Brand Marker
-      const customIcon = L.divIcon({
-        className: "custom-luxury-marker",
-        html: `<div style="position: relative; width: 24px; height: 24px;">
-                 <span style="position: absolute; inset: 0; background: #007DC6; border-radius: 50%; opacity: 0.3; animation: mapPing 1.5s cubic-bezier(0,0,0.2,1) infinite;"></span>
-                 <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; background: #007DC6; border-radius: 50%; border: 3px solid #FFFFFF; box-shadow: 0 0 15px rgba(0, 125, 198, 0.6);"></span>
-               </div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-      });
-
-      L.marker([targetLat, targetLng], { icon: customIcon }).addTo(map);
-      
-      setTimeout(() => map.invalidateSize(), 1000);
-    };
-
-    if ((window as any).L) {
-      initializeMap();
-    } else {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-      document.head.appendChild(link);
-
-      const script = document.createElement("script");
-      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-      script.async = true;
-      script.onload = initializeMap;
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (map) {
-        map.remove();
-        if (mapContainerRef.current) {
-          delete (mapContainerRef.current as any)._leaflet_map;
-        }
-      }
-    };
-  }, []);
 
   return (
     <section
@@ -190,22 +116,10 @@ export default function AboutLocation() {
               Express Highway Inn is built around one idea: that a journey should never feel like a pause. Every corner of the property is designed for comfort, elegance and genuine care, so travelers arrive relaxed and members feel at home every single time.
             </p>
 
-            {/* Architectural Coordinates */}
-            <div className="about-anim grid grid-cols-2 gap-8 mb-12 max-w-xs">
-              <div className="border-l border-[#0c0b0b]/10 pl-4">
-                <span className="block text-[9px] uppercase tracking-[0.2em] text-[#0c0b0b]/40 mb-2">Latitude</span>
-                <span className="text-sm font-light text-[#0c0b0b]/80 font-[family-name:var(--font-playfair)]">23.5433° N</span>
-              </div>
-              <div className="border-l border-[#0c0b0b]/10 pl-4">
-                <span className="block text-[9px] uppercase tracking-[0.2em] text-[#0c0b0b]/40 mb-2">Longitude</span>
-                <span className="text-sm font-light text-[#0c0b0b]/80 font-[family-name:var(--font-playfair)]">90.4012° E</span>
-              </div>
-            </div>
-
             {/* Minimal CTA */}
             <div className="about-anim">
               <a
-                href="https://www.google.com/maps/dir/?api=1&destination=23.5433,90.4012"
+                href={`https://www.google.com/maps/dir/?api=1&destination=${MAP_LAT},${MAP_LNG}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-[#0c0b0b]/80 hover:text-[#007DC6] transition-colors duration-300"
@@ -222,8 +136,17 @@ export default function AboutLocation() {
           <div className="lg:col-span-7 relative">
             <div className="map-wrapper relative w-full h-[60vh] md:h-[75vh] overflow-hidden border border-[#0c0b0b]/10 bg-[#F9F8F6]">
               
-              {/* Leaflet Map Container */}
-              <div ref={mapContainerRef} className="absolute inset-0 w-full h-full" />
+              {/* Google Maps Iframe */}
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.415843887747!2d90.53096697602183!3d23.696839590829157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b5d09a1b0c3f%3A0x5b0f161298224bab!2sExpress%20Highway%20Inn!5e0!3m2!1sbn!2sbd!4v1789988420452!5m2!1sbn!2sbd"
+                width="100%"
+                height="100%"
+                style={{ border: 0, position: 'absolute', top: 0, left: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="absolute inset-0 w-full h-full z-[1]"
+              />
 
               {/* Map UI Overlays */}
               <div className="pointer-events-none absolute inset-0 z-[400]">
@@ -270,42 +193,6 @@ export default function AboutLocation() {
           </div>
         </div>
       </div>
-
-      {/* ── Leaflet Custom Styling Overrides ── */}
-      <style jsx global>{`
-        .leaflet-container {
-          background: #F9F8F6 !important;
-          font-family: var(--font-sans) !important;
-          outline: none;
-          z-index: 1;
-        }
-        .leaflet-control-zoom a {
-          background: #FFFFFF !important;
-          color: #0c0b0b !important;
-          border: 1px solid rgba(12, 11, 11, 0.1) !important;
-          font-weight: 300;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .leaflet-control-zoom a:hover {
-          background: #0c0b0b !important;
-          color: #FFFFFF !important;
-        }
-        .leaflet-control-attribution {
-          background: rgba(249, 248, 246, 0.8) !important;
-          color: rgba(12, 11, 11, 0.4) !important;
-          font-size: 8px !important;
-          padding: 2px 6px !important;
-        }
-        .leaflet-control-attribution a {
-          color: rgba(0, 125, 198, 0.8) !important;
-        }
-        @keyframes mapPing {
-          75%, 100% {
-            transform: scale(2.5);
-            opacity: 0;
-          }
-        }
-      `}</style>
     </section>
   );
 }
