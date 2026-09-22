@@ -16,31 +16,31 @@ const TIMELINE_MILESTONES = [
     year: "2013",
     title: "Sampan 21st Century",
     desc: "The foundation of Sampan Group's vision for modern infrastructure.",
-    img: "/about/Sampan 21st Century.jpg",
+    img: "/about/21st century.png",
   },
   {
     year: "2013",
     title: "Sampan Taj Bashundhara",
     desc: "Expanding our footprint in premium residential living.",
-    img: "/about/Sampan Taj Basundhara.jpg",
+    img: "/about/sampantaz.jpg",
   },
   {
     year: "2014",
     title: "Sampan Niketon",
     desc: "Further establishing our commitment to architectural excellence.",
-    img: "/about/Sampan Niketon.jpg",
+    img: "/about/sampanniketonimg.jpg",
   },
   {
     year: "2021",
     title: "Sampan Highway Inn",
     desc: "Entering the hospitality sector with a flagship highway destination.",
-    img: "/about/Sampan Highway Motel.jpg",
+    img: "/images/highwayinn.jpg",
   },
   {
     year: "2022",
     title: "Sampan White House",
     desc: "Broadening our hospitality portfolio with premium accommodations.",
-    img: "/images/highwayinn.jpg",
+    img: "/about/Sampan Highway Motel.jpg",
   },
   {
     year: "2026",
@@ -372,7 +372,7 @@ function OurStory() {
             {/* Small Secondary Landscape Image - Bottom Left (Matted Frame) */}
             <div className="story-img-right absolute bottom-0 left-0 w-[50%] h-[50%] overflow-hidden border-[8px] border-[#F9F8F6] shadow-[0_20px_50px_rgba(0,0,0,0.12)] group">
               <Image
-                src="/images/cta.jpeg"
+                src="/images/Express-Highway-Inn-New-Model-Design-2.jpg.jpeg"
                 alt="Highway Inn Detail"
                 fill
                 className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
@@ -595,8 +595,8 @@ function Timeline() {
               <div className="absolute left-[-9px] top-2 w-4 h-4 rounded-full bg-[#050505] border-2 border-[#C5A572]"></div>
               
               <div className="border border-white/10 bg-[#0B0B0B] overflow-hidden">
-                <div className="relative h-56 w-full overflow-hidden">
-                  <Image src={m.img} alt={m.title} fill className="object-cover" />
+                <div className="relative h-62 w-full overflow-hidden">
+                  <Image src={m.img} alt={m.title} fill className="object-fill" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] to-transparent"></div>
                   <span className="absolute top-4 left-4 font-[family-name:var(--font-playfair)] text-5xl text-white/10">
                     {m.year}

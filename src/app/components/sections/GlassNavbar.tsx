@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Menu, X, Phone, Mail, MapPin } from "lucide-react";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // Added usePathname
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,6 +30,7 @@ export default function GlassNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname(); // Get current route
 
   useEffect(() => {
     setIsMounted(true);
@@ -90,8 +92,6 @@ export default function GlassNavbar() {
             ease: "power3.out",
           });
 
-          // Updated to use a dark gray base (rgba(18, 18, 18)) instead of pure black
-          // This allows the backdrop-blur to be visible and frosted
           gsap.to(inner, {
             backgroundColor: `rgba(18, 18, 18, ${0.35 + p * 0.45})`,
             borderColor: `rgba(255, 255, 255, ${0.12 + p * 0.15})`,
@@ -131,6 +131,13 @@ export default function GlassNavbar() {
     };
   }, [menuOpen]);
 
+  // Helper to determine if link is active
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (href.startsWith("http")) return false;
+    return pathname.startsWith(href);
+  };
+
   return (
     <>
       <motion.nav
@@ -150,10 +157,10 @@ export default function GlassNavbar() {
         }
         className="fixed top-4 left-4 right-4 md:top-6 md:left-6 md:right-6 z-[9000] will-change-transform"
       >
-        {/* Outer Glow - Enhanced White Border */}
+        {/* Outer Glow */}
         <div className="absolute -inset-[1px] rounded-[28px] bg-gradient-to-r from-white/15 via-white/5 to-white/15 pointer-events-none" />
 
-        {/* Main Glass - Updated to dark gray frosted glass */}
+        {/* Main Glass */}
         <div
           ref={innerRef}
           className="relative overflow-hidden rounded-[28px] border border-white/[0.12] bg-[#121212]/40 backdrop-blur-2xl backdrop-saturate-150"
@@ -186,28 +193,39 @@ export default function GlassNavbar() {
             </MotionLink>
 
             <div className="hidden xl:flex items-center gap-1">
-              {NAV_ITEMS.map((item) => (
-                <MotionLink
-                  key={item.label}
-                  href={item.href}
-                  initial={false}
-                  target={item.label === "Sampan Group" ? "_blank" : undefined}
-                  rel={item.label === "Sampan Group" ? "noopener noreferrer" : undefined}
-                  className="group relative flex items-center gap-3 px-4 py-3 rounded-xl overflow-hidden"
-                  whileHover={{ backgroundColor: "rgba(255,255,255,0.06)" }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="relative z-10 text-[13px] uppercase tracking-[0.18em] text-white group-hover:text-white/50 transition-all duration-300">
-                    {item.label}
-                  </span>
-                  <motion.span
-                    className="absolute bottom-0 left-4 right-4 h-px origin-left bg-gradient-to-r from-primary via-primary/60 to-transparent"
-                    initial={{ scaleX: 0, opacity: 0 }}
-                    whileHover={{ scaleX: 1, opacity: 1 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </MotionLink>
-              ))}
+              {NAV_ITEMS.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <MotionLink
+                    key={item.label}
+                    href={item.href}
+                    initial={false}
+                    target={item.label === "Sampan Group" ? "_blank" : undefined}
+                    rel={item.label === "Sampan Group" ? "noopener noreferrer" : undefined}
+                    className={`group relative flex items-center gap-3 px-4 py-3 rounded-xl overflow-hidden transition-colors duration-300 ${
+                      active ? "bg-white/[0.06]" : ""
+                    }`}
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.06)" }}
+                  >
+                    <span
+                      className={`relative z-10 text-[13px] uppercase tracking-[0.18em] transition-all duration-300 ${
+                        active
+                          ? "text-primary"
+                          : "text-white group-hover:text-white/50"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                    <motion.span
+                      className="absolute bottom-0 left-4 right-4 h-px origin-left bg-gradient-to-r from-primary via-primary/60 to-transparent"
+                      initial={{ scaleX: 0, opacity: 0 }}
+                      animate={active ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
+                      whileHover={{ scaleX: 1, opacity: 1 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  </MotionLink>
+                );
+              })}
             </div>
 
             <div className="flex items-center gap-3">
@@ -250,7 +268,7 @@ export default function GlassNavbar() {
         </div>
       </motion.nav>
 
-      {/* MOBILE FULLSCREEN MENU - Updated with dark frosted blur */}
+      {/* MOBILE FULLSCREEN MENU */}
       <motion.div
         initial={false}
         animate={{ opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none" }}
@@ -270,26 +288,45 @@ export default function GlassNavbar() {
 
         <div className="relative z-10 px-6 pt-8 pb-8 flex flex-col h-[calc(100vh-100px)] justify-between overflow-y-auto">
           <div>
-            {NAV_ITEMS.map((item, index) => (
-              <MotionLink
-                key={item.label}
-                href={item.href}
-                initial={false}
-                target={item.label === "Sampan Group" ? "_blank" : undefined}
-                rel={item.label === "Sampan Group" ? "noopener noreferrer" : undefined}
-                onClick={() => setMenuOpen(false)}
-                className="group flex items-center justify-between py-5 border-b border-white/[0.1]"
-              >
-                <div className="flex items-center gap-5">
-                  {/* Changed to light by default, darker on hover */}
-                  <span className="text-[9px] text-white/50 group-hover:text-white/20 transition-colors">{item.number}</span>
-                  <span className="text-2xl font-light tracking-tight text-white group-hover:text-white/50 transition-colors duration-300">
-                    {item.label}
-                  </span>
-                </div>
-                <ArrowUpRight size={18} className="text-white/30 group-hover:text-primary group-hover:rotate-45 transition-all duration-500" />
-              </MotionLink>
-            ))}
+            {NAV_ITEMS.map((item, index) => {
+              const active = isActive(item.href);
+              return (
+                <MotionLink
+                  key={item.label}
+                  href={item.href}
+                  initial={false}
+                  target={item.label === "Sampan Group" ? "_blank" : undefined}
+                  rel={item.label === "Sampan Group" ? "noopener noreferrer" : undefined}
+                  onClick={() => setMenuOpen(false)}
+                  className="group flex items-center justify-between py-5 border-b border-white/[0.1]"
+                >
+                  <div className="flex items-center gap-5">
+                    <span
+                      className={`text-[9px] transition-colors ${
+                        active ? "text-primary" : "text-white/50 group-hover:text-white/20"
+                      }`}
+                    >
+                      {item.number}
+                    </span>
+                    <span
+                      className={`text-2xl font-light tracking-tight transition-colors duration-300 ${
+                        active ? "text-primary" : "text-white group-hover:text-white/50"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                  </div>
+                  <ArrowUpRight
+                    size={18}
+                    className={`transition-all duration-500 ${
+                      active
+                        ? "text-primary rotate-45"
+                        : "text-white/30 group-hover:text-primary group-hover:rotate-45"
+                    }`}
+                  />
+                </MotionLink>
+              );
+            })}
           </div>
 
           <div className="mt-10">

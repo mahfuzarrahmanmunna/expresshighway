@@ -30,7 +30,7 @@ type Facility = {
 
 const facilities: Facility[] = [
   { id: 1, name: "Highway Club & Lounge", tagline: "Elegance Redefined", category: "Leisure", src: "https://images.unsplash.com/photo-1584132967334-10e028070cc1?q=85&w=1920&auto=format&fit=crop" },
-  { id: 2, name: "Billiards", tagline: "Fun, Skill, Competition", category: "Leisure", src: "https://images.unsplash.com/photo-1612564237258-0f1688d4d7f9?q=85&w=1920&auto=format&fit=crop" },
+  { id: 2, name: "Billiards", tagline: "Fun, Skill, Competition", category: "Leisure", src: "/images/Billiards.jpeg" },
   { id: 3, name: "Card Rooms", tagline: "Play, Strategy, Enjoyment", category: "Leisure", src: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?q=85&w=1920&auto=format&fit=crop" },
   { id: 4, name: "Super Shop", tagline: "Fulfill Your Daily Needs", category: "Convenience", src: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?q=85&w=1920&auto=format&fit=crop" },
   { id: 5, name: "VVIP Lounge", tagline: "Exclusive, Luxury, Comfort", category: "Luxury", src: "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=85&w=1920&auto=format&fit=crop" },

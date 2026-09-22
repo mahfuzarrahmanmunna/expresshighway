@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import videojs from "video.js";
+import "video.js/dist/video-js.css";
 
 const GALLERY_IMAGES = [
-  { src: "/images/Rectangle-2.jpg", size: "col-span-2 md:col-span-12 aspect-[16/9] md:aspect-[21/9]" },
-  { src: "/images/clubandlounge.jpg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
+  { src: "/images/clubandlounge.jpeg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
   { src: "/club/salon.jpg", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
   { src: "/club/bar.jpg", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
-  { src: "/images/condomenium.jpeg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
+  { src: "/club/condomenium.jpg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
   { src: "/images/swimmingpool.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/club/gym.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/club/room.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
@@ -18,19 +19,42 @@ const GALLERY_IMAGES = [
   { src: "/images/WhatsApp_Image_2026-08-30_at_2.27.22_PM.jpg", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
   { src: "/images/freepik__enhance__34463.png", size: "col-span-1 md:col-span-4 aspect-[4/5]" },
   { src: "/images/WhatsApp_Image_2026-08-30_at_2.27.22_PM.jpg", size: "col-span-1 md:col-span-8 aspect-[4/5] md:aspect-[16/10]" },
-  { src: "/images/WhatsApp-Image-2025-06-25-at-6.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
+  { src: "/images/restaurant-hall-with-round-square-tables-some-chairs-plants (3).jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/images/Express-Highway-Inn-New-Model-Design-4.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/images/restaurant-hall-with-round-square-tables-some-chairs-plants (2).jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
   { src: "/images/lighting.jpg", size: "col-span-1 md:col-span-3 aspect-[3/2]" },
-
-
-
 ];
 
 export default function GalleryTeaser() {
   const containerRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const playerRef = useRef<any>(null);
   const [viewerIndex, setViewerIndex] = useState<number | null>(null);
 
+  // Initialize Video.js
+  useEffect(() => {
+    if (!videoRef.current) return;
+
+    playerRef.current = videojs(videoRef.current, {
+      controls: true,
+      autoplay: false,
+      preload: "metadata",
+      fluid: true,
+      playbackRates: [0.5, 1, 1.5, 2],
+      controlBar: {
+        pictureInPictureToggle: false,
+      },
+    });
+
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null;
+      }
+    };
+  }, []);
+
+  // Lightbox Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (viewerIndex === null) return;
@@ -56,6 +80,7 @@ export default function GalleryTeaser() {
     };
   }, [viewerIndex]);
 
+  // Scroll Reveal Observer
   useEffect(() => {
     const node = containerRef.current;
     if (!node) return;
@@ -105,6 +130,42 @@ export default function GalleryTeaser() {
         </div>
 
         <div className="gallery-grid grid grid-cols-2 gap-2 md:grid-cols-12 md:gap-3">
+          
+          {/* ════════════════════════════════════════ */}
+          {/* PREMIUM VIDEO.JS BANNER SECTION           */}
+          {/* ════════════════════════════════════════ */}
+          <div className="reveal-up col-span-2 md:col-span-12 relative mb-2 md:mb-3 group">
+            
+            {/* Architectural Corner Accents */}
+            <div className="absolute -top-3 -left-3 w-8 h-8 border-t border-l border-[#0c0b0b]/30 z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:top-0 group-hover:left-0 group-hover:border-[#007DC6]/80"></div>
+            <div className="absolute -top-3 -right-3 w-8 h-8 border-t border-r border-[#0c0b0b]/30 z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:top-0 group-hover:right-0 group-hover:border-[#007DC6]/80"></div>
+            <div className="absolute -bottom-3 -left-3 w-8 h-8 border-b border-l border-[#0c0b0b]/30 z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:bottom-0 group-hover:left-0 group-hover:border-[#007DC6]/80"></div>
+            <div className="absolute -bottom-3 -right-3 w-8 h-8 border-b border-r border-[#0c0b0b]/30 z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:bottom-0 group-hover:right-0 group-hover:border-[#007DC6]/80"></div>
+
+            {/* Video Wrapper */}
+            <div className="relative w-full overflow-hidden border border-[#0c0b0b]/10 shadow-[0_20px_70px_-20px_rgba(0,0,0,0.3)] bg-black">
+              <div data-vjs-player className="w-full aspect-video">
+                <video
+                  ref={videoRef}
+                  className="video-js vjs-big-play-centered vjs-theme-luxe"
+                  poster="/images/cta.jpeg" 
+                  playsInline
+                >
+                  <source src="/herovideo.mp4" type="video/mp4" />
+                  <p className="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a web browser that{" "}
+                    <a href="https://videojs.com/html5-video-support/" target="_blank" rel="noopener noreferrer">
+                      supports HTML5 video
+                    </a>
+                  </p>
+                </video>
+              </div>
+            </div>
+          </div>
+
+          {/* ════════════════════════════════════════ */}
+          {/* STANDARD GALLERY IMAGES                   */}
+          {/* ════════════════════════════════════════ */}
           {GALLERY_IMAGES.map((item, index) => (
             <div
               key={`${item.src}-${index}`}
@@ -181,6 +242,161 @@ export default function GalleryTeaser() {
           </button>
         </div>
       )}
+
+      {/* Premium Video.js Custom Theme */}
+      <style jsx global>{`
+        /* 1. Hide unnecessary UI elements for a cleaner look */
+        .vjs-theme-luxe .vjs-volume-panel,
+        .vjs-theme-luxe .vjs-settings-menu,
+        .vjs-theme-luxe .vjs-remaining-time,
+        .vjs-theme-luxe .vjs-picture-in-picture-control {
+          display: none !important;
+        }
+
+        /* 2. Player Background */
+        .vjs-theme-luxe.video-js {
+          background-color: #050505;
+          font-family: var(--font-sans), sans-serif;
+        }
+
+        /* 3. Big Play Button */
+        .vjs-theme-luxe .vjs-big-play-button {
+          width: 90px;
+          height: 90px;
+          line-height: 90px;
+          border-radius: 50%;
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          backdrop-filter: blur(10px);
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translate(-50%, -50%) scale(1); /* Perfectly Centered */
+          top: 50%;
+          left: 50%;
+          margin: 0;
+          padding: 0;
+        }
+
+        .vjs-theme-luxe:hover .vjs-big-play-button {
+          background-color: rgba(0, 125, 198, 0.2);
+          border-color: #007DC6;
+          box-shadow: 0 0 60px rgba(0, 125, 198, 0.4);
+          transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .vjs-theme-luxe .vjs-big-play-button .vjs-icon-placeholder:before {
+          font-size: 36px;
+          color: #fff;
+          text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* 4. Control Bar Styling */
+        .vjs-theme-luxe .vjs-control-bar {
+          background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+          height: 60px;
+          padding: 0 20px;
+          display: flex;
+          align-items: center;
+          backdrop-filter: blur(8px);
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+
+        .vjs-theme-luxe.vjs-user-active .vjs-control-bar,
+        .vjs-theme-luxe.vjs-paused .vjs-control-bar {
+          opacity: 1;
+        }
+
+        .vjs-theme-luxe .vjs-button > .vjs-icon-placeholder:before {
+          line-height: 60px;
+          color: rgba(255, 255, 255, 0.7);
+          transition: color 0.3s ease;
+          font-size: 18px;
+        }
+
+        .vjs-theme-luxe .vjs-button:hover > .vjs-icon-placeholder:before {
+          color: #fff;
+        }
+
+        /* 5. Progress Bar */
+        .vjs-theme-luxe .vjs-progress-control {
+          position: absolute;
+          top: -10px; /* Hover above the control bar */
+          left: 0;
+          right: 0;
+          width: 100%;
+          height: 6px;
+        }
+
+        .vjs-theme-luxe .vjs-progress-holder {
+          background-color: rgba(255, 255, 255, 0.15);
+          border-radius: 0;
+          height: 2px;
+          transition: height 0.3s ease, background-color 0.3s ease;
+          margin: 0 20px;
+        }
+
+        .vjs-theme-luxe .vjs-progress-control:hover .vjs-progress-holder {
+          height: 6px; /* Expand on hover */
+          background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .vjs-theme-luxe .vjs-play-progress {
+          background: #007DC6;
+          border-radius: 0;
+        }
+
+        .vjs-theme-luxe .vjs-play-progress:before {
+          color: #007DC6;
+          font-size: 14px;
+          top: -5px;
+        }
+
+        .vjs-theme-luxe .vjs-load-progress {
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 0;
+        }
+
+        /* 6. Time Display */
+        .vjs-theme-luxe .vjs-current-time,
+        .vjs-theme-luxe .vjs-duration {
+          font-size: 11px;
+          letter-spacing: 0.15em;
+          color: rgba(255, 255, 255, 0.6);
+          font-family: var(--font-sans), sans-serif;
+        }
+
+        .vjs-theme-luxe .vjs-time-divider {
+          color: rgba(255, 255, 255, 0.3);
+          font-size: 11px;
+        }
+
+        /* 7. Custom Spacing */
+        .vjs-theme-luxe .vjs-control-bar {
+          justify-content: space-between;
+        }
+        
+        .vjs-theme-luxe .vjs-play-control {
+          margin-right: 20px;
+          flex: 0 0 auto;
+        }
+
+        .vjs-theme-luxe .vjs-time-control {
+          flex: 0 0 auto;
+          display: flex;
+          align-items: center;
+        }
+
+        /* Reveal Animation */
+        .reveal-up {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
     </section>
   );
 }

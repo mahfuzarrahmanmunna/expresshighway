@@ -67,7 +67,7 @@ interface MousePos {
 }
 
 // ═══════════════════════════════════════════
-// 3D TILT BUTTON WITH GLARE
+// MAGIC MAGNETIC 3D TILT BUTTON WITH GLARE
 // ═══════════════════════════════════════════
 function TiltButton({
   children,
@@ -80,6 +80,17 @@ function TiltButton({
 }) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
+  
+  // Magnetic GSAP quick setters
+  const xTo = useRef<gsap.QuickToFunc | null>(null);
+  const yTo = useRef<gsap.QuickToFunc | null>(null);
+
+  useEffect(() => {
+    if (btnRef.current) {
+      xTo.current = gsap.quickTo(btnRef.current, "x", { duration: 0.6, ease: "power3.out" });
+      yTo.current = gsap.quickTo(btnRef.current, "y", { duration: 0.6, ease: "power3.out" });
+    }
+  }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     const btn = btnRef.current;
@@ -89,31 +100,46 @@ function TiltButton({
     const y = e.clientY - rect.top;
     const cx = rect.width / 2;
     const cy = rect.height / 2;
+    const dx = x - cx;
+    const dy = y - cy;
 
-    const rotateX = ((y - cy) / cy) * -10;
-    const rotateY = ((x - cx) / cx) * 10;
-    const angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI) + 180;
+    // 1. Magnetic Pull (Moves button towards cursor)
+    if (xTo.current && yTo.current) {
+      xTo.current(dx * 0.4); // Adjust 0.4 for more/ less pull
+      yTo.current(dy * 0.4);
+    }
+
+    // 2. 3D Tilt
+    const rotateX = (dy / cy) * -10;
+    const rotateY = (dx / cx) * 10;
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 180;
 
     gsap.to(btn, {
       rotateX,
       rotateY,
-      transformPerspective: 600,
+      transformPerspective: 800,
       duration: 0.35,
       ease: "power2.out",
+      overwrite: "auto",
     });
 
+    // 3. Glare Effect
     if (glareRef.current) {
       glareRef.current.style.background = `linear-gradient(${angle}deg, rgba(255,255,255,0.35) 0%, transparent 50%)`;
-      gsap.to(glareRef.current, { opacity: 0.15, duration: 0.2 });
+      gsap.to(glareRef.current, { opacity: 0.2, duration: 0.2 });
     }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
+    // Smoothly reset magnetic position and tilt
+    if (xTo.current && yTo.current) {
+      xTo.current(0);
+      yTo.current(0);
+    }
     gsap.to(btnRef.current, {
       rotateX: 0,
       rotateY: 0,
-      transformPerspective: 600,
-      duration: 0.7,
+      duration: 0.8,
       ease: "elastic.out(1, 0.4)",
     });
     if (glareRef.current) {
@@ -124,7 +150,7 @@ function TiltButton({
   return (
     <button
       ref={btnRef}
-      className={cn(className, "transform-gpu")}
+      className={cn(className, "transform-gpu will-change-transform")}
       style={{ transformStyle: "preserve-3d" }}
       onClick={onClick}
       onMouseMove={handleMouseMove}
@@ -583,7 +609,7 @@ export default function Hero() {
       className="group/scene relative flex h-screen w-full items-center justify-center overflow-hidden"
     >
       {/* ════════════════════════════════════════ */}
-      {/* BACKGROUND LAYER 1                       */}
+      {/* BACKGROUND LAYER 1 (Upgraded 4K Cinematic Image) */}
       {/* ════════════════════════════════════════ */}
       <div
         ref={bgMouseW1Ref}
@@ -594,15 +620,16 @@ export default function Hero() {
           className="absolute inset-0 will-change-transform"
           style={{
             backgroundImage:
-              "url('https://picsum.photos/seed/EXPRESS-hwy-night/1920/1080.jpg')",
+              "url('https://images.unsplash.com/photo-1502828438634-31f2b292c77e?q=80&w=2400&auto=format&fit=crop')",
             backgroundSize: "cover",
             backgroundPosition: "center 20%",
+            filter: "contrast(1.1) saturate(1.1)", // Premium color grade
           }}
         />
       </div>
 
       {/* ════════════════════════════════════════ */}
-      {/* BACKGROUND LAYER 2                       */}
+      {/* BACKGROUND LAYER 2 (Upgraded 4K Cinematic Image) */}
       {/* ════════════════════════════════════════ */}
       <div
         ref={bgMouseW2Ref}
@@ -613,9 +640,10 @@ export default function Hero() {
           className="absolute inset-0 will-change-transform mix-blend-overlay opacity-40"
           style={{
             backgroundImage:
-              "url('https://picsum.photos/seed/EXPRESS-road-lights/1920/1080.jpg')",
+              "url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2400&auto=format&fit=crop')",
             backgroundSize: "cover",
             backgroundPosition: "center 60%",
+            filter: "contrast(1.2) brightness(1.1)",
           }}
         />
       </div>
@@ -744,7 +772,6 @@ export default function Hero() {
             ref={titleLine1Ref}
             className={cn(
               "font-serif text-[clamp(3rem,11vw,9rem)] font-normal leading-[0.9] tracking-[-0.03em] text-foreground",
-              /* Hidden until GSAP takes over; always visible if reduced-motion */
               !isReducedMotion && "opacity-0",
             )}
             style={{ perspective: "600px" }}

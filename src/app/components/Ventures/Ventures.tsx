@@ -17,7 +17,7 @@ const VENTURES = [
     title: "Express Highway Club & Lounge",
     tag: "VVIP Lounge",
     desc: "An exclusive sanctuary of comfort and privilege for the modern traveller.",
-    img: "/club/resturant.webp",
+    img: "/images/clubandlounge.jpeg",
     link: "https://sampangroup.com.bd",
   },
   {
@@ -235,7 +235,7 @@ export default function Ventures() {
                       alt={item.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 60vw"
-                      className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-105"
+                      className="object-top object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 group-hover:scale-105"
                       quality={90}
                     />
                   </div>

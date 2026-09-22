@@ -51,7 +51,7 @@ const BENEFITS = [
     num: "06",
     title: "Play. Unwind. Connect.",
     desc: "Access to Billiards, Card Room and the Juice & Drinks Bar.",
-    img: "https://images.unsplash.com/photo-1611132944641-7573e0c5b57e?q=80&w=800&auto=format&fit=crop",
+    img: "/images/Billiards.jpeg",
     size: "md:col-span-1",
   },
   {
